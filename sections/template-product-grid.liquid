@@ -108,9 +108,7 @@ assign badge_style    = section.settings.badge_style
 }
 {%- endcapture -%}
 <style>{{ css | strip_newlines | remove: '  ' }}</style>
-<script>
-    document.getElementById("grid-products__mobile").className += ' is-draggable'
-</script>
+
 {% schema %}
 {
   "name": "Main Information",

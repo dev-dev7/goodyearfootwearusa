@@ -1266,7 +1266,7 @@ function initProductImageSlider(container) {
       pageDots: false,
       imagesLoaded: true,
       lazyLoad: 2,
-      draggable: false,
+      draggable: true,
       initialIndex: initIndex,
       adaptiveHeight: true
     });
