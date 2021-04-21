@@ -461,7 +461,7 @@ var parallaxLookbook = {
     var sectionTop = $(container).offset().top;
 
     var transformHeight = parallaxLookbook.calcTransformValue(pageTop, windowHeight, sectionTop, sectionHeight);
-    var parallaxHeight = sectionHeight * 1.3;
+    var parallaxHeight = sectionHeight * 1;
 
     $(container).find('.image-container').css({ 'height': parallaxHeight, 'transform': `translate3d(0px,${transformHeight}px, 0px`, "-webkit-backface-visibility": "hidden" });
 
@@ -470,7 +470,7 @@ var parallaxLookbook = {
 
       if (parallaxLookbook.isInView(container)) {
         transformHeight = parallaxLookbook.calcTransformValue(pageTop, windowHeight, sectionTop, sectionHeight);
-        parallaxHeight = sectionHeight * 1.3;
+        parallaxHeight = sectionHeight * 1;
 
         $(container).find('.image-container').css({ 'transform': `translate3d(0px,${transformHeight}px, 0px` });
         $(container).find('.lookbook-spot').css({ 'transform': `translate3d(0px,${transformHeight}px, 0px`, "-webkit-backface-visibility": "hidden" });
