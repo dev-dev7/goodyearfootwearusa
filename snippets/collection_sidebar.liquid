@@ -1,0 +1,14 @@
+{%- if settings.show_collection_sidebar_menu -%}
+  <div class="sidebar-block">
+    {% render 'collection_sidebar_navigation' %}
+  </div>
+{%- endif -%}
+
+{%- if settings.show_collection_bestseller -%}
+  <div class="sidebar-block">
+    {% render 'sidebar_collection_carousel', block_title: settings.collection_bestseller_title,
+      collection_name: settings.collection_bestseller_collection,
+      show_count: settings.collection_bestseller_show_count,
+      prd_img_ft: settings.sidebar_prd_img_ft %}
+  </div>
+{%- endif -%}

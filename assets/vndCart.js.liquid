@@ -1,0 +1,16 @@
+var submitButton = '{{ 'cart.shipping.calculate_shipping' | t }}';
+var submitButtonDisabled = '{{ 'cart.shipping.calculating' | t }}';
+
+Shopify.Cart.ShippingCalculator.show({
+  submitButton: submitButton,
+  submitButtonDisabled: submitButtonDisabled,
+  {% if shop.customer_accounts_enabled and customer %}customerIsLoggedIn: true,{% endif %}
+  moneyFormat: {{ shop.money_with_currency_format | json }}
+});
+
+$('.expander').on('click', function(e) {
+  e.preventDefault();
+  var $parent = $(this).parent();
+  $parent.toggleClass('opened');
+  $parent.find('.expandable').slideToggle();
+});

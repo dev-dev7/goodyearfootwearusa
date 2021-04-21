@@ -1,0 +1,71 @@
+{% comment %}
+Renders color swatch or image swatches in product cards
+  Accepts:
+    - product: <Product> product to show
+{% endcomment %}
+{%- if settings.show_card_swatches -%}
+  {%- assign option_index = blank -%}
+  {%- for option in product.options -%}
+    {%- assign option_name = option | downcase -%}
+    {%- if option_name contains 'colour' or option_name contains 'color' -%}
+      {%- assign option_index = forloop.index0 -%}
+      {%- break -%}
+    {%- endif -%}
+  {%- endfor -%}
+
+  {%- if option_index != blank -%}
+    {%- assign colorlist = '' -%}
+    {%- assign color = '' -%}
+    {%- assign swatch_list = '' -%}
+    {%- assign variant_count = 1 -%}
+
+    {% capture swatch_list %}
+    {%- for variant in product.variants -%}
+      {%- assign org_value = variant.options[option_index] -%}
+      {%- assign color = org_value | remove: ' ' | remove: '[image]' -%}
+      {%- assign color = color | split: '[svg]' | first -%}
+      {%- assign org_value = org_value | append: ',' | prepend: ',' -%}
+      {%- assign class_name = '' -%}
+
+      {%- unless colorlist contains org_value -%}
+        {%- assign variant_count = variant_count | plus: 1 -%}
+        {%- capture style -%}background-color:{{ color }};{%- endcapture -%}
+        {%- if settings.color_swatch_type == 'variant_img' and variant.image.src != blank -%}
+          {%- capture style -%}{{ style }}background-image:url({{ variant.image.src | img_url: '32x' }}){%- endcapture -%}
+          {%- assign class_name = ' color-swatch-variant' -%}
+        {%- elsif settings.color_swatch_type == 'swatch_img' -%}
+          {%- if org_value contains '[image]' -%}
+            {%- assign class_name = ' color-swatch-custom' -%}
+            {%- assign swatch_url = color | downcase | append: '.png' | file_img_url: '32x' -%}
+            {%- capture style -%}{{ style }}background-image:url({{ swatch_url }}){%- endcapture -%}
+          {%- elsif org_value contains '[svg]' -%}
+            {%- assign class_name = ' color-swatch-custom' -%}
+            {%- assign svg_name = org_value | split: '[svg]' | last | remove: ',' -%}
+            {%- capture swatch_tag -%}{% include 'include_icon', icon_name: svg_name %}{%- endcapture -%}
+          {%- endif -%}
+        {%- endif -%}
+        <li>
+          {%- if variant.image.src != blank -%}
+            <a href="#" class="color-swatch{{ class_name }} ds-flex{% if forloop.first == true %} active{% endif %} tooltip" data-image="{{ variant.image.src | img_url: '400x' }}" data-price="{{ variant.price | money }}" aria-description="{{ org_value | remove: ',' | remove: '[image]' | split: '[svg]' | first }}">
+              <i style="{{ style }}">{{ swatch_tag }}</i>
+            </a>
+          {%- else -%}
+            <a href="#" class="color-swatch{{ class_name }} ds-flex{% if forloop.first == true %} active{% endif %} tooltip" data-price="{{ variant.price | money }}" aria-description="{{ org_value | remove: '[image]' | split: '[svg]' | first }}">
+              <i style="{{ style }}">{{ swatch_tag }}</i>
+            </a>
+          {%- endif -%}
+        </li>
+        {%- capture tempList %}{{ colorlist }} {{ org_value }}{% endcapture %}
+        {%- assign colorlist = tempList -%}
+      {%- endunless -%}
+    {%- endfor -%}
+    {% endcapture %}
+
+    {%- unless variant_count < 2 and settings.hide_one_swatch -%}
+      <ul class="swatch-group ds-flex flex-wrap">
+        {{ swatch_list }}
+      </ul>
+    {%- endunless -%}
+  {%- endif -%}
+
+{%- endif -%}

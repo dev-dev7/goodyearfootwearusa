@@ -1,0 +1,16 @@
+{% comment %}
+Renders supported payment icons in the footer
+
+  Usage:
+    {% render 'footer_bottom_payment' %}
+{% endcomment %}
+
+{% unless shop.enabled_payment_types == blank %}
+<ul class="ds-flex list-style-none flex-wrap">
+  {% for type in shop.enabled_payment_types %}
+    <li class="footer-payment__icon">
+      {{ type | payment_type_svg_tag: class: 'icon' }}
+    </li>
+  {% endfor %}
+</ul>
+{% endunless %}

@@ -1,0 +1,80 @@
+/*===================== Color =====================*/
+$c-theme: {{ settings.c_theme }};
+
+.sort-wrapper:hover .collection-sort__by,
+.group-wrapper:hover .collection-group__by { background-color: #f8f8f8; }
+
+.filter-wrapper {
+  .dd-pp__list {
+    top: calc(100% + 1.2rem);
+    left: 0;
+    box-shadow: 0 2px 10px 6px #f1f1f1;
+    background-color: #ffffff;
+
+    .sidebar-block {
+      margin: 0;
+    }
+
+    @media all and (min-width: 1200px) {
+      top: calc(100% + 2rem);
+    }
+  }
+
+  &:hover .collection-filter__by {
+    background-color: #f8f8f8;
+  }
+
+  .filter-list {
+    max-height: 27rem;
+    overflow-x: hidden;
+  }
+
+  ::-webkit-scrollbar {
+    width: 4px;
+    background-color: #f1f1f1;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: #a9a9a9;
+  }
+
+  .dd-pp__close {
+    top: 1.5rem;
+    right: 1.5rem;
+    color: #222222;
+
+    svg {
+      width: 1.1rem;
+      height: 1.1rem;
+    }
+  }
+}
+
+.collection-grid__switcher {
+  &.active,
+  &:hover {
+    svg { fill: $c-theme }
+  }
+
+  .cfd-classic & {
+    &.active,
+    &:hover {
+      border-color: #dfdfdf;
+    }
+  }
+}
+
+.icon-grid-three {
+  &.active,
+  &:hover {
+    &::after,
+    &::before {
+      border-color: $c-theme;
+    }
+  }
+}
+
+.active-tag__item:hover svg {
+  background-color: $c-theme;
+  color: #fff;
+}

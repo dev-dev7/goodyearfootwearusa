@@ -1,0 +1,124 @@
+{%- if section.settings.show -%}
+  <div class="text-and-buttons" style="margin: {{ section.settings.margin }};">
+    <div class="container">
+      <div class="section-header text-center">
+        <h2 style="color:{{ section.settings.c_title }}">{{ section.settings.title | newline_to_br }}</h2>
+        <p style="color:{{ section.settings.c_desc }}">{{ section.settings.description | newline_to_br }}</p>
+        <div>
+          {%- if section.settings.btn1_text -%}
+            <a class="btn {{ section.settings.btn1_style }}" href="{{ section.settings.btn1_link }}">{{ section.settings.btn1_text }}</a>
+          {%- endif -%}
+          {%- if section.settings.btn2_text -%}
+            <a class="btn btn-second {{ section.settings.btn2_style }}" href="{{ section.settings.btn2_link }}">{{ section.settings.btn2_text }}</a>
+          {%- endif -%}
+        </div>
+      </div><!-- .section-header.text-center -->
+    </div><!-- .container -->
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Text and buttons",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show",
+      "label": "Show this section",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Section Settings"
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "Section margin",
+      "info": "sequence: top-right-bottom-left (ex: 0 0 10px 0)",
+      "default": "70px 0 90px 0"
+    },
+    {
+      "type": "header",
+      "content": "Content Settings"
+    },
+    {
+      "type": "textarea",
+      "id": "title",
+      "label": "Title",
+      "default": "Best Way to\nGrow Your Brand"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Praesent ut neque, Praesent tempor. Augue ac tempus finibus."
+    },
+    {
+      "type": "color",
+      "id": "c_title",
+      "label": "Title color",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "c_desc",
+      "label": "Description color",
+      "default": "#28282b"
+    },
+    {
+      "type": "text",
+      "id": "btn1_text",
+      "label": "Button 1 Text",
+      "default": "READ MORE"
+    },
+    {
+      "type": "url",
+      "id": "btn1_link",
+      "label": "Button 1 Link"
+    },
+    {
+      "type": "select",
+      "id": "btn1_style",
+      "label": "Button Style",
+      "options": [
+        {"value": "btn-default", "label": "Default button"},
+        {"value": "btn-transparent", "label": "Transparent button"},
+        {"value": "btn-secondary", "label": "Secondary button"},
+        {"value": "btn-third", "label": "Third button"},
+        {"value": "btn-text", "label": "Text button"}
+      ],
+      "default": "btn-transparent"
+    },
+    {
+      "type": "text",
+      "id": "btn2_text",
+      "label": "Button 2 Text",
+      "default": "DISCOVER"
+    },
+    {
+      "type": "url",
+      "id": "btn2_link",
+      "label": "Button 2 Link"
+    },
+    {
+      "type": "select",
+      "id": "btn2_style",
+      "label": "Button Style",
+      "options": [
+        {"value": "btn-default", "label": "Default button"},
+        {"value": "btn-transparent", "label": "Transparent button"},
+        {"value": "btn-secondary", "label": "Secondary button"},
+        {"value": "btn-third", "label": "Third button"},
+        {"value": "btn-text", "label": "Text button"}
+      ],
+      "default": "btn-third"
+    }
+  ],
+  "presets": [{
+    "name": "Text and buttons",
+    "category": "Text Section"
+  }]
+}
+{% endschema %}

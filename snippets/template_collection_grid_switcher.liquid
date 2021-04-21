@@ -1,0 +1,9 @@
+<div class="collection-grid ds-flex">
+{%- if design == 'classic' -%}
+  <span class="collection-grid__switcher grid active">{% render 'icon-grid-four' %}</span>
+  <span class="collection-grid__switcher list icon-grid-three"></span>
+{%- else -%}
+  <span class="collection-grid__switcher grid active">{% render 'icon-grid-four-2' %}</span>
+  <span class="collection-grid__switcher list">{% render 'icon-grid-single' %}</span>
+{%- endif -%}
+</div>

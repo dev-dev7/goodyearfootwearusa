@@ -1,0 +1,171 @@
+<div class="container">
+  <h1 class="page-title">{{ page.title }}</h1>
+  <p class="page-description">{{ 'contact.page_description' | t }}</p>
+
+  {%- if page.content != blank -%}
+    <div class="contact-custom-content">
+    {{ page.content }}
+    </div>
+  {%- endif -%}
+
+  <div class="row template-contact contact-{{ section.settings.layout }}">
+    {%- if section.settings.layout == 'row' -%}
+      {%- assign class = 'medium-12' -%}
+      {%- assign padding = '400px' -%}
+    {%- else -%}
+      {%- assign class = 'medium-6' -%}
+      {%- assign padding = '114%' -%}
+    {%- endif -%}
+
+    {%- if section.settings.show_map -%}
+      <div class="{{ class }} col-padding">
+        {% render 'map', padding_top: padding %}
+      </div><!-- .medium-6.col-padding -->
+      <div class="{{ class }} col-padding ds-flex vb-form {{ section.settings.form_style }}">
+    {%- else -%}
+      <div class="medium-12 col-padding ds-flex vb-form {{ section.settings.form_style }}">
+    {%- endif -%}
+
+      {%- assign formId = 'ContactForm' -%}
+      {% render 'form_contact', form_title: section.settings.form_title, ph_name: section.settings.name_text,
+          ph_email: section.settings.email_text, ph_message: section.settings.review_text, ph_submit: section.settings.submit_text %}
+
+      {%- if section.settings.layout == 'row' and section.blocks.size > 0 -%}
+        <div class="map-contact__dtl">
+          {%- for block in section.blocks -%}
+            <div class="contact-dtl__ctn">
+              {%- if block.settings.icon != blank -%}
+                <div class="contact-dtl__ic">
+                  {% include 'include_icon', icon_name: block.settings.icon %}
+                </div>
+              {%- endif -%}
+
+              {%- if block.settings.title != blank -%}
+                <h4 class="contact-dtl__tt">{{ block.settings.title }}</h4>
+              {%- endif -%}
+
+              {%- if block.settings.detail1 != blank -%}
+                <p class="contact-dtl__if">{{ block.settings.detail1 }}</p>
+              {%- endif -%}
+
+              {%- if block.settings.detail2 != blank -%}
+                <p class="contact-dtl__if">{{ block.settings.detail2 }}</p>
+              {%- endif -%}
+
+              {%- if block.settings.detail3 != blank -%}
+                <p class="contact-dtl__if">{{ block.settings.detail3 }}</p>
+              {%- endif -%}
+            </div>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div><!-- .medium-6.col-padding -->
+  </div><!-- .template-contact.row -->
+</div>
+
+{% schema %}
+{
+  "name": "Contact section",
+  "tag": "section",
+  "class": "vs-google-map",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_map",
+      "label": "Show Map",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Layout Settings"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Section Layout",
+      "options": [
+        { "value": "row", "label": "Layers" },
+        { "value": "column", "label": "Columns" }
+      ],
+      "default": "column"
+    },
+    {
+      "type": "select",
+      "id": "form_style",
+      "label": "Form Style",
+      "options": [
+        { "value": "form-clean", "label": "Clean form" },
+        { "value": "form-classic", "label": "Classic form" }
+      ],
+      "default": "form-classic"
+    },
+    {
+      "type": "text",
+      "id": "form_title",
+      "label": "Title",
+      "default": "write your review"
+    },
+    {
+      "type": "text",
+      "id": "name_text",
+      "label": "Name Placeholder",
+      "default": "Enter your name"
+    },
+    {
+      "type": "text",
+      "id": "email_text",
+      "label": "Email Placeholder",
+      "default": "Enter your e-mail"
+    },
+    {
+      "type": "text",
+      "id": "review_text",
+      "label": "Review Placeholder",
+      "default": "Write your review"
+    },
+    {
+      "type": "text",
+      "id": "submit_text",
+      "label": "Button Text",
+      "default": "Submit Review"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "contact_details",
+      "name": "Contact Details",
+      "settings": [
+        {
+          "type": "text",
+          "id": "icon",
+          "label": "Icon",
+          "default": "icon-location"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Address"
+        },
+        {
+          "type": "text",
+          "id": "detail1",
+          "label": "Detail 1",
+          "default": "Oxford Street 48/188, London,"
+        },
+        {
+          "type": "text",
+          "id": "detail2",
+          "label": "Detail 2",
+          "default": "United Kingdom, 24-157"
+        },
+        {
+          "type": "text",
+          "id": "detail3",
+          "label": "Detail 3"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

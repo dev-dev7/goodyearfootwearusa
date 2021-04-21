@@ -1,0 +1,2968 @@
+{
+  "current": {
+    "favicon": "shopify:\/\/shop_images\/favicon-32x32.png",
+    "logo": "shopify:\/\/shop_images\/checkout_logo_2.png",
+    "logo_mobile": "shopify:\/\/shop_images\/checkout_logo_2.png",
+    "logo_max_width": 160,
+    "switch_rtl": false,
+    "layout": "full_width",
+    "enable_top_promotion": false,
+    "dot_style": "vnd-sls-dots-same",
+    "enable_login_popup": false,
+    "login_popup_icon": "icon-user-4",
+    "enable_breadcrumb": true,
+    "h_breadcrumb_border": 0,
+    "enable_lazyload": true,
+    "product_other_img": true,
+    "product_img_filter": true,
+    "bt_style": "block-title__classic",
+    "space_btitle": 35,
+    "google_api_key": "",
+    "store_lat": "",
+    "store_lng": "",
+    "map_style": "2",
+    "enable_scroll_top": true,
+    "c_theme": "#293242",
+    "c_main_bg": "#fff",
+    "c_body_text": "#06141d",
+    "c_block_title": "#413f3f",
+    "c_page_title": "#3b3b3b",
+    "c_page_desc": "#818181",
+    "c_breadcrumb": "#ffffff",
+    "c_breadcrumb_bg": "",
+    "c_breadcrumb_border": "",
+    "c_btn_default": "#293242",
+    "c_default_h_t": "#fff",
+    "c_btn_transparent": "#ffffff",
+    "c_btn_transparent_h": "#293242",
+    "c_btn_bg": "#ffffff",
+    "c_btn_t": "#06141d",
+    "c_btn_h_bg": "#293242",
+    "c_btn_h_t": "#fff",
+    "c_btn_3_bg": "#fde7e9",
+    "c_btn_3_border": "#fde7e9",
+    "c_btn_3_t": "#293242",
+    "c_btn_3_h_bg": "#293242",
+    "c_btn_3_h_t": "#ffffff",
+    "c_btn_text": "#293242",
+    "c_cart_bg": "rgba(0,0,0,0)",
+    "c_cart_border": "#293242",
+    "c_cart_text": "#293242",
+    "c_product_name": "#444",
+    "c_product_type": "#acacac",
+    "c_current_price": "#293242",
+    "c_sale_price": "#293242",
+    "c_old_price": "#838383",
+    "c_action_bg": "#ffffff",
+    "c_action_text": "#293242",
+    "c_product_date_border": "#142e3f",
+    "c_product_date_bg": "#142e3f",
+    "c_product_date_text": "#ffffff",
+    "c_sale_label_bg": "rgba(0,0,0,0)",
+    "c_sale_label_bd": "#c72929",
+    "c_sale_label": "#c72929",
+    "c_sold_label_bg": "rgba(0,0,0,0)",
+    "c_sold_label_bd": "#444645",
+    "c_sold_label": "#444645",
+    "c_new_label_bg": "#0d3c55",
+    "c_new_label_bd": "#0d3c55",
+    "c_new_label": "#ffffff",
+    "c_wslst_bg": "#3598db",
+    "c_wslst_text": "#ffffff",
+    "c_lookbook_bg": "#faf5f6",
+    "c_lookbook_hover_bg": "#cac5c3",
+    "c_lookbook_text": "#0a1b25",
+    "c_footer_bg": "#073982",
+    "c_footer_link_title": "#ffffff",
+    "c_footer_text": "#c9cbd0",
+    "c_footer_bottom_bg": "#00204d",
+    "c_footer_bottom_title": "#cacdd3",
+    "c_footer_bottom_text": "#c7c9cb",
+    "c_review_star": "#f9e609",
+    "c_scroll_top": "#f9e609",
+    "font_origin": "shopify",
+    "font_heading": "open_sans_n7",
+    "font_body": "pt_sans_n4",
+    "font_button": "pt_sans_n4",
+    "font_menu": "pt_sans_n4",
+    "font_extra": "work_sans_n4",
+    "gf_heading": "Rokkitt",
+    "gf_body": "PT Sans",
+    "gf_button": "PT Sans",
+    "gf_menu": "Rokkitt",
+    "gf_extra": "PT Sans",
+    "font_body_size": 16,
+    "font_size_button": 13,
+    "font_space_button": "0.08em",
+    "btn_border_width": "2px",
+    "font_size_header_menu": 12,
+    "font_weight_header_menu": 700,
+    "font_space_header_menu": "0.1em",
+    "font_transform_header_menu": "uppercase",
+    "product_name_font_family": "body",
+    "f_p_n_s": "0.026em",
+    "product_price_font_family": "arial",
+    "product_desc_font_family": "arial",
+    "font_size_breadcrumb": 13,
+    "newsletter_service": "shopify-default",
+    "newsletter_form_action": "",
+    "enable_newsletter_popup": false,
+    "newsletter_delay": "5",
+    "newsletter_bg": "",
+    "newsletter_type": "newsletter-style",
+    "newsletter_content_pos": "right",
+    "newsletter_popup_subtitle": "",
+    "newsletter_popup_title": "BE THE FIRST TO KNOW",
+    "newsletter_popup_desc": "Subscribe for the latest news & get 15% off your first order",
+    "newsletter_popup_btn": "Get your code",
+    "newsletter_bg_c": "#ffffff",
+    "newsletter_subtitle_c": "#555",
+    "newsletter_title_c": "#313131",
+    "newsletter_desc_c": "#555",
+    "newsletter_btn_c": "#333",
+    "font_nsl_subtitle_size": 16,
+    "font_nsl_title_size": 25,
+    "font_nsl_desc_size": 16,
+    "newsletter_content_html": "",
+    "show_multiple_currencies": false,
+    "show_currency_flag": false,
+    "currency_format": "money_format",
+    "price_format": "with_zero",
+    "currency_spt_type": "shopify",
+    "supported_currencies": "INR GBP CAD USD AUD EUR JPY",
+    "scroll_to_main": false,
+    "enable_ajax_filter": true,
+    "collection_sidebar_pos": "none",
+    "show_collection_sidebar_menu": true,
+    "collection_sidebar_menu_title": "collections",
+    "collection_sidebar_menu": "collections",
+    "show_collection_bestseller": true,
+    "collection_bestseller_title": "bestsellers",
+    "collection_bestseller_collection": "electronics",
+    "collection_bestseller_show_count": 3,
+    "product_layout": "grid",
+    "enable_product_zoom": false,
+    "prd_zoom_pos": "default",
+    "enable_product_gallery": true,
+    "review_app": "none",
+    "enable_product_availability": true,
+    "product_option_style": "dropdown",
+    "product_option_design": "circle",
+    "color_swatch_type": "variant_img",
+    "product_cd_align": "vnd-cd__text-center",
+    "card_img_height": "square",
+    "vertical_card_wishlist": false,
+    "enable_product_type": true,
+    "enable_product_vendor": false,
+    "show_card_swatches": true,
+    "hide_one_swatch": true,
+    "product_swatch_style": "swatch-color-circle-medium",
+    "show_name_after_price": false,
+    "price_sale_style": "text",
+    "product_action_pos": "product-actions-center",
+    "product_action_style": "quick-actions-rect",
+    "show_action_quickview": true,
+    "show_action_addcart": true,
+    "show_action_wishlist": true,
+    "show_action_compare": false,
+    "qv_thumbs_style": "thumbs-circle",
+    "show_global_sizechart": true,
+    "global_sizechart": "",
+    "enable_ajax_cart": true,
+    "cart_icon": "icon-cart-5",
+    "cart_effect": "sidebar",
+    "enable_itc": false,
+    "enable_fsa": true,
+    "fsa_amount": "adaptive-sound-player",
+    "enable_ctc": true,
+    "ctc_link": "shopify:\/\/pages\/terms-and-conditions",
+    "show_payment_info": true,
+    "payment_svgs": "american_express, visa, master,  paypal, apple_pay, shopify_pay",
+    "search_predictive": true,
+    "predictive_fields": "product",
+    "search_limit": 5,
+    "search_icon": "icon-search",
+    "enable_wishlist": true,
+    "wishlist_link": "shopify:\/\/pages\/wishlist",
+    "wishlist_icon": "icon-heart-empty",
+    "enable_compare": false,
+    "compare_link": "",
+    "compare_icon": "icon-repeat-square",
+    "share_image": "",
+    "share_facebook": true,
+    "share_twitter": true,
+    "share_pinterest": true,
+    "social_facebook_link": "https:\/\/www.facebook.com\/GoodyearFootwearUSA",
+    "social_twitter_link": "https:\/\/www.facebook.com\/GoodyearFootwearUSA\/",
+    "social_instagram_link": "https:\/\/www.instagram.com\/goodyearfootwear\/",
+    "social_pinterest_link": "https:\/\/www.pinterest.com\/GoodyearFootwearUSA",
+    "social_youtube_link": "",
+    "social_snapchat_link": "",
+    "social_tumblr_link": "",
+    "social_vimeo_link": "",
+    "social_linkedin_link": "",
+    "insta_token": "",
+    "anm_img_loader": "vnd-image-loading-three-dots",
+    "anm_loading_pp": "icon-loader-three-dots",
+    "anm_loading_products": "icon-loader-three-dots",
+    "anm_newsletter_pp": "horizontal-move",
+    "anm_qv_pp": "in-right",
+    "anm_zoom_pp": "zoom-in",
+    "anm_cart_btn": "shake-x",
+    "enable_mb_hd": true,
+    "enable_mobile_sticky": true,
+    "mobile_card_action": "nav_to_product",
+    "custom_style": "",
+    "custom_script": "",
+    "checkout_header_image": "",
+    "checkout_logo_image": "",
+    "checkout_logo_position": "left",
+    "checkout_logo_size": "medium",
+    "checkout_body_background_image": "",
+    "checkout_body_background_color": "#fff",
+    "checkout_input_background_color_mode": "white",
+    "checkout_sidebar_background_image": "",
+    "checkout_sidebar_background_color": "#fafafa",
+    "checkout_heading_font": "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
+    "checkout_body_font": "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
+    "checkout_accent_color": "#197bbd",
+    "checkout_button_color": "#197bbd",
+    "checkout_error_color": "#e32c2b",
+    "color_swatch_style": "swatch_color",
+    "product_price_body_font": false,
+    "c_menu": "#3f3f3f",
+    "c_tooltip_hot": "#feae17",
+    "c_tooltip_new": "#90a900",
+    "enable_review": true,
+    "sections": {
+      "top-bar": {
+        "type": "top-bar",
+        "settings": {
+          "show_announcement": true,
+          "announcement_text": "Sign up & get 10% Off Your First Order + Free Shipping for all orders over $75!",
+          "announcement_bg": "#ffd300",
+          "announcement_color": "#000000",
+          "show_topbar": true,
+          "hide_mobile": false,
+          "topbar_style": "general",
+          "topbar_bg": "rgba(0,0,0,0)",
+          "topbar_text_color": "#757575",
+          "show_border_top": false,
+          "show_border_bottom": false,
+          "show_item_border": false,
+          "topbar_border_color": "#f4f4f4"
+        }
+      },
+      "header": {
+        "type": "header",
+        "blocks": {
+          "1597673112357": {
+            "type": "login",
+            "settings": {
+              "icon": "icon-user-4",
+              "size_icon": 14,
+              "text": ""
+            }
+          },
+          "1597672833039": {
+            "type": "cart",
+            "settings": {
+              "size_icon": 14,
+              "header_cart_style": "only_icon",
+              "cart_bg": "rgba(0,0,0,0)",
+              "cart_color": "#ffffff",
+              "cart_icon": "#ffffff",
+              "amount_pos": "right",
+              "c_amount_bg": "#142e3f",
+              "c_amount_text": "#ffffff"
+            }
+          },
+          "1601301168964": {
+            "type": "menu_style",
+            "settings": {
+              "type": "dropdown-mega1",
+              "menu_label": "Features",
+              "width": "container"
+            }
+          },
+          "1579185417320": {
+            "type": "menu_style",
+            "settings": {
+              "type": "dropdown-mega1",
+              "menu_label": "Shop",
+              "width": "container"
+            }
+          },
+          "1584343433129": {
+            "type": "menu_tooltip",
+            "settings": {
+              "menu_label": "Extra Images",
+              "tooltip_label": "hot",
+              "bg_tooltip": "#feae17",
+              "c_tooltip": "#ffffff",
+              "text_transform": "lowercase"
+            }
+          },
+          "1584343470671": {
+            "type": "menu_tooltip",
+            "settings": {
+              "menu_label": "Extra Video",
+              "tooltip_label": "hot",
+              "bg_tooltip": "#feae17",
+              "c_tooltip": "#ffffff",
+              "text_transform": "lowercase"
+            }
+          },
+          "1584343487862": {
+            "type": "menu_tooltip",
+            "settings": {
+              "menu_label": "Product Showcase",
+              "tooltip_label": "hot",
+              "bg_tooltip": "#feae17",
+              "c_tooltip": "#ffffff",
+              "text_transform": "lowercase"
+            }
+          },
+          "1584343507272": {
+            "type": "menu_tooltip",
+            "settings": {
+              "menu_label": "Default Layout",
+              "tooltip_label": "new",
+              "bg_tooltip": "#293242",
+              "c_tooltip": "#ffffff",
+              "text_transform": "lowercase"
+            }
+          },
+          "1584343530976": {
+            "type": "menu_tooltip",
+            "settings": {
+              "menu_label": "Sticky Form",
+              "tooltip_label": "new",
+              "bg_tooltip": "#293242",
+              "c_tooltip": "#ffffff",
+              "text_transform": "lowercase"
+            }
+          },
+          "1601549375309": {
+            "type": "menu_tooltip",
+            "settings": {
+              "menu_label": "Features",
+              "tooltip_label": "hot",
+              "bg_tooltip": "#feae17",
+              "c_tooltip": "#ffffff",
+              "text_transform": "lowercase"
+            }
+          },
+          "bf8427d0-89b3-49b8-8b81-0bc1fa26aede": {
+            "type": "menu_tooltip",
+            "settings": {
+              "menu_label": "Dark Green - Pharmacy",
+              "tooltip_label": "new",
+              "bg_tooltip": "#293242",
+              "c_tooltip": "#ffffff",
+              "text_transform": "lowercase"
+            }
+          }
+        },
+        "block_order": [
+          "1597673112357",
+          "1597672833039",
+          "1601301168964",
+          "1579185417320",
+          "1584343433129",
+          "1584343470671",
+          "1584343487862",
+          "1584343507272",
+          "1584343530976",
+          "1601549375309",
+          "bf8427d0-89b3-49b8-8b81-0bc1fa26aede"
+        ],
+        "settings": {
+          "header_type": "1",
+          "padding": "",
+          "c_bg": "#073982",
+          "c_text": "#ffffff",
+          "menu": "main-menu",
+          "header_menu_center": false,
+          "header_sticky": true,
+          "show_dropdown_icon": false,
+          "space_menu_item": 56,
+          "menu_anm": "slide-left",
+          "c_menu_bg": "#ffffff",
+          "c_menu": "#ffffff",
+          "promo_icon1": "",
+          "promo_title1": "",
+          "promo_text1": "",
+          "promo_icon2": "",
+          "promo_title2": "",
+          "promo_text2": ""
+        }
+      },
+      "footer": {
+        "type": "footer",
+        "blocks": {
+          "d3cdbd08-4d3a-4919-aba8-14fef116c73c": {
+            "type": "menu",
+            "settings": {
+              "link_list": "my-account"
+            }
+          },
+          "1579877970297": {
+            "type": "menu",
+            "settings": {
+              "link_list": "customer-care"
+            }
+          },
+          "e1935222-458d-4fb9-a6bb-44c905f84eb6": {
+            "type": "newsletter",
+            "settings": {
+              "form_title": "Get 10% off your first order",
+              "email_text": "Enter your email",
+              "description": ""
+            }
+          },
+          "1583968373741": {
+            "type": "footer_bottom",
+            "settings": {
+              "style": "space-between",
+              "type": "custom_image",
+              "block_title": "",
+              "copyright": "Copyright 2021 The Goodyear Tire & Rubber Company. Goodyear (and winged foot design) is a trademark of The Goodyear Tire & Rubber Company used under license by SCL Footwear Group, New York, USA.",
+              "font_header": "ff-setting-none",
+              "fw_header": "fw-setting-none",
+              "font_body": "ff-setting-none",
+              "fw_body": "fw-setting-none",
+              "color_icon": "#f9f6f6",
+              "color_icon_bd": "rgba(0,0,0,0)",
+              "color_icon_bg": "#ffffff",
+              "use_custom_padding": false,
+              "padding": "50px 0 50px 0",
+              "padding_laptop": "24px 0 24px 0",
+              "padding_mobile": "7px 0 24px 0"
+            }
+          },
+          "623902c1-8d3b-4829-9e98-7d2699e7cb62": {
+            "type": "footer_social_icons",
+            "settings": {
+              "title": "Follow us",
+              "color_icon": "#ffffff",
+              "color_icon_bd": "rgba(0,0,0,0)",
+              "color_icon_bg": "rgba(0,0,0,0)"
+            }
+          }
+        },
+        "block_order": [
+          "d3cdbd08-4d3a-4919-aba8-14fef116c73c",
+          "1579877970297",
+          "e1935222-458d-4fb9-a6bb-44c905f84eb6",
+          "1583968373741",
+          "623902c1-8d3b-4829-9e98-7d2699e7cb62"
+        ],
+        "settings": {
+          "footer_style": "footer-style3",
+          "use_custom_padding": false,
+          "padding": "50px 0 50px 0",
+          "padding_laptop": "24px 0 24px 0",
+          "padding_mobile": "7px 0 24px 0",
+          "font_header": "ff-setting-none",
+          "fw_header": "fw-setting-none",
+          "font_body": "ff-setting-none",
+          "fw_body": "fw-setting-none"
+        }
+      },
+      "1579615647655": {
+        "type": "text-with-image-parallax",
+        "blocks": {
+          "1579615647655-0": {
+            "type": "text",
+            "settings": {
+              "content_style": "parallax-style2",
+              "content_pos": "left",
+              "content_vpos": "middle",
+              "content_align": "text-left",
+              "content_effect": "from-right",
+              "top_title": "",
+              "main_title": "ACCELERATE IN \nULTIMATE STYLE",
+              "sub_title": "",
+              "color_top_title": "#fefefe",
+              "color_main_title": "#ffffff",
+              "sub_color": "#2c3a44",
+              "show_content_bg": false,
+              "c_textbg": "#ffffff",
+              "em_color": "#ffffff",
+              "em_bg_color": "#a8bf00",
+              "strong_color": "#ffffff",
+              "strong_bg_color": "#2c7800",
+              "btn1_title": "",
+              "btn1_style": "btn-default",
+              "btn2_title": "SHOP NOW",
+              "btn2_link": "shopify:\/\/products\/clutch-e-racing-white-black-sneaker",
+              "btn2_style": "btn-secondary"
+            }
+          }
+        },
+        "block_order": [
+          "1579615647655-0"
+        ],
+        "settings": {
+          "show": true,
+          "margin": "",
+          "layout_w": "full-width-container",
+          "layout_h": "custom-height",
+          "ch_desc": "800",
+          "ch_tablet": "",
+          "ch_mobile": "",
+          "back_img": "shopify:\/\/shop_images\/Slide-Clutch_1900x900_576ef579-2d0b-4286-8e76-c1370224b19f.jpg",
+          "spot_style": "lookbook-spot__big",
+          "product_a": "clutch-e-racing-white-black-sneaker",
+          "product_a_x": 36,
+          "product_a_y": 63,
+          "product_b": "",
+          "product_b_x": 0,
+          "product_b_y": 0,
+          "slide_transition": "slide",
+          "auto_speed": "7",
+          "show_paging": false,
+          "dots_color": "#ffffff",
+          "color_dots_h": "",
+          "show_nav": false,
+          "nav_color": "#ffffff",
+          "nav_style": "slideshow-nav__small"
+        }
+      },
+      "1579751776489": {
+        "type": "product-showcase",
+        "blocks": {
+          "1579751776489-0": {
+            "type": "information",
+            "settings": {
+              "title": "Lightweight Synthetic Upper",
+              "desc": "Donec semper, ante eget rutrum varius, orci\nmetus. Sed sed sapien id diam dictum ...",
+              "icon": "icon-play-1"
+            }
+          },
+          "1579751776489-1": {
+            "type": "information",
+            "settings": {
+              "title": "Branded Strap With Lace Closure",
+              "desc": "Quisque ac quam id quam ullam. lorem corper dignissim ullamcorper utnisi...",
+              "icon": "icon-microphone-2"
+            }
+          },
+          "1579751776489-2": {
+            "type": "information",
+            "settings": {
+              "title": "Breathable Fabric Lining",
+              "desc": "Suspendisse nec nulla vitae justo lacinia ferment. Curabitur vitae erat fermentum viverra...",
+              "icon": "icon-microphone-1"
+            }
+          },
+          "1579751776489-3": {
+            "type": "information",
+            "settings": {
+              "title": "Cushioned EVA Comfort Midsole",
+              "desc": "Mauris id magna ut dui pulvinar mattis in quis\nlorem. Vivamus eleifend, dui fringilla...",
+              "icon": "icon-speaker"
+            }
+          },
+          "1579751776489-4": {
+            "type": "information",
+            "settings": {
+              "title": "Slick Performance Design",
+              "desc": "Consectetur tincidunt, augue lacus sollicitudin sapien, interdum. Augue eros sed nulla...",
+              "icon": "icon-music"
+            }
+          },
+          "1579751776489-5": {
+            "type": "information",
+            "settings": {
+              "title": "Slip Resistant Tire Thread Outsole",
+              "desc": "Praesent gravida malesuada faucibus. Etiam \nvehicula massa eget nisl ante, posuere ...",
+              "icon": "icon-pause"
+            }
+          }
+        },
+        "block_order": [
+          "1579751776489-0",
+          "1579751776489-1",
+          "1579751776489-2",
+          "1579751776489-3",
+          "1579751776489-4",
+          "1579751776489-5"
+        ],
+        "settings": {
+          "slide_layout": "full-width-container",
+          "margin": "",
+          "has_minheight": true,
+          "title": "GOODYEAR FOOTWEAR\n<i>Performance Design at its Best<i><\/i><\/i>",
+          "color_title": "#142e3f",
+          "product_url": "shopify:\/\/products\/clutch-e-racing-white-black-sneaker",
+          "product_img": "shopify:\/\/shop_images\/CLUTCH-E_WHITE-BLACK_f878a937-b147-4b93-b59c-43cca6b96e4c.jpg",
+          "color_back": "#ffffff",
+          "color_t": "#06141d",
+          "color_desc": "#293242",
+          "color_ibg": "#413f3f",
+          "color_icon": "#f0f4f8"
+        }
+      },
+      "1579849986141": {
+        "type": "text-with-image-parallax",
+        "blocks": {
+          "1579849986141-0": {
+            "type": "text",
+            "settings": {
+              "content_style": "parallax-style2",
+              "content_pos": "left",
+              "content_vpos": "middle",
+              "content_align": "text-left",
+              "content_effect": "from-bottom",
+              "top_title": "",
+              "main_title": "ON THE ROAD\nOR ON THE STREET",
+              "sub_title": "",
+              "color_top_title": "#fefefe",
+              "color_main_title": "#ffffff",
+              "sub_color": "#2c3a44",
+              "show_content_bg": false,
+              "c_textbg": "#ffffff",
+              "em_color": "#ffffff",
+              "em_bg_color": "#a8bf00",
+              "strong_color": "#ffffff",
+              "strong_bg_color": "#2c7800",
+              "btn1_title": "",
+              "btn1_style": "btn-default",
+              "btn2_title": "SHOP NOW",
+              "btn2_style": "btn-secondary"
+            }
+          }
+        },
+        "block_order": [
+          "1579849986141-0"
+        ],
+        "settings": {
+          "show": true,
+          "margin": "0 0 0 0",
+          "layout_w": "full-width-container",
+          "layout_h": "full-height",
+          "ch_desc": "500",
+          "ch_tablet": "",
+          "ch_mobile": "",
+          "back_img": "shopify:\/\/shop_images\/hamza-ali-Sg9QgM9LO4k-unsplash.jpg",
+          "spot_style": "lookbook-spot__big",
+          "product_a": "index-white-royal-racing-sneaker",
+          "product_a_x": 57,
+          "product_a_y": 40,
+          "product_b": "",
+          "product_b_x": 0,
+          "product_b_y": 0,
+          "slide_transition": "slide",
+          "auto_speed": "7",
+          "show_paging": false,
+          "dots_color": "#ffffff",
+          "color_dots_h": "",
+          "show_nav": false,
+          "nav_color": "#ffffff",
+          "nav_style": "slideshow-nav__small"
+        }
+      },
+      "1579876806063": {
+        "type": "text-with-image-parallax",
+        "blocks": {
+          "1579876806063-0": {
+            "type": "text",
+            "settings": {
+              "content_style": "parallax-style2",
+              "content_pos": "left",
+              "content_vpos": "middle",
+              "content_align": "text-left",
+              "content_effect": "from-right",
+              "top_title": "",
+              "main_title": "EYE POPPING\nSTYLE",
+              "sub_title": "",
+              "color_top_title": "#fefefe",
+              "color_main_title": "#ffffff",
+              "sub_color": "#dedfdf",
+              "show_content_bg": false,
+              "c_textbg": "#ffffff",
+              "em_color": "#ffffff",
+              "em_bg_color": "#a8bf00",
+              "strong_color": "#ffffff",
+              "strong_bg_color": "#2c7800",
+              "btn1_title": "",
+              "btn1_style": "btn-transparent",
+              "btn2_title": "SHOP NOW",
+              "btn2_link": "shopify:\/\/collections\/electronics",
+              "btn2_style": "btn-third"
+            }
+          }
+        },
+        "block_order": [
+          "1579876806063-0"
+        ],
+        "settings": {
+          "show": true,
+          "margin": "0 0 0 0",
+          "layout_w": "full-width-container",
+          "layout_h": "full-height",
+          "ch_desc": "500",
+          "ch_tablet": "",
+          "ch_mobile": "",
+          "back_img": "shopify:\/\/shop_images\/erik-mclean-AnRxcupEQT0-unsplash.jpg",
+          "spot_style": "lookbook-spot__big",
+          "product_a": "throttle-white-racing",
+          "product_a_x": 75,
+          "product_a_y": 64,
+          "product_b": "",
+          "product_b_x": 0,
+          "product_b_y": 0,
+          "slide_transition": "slide",
+          "auto_speed": "7",
+          "show_paging": false,
+          "dots_color": "#ffffff",
+          "color_dots_h": "",
+          "show_nav": false,
+          "nav_color": "#ffffff",
+          "nav_style": "slideshow-nav__small"
+        }
+      },
+      "1579877186442": {
+        "type": "newsletter",
+        "settings": {
+          "show": true,
+          "color_section_bg": "#293242",
+          "style": "1",
+          "section_width": "100%",
+          "title": "Sign up for our newsletter",
+          "description": "and enjoy -15% off your first purchase!",
+          "color_title": "#ffffff",
+          "c_title_bg": "#f8f8f8",
+          "color_desc": "#c9cbd0",
+          "color_input_bg": "#20242b",
+          "color_input": "#ffffff",
+          "color_btn_bg": "#9da2ae",
+          "color_btn": "#ffffff",
+          "color_btn_hover": "#3d4759",
+          "c_form_bg": "#dddddd",
+          "section_margin": "",
+          "margin_laptop": "",
+          "margin_mobile": "",
+          "section_padding": "25px 0 25px 0"
+        }
+      },
+      "template-product-default": {
+        "type": "template-product-default",
+        "settings": {
+          "margin": "40px 0 70px 0",
+          "margin_laptop": "32px 0 50px 0",
+          "margin_mobile": "32px 0 50px 0",
+          "img_position": "left",
+          "thumbs_pos": "thumbs-left",
+          "thumbs_style": "thumbs-rect",
+          "gap_thumbs": 0,
+          "show_prev_next": false,
+          "show_sku": false,
+          "show_vendor": true,
+          "show_product_type": true,
+          "show_buy_now": false,
+          "show_share_btns": false,
+          "show_question_form": false,
+          "show_payment_info": false,
+          "payment_title": "Guaranteed Safe Checkout",
+          "payment_svgs": "amazon_payments, american_express, apple_pay, bitcoin, dankort, diners_club, discover, dogecoin, dwolla, forbrugsforeningen, interac, google_pay, jcb, klarna, klarna-pay-later, litecoin, maestro, master, paypal, shopify_pay, sofort, visa",
+          "badge_style": "classic",
+          "badge_position": "side-fixed"
+        }
+      },
+      "template-product-details-tabs": {
+        "type": "template-product-details-tabs",
+        "blocks": {
+          "template-product-details-tabs-0": {
+            "type": "description",
+            "settings": {}
+          },
+          "template-product-details-tabs-1": {
+            "type": "reviews",
+            "settings": {}
+          },
+          "template-product-details-tabs-2": {
+            "type": "product_video",
+            "settings": {
+              "cols": 2,
+              "gap_videos": 18,
+              "controls": true,
+              "autoplay": false,
+              "loop": true,
+              "mute": true
+            }
+          },
+          "template-product-details-tabs-3": {
+            "type": "custom",
+            "settings": {
+              "name": "Custom tab",
+              "content": "<p>While there isn&#x27;t a law requiring ecommerce stores to have a <strong>Return Policy<\/strong>, you may need one if you wish to enforce your <strong>terms <\/strong>and<strong> parameters of returns <\/strong>and<strong> refunds<\/strong>.<\/p><p>For example, in the state of New York, if a retailer does not provide a Return &amp; Refund Policy, the retailer will be required to accept returns and give refunds for all merchandise returned within 30 days of purchase. If you wish to limit this in any way, you will need to create and post a Return Policy with your own custom terms.<\/p><p>Another reason for having a Return Policy even if not required by law is that most consumers prefer to shop at retailers with a clearly-posted Return Policy. This is especially important when shopping online, as more issues are likely when purchasing something without being able to see it in person first.<\/p><p>If you don&#x27;t have a Return Policy, you may be at the mercy of state laws regulating return and refund timeframes. You may also lose potential customers who are concerned about not being able to return a product if they need or want to.<\/p>"
+            }
+          },
+          "1594634398941": {
+            "type": "unique",
+            "settings": {}
+          }
+        },
+        "block_order": [
+          "template-product-details-tabs-0",
+          "template-product-details-tabs-1",
+          "template-product-details-tabs-2",
+          "template-product-details-tabs-3",
+          "1594634398941"
+        ],
+        "settings": {
+          "margins": "130px 0 165px 0",
+          "margin_laptop": "80px 0 85px 0",
+          "margin_mobile": "45px 0 45px 0",
+          "c_tab": "#b5b5b5",
+          "c_active_tab": "#666666",
+          "style": "modern"
+        }
+      },
+      "products-related": {
+        "type": "products-related",
+        "settings": {
+          "show_related_products": false,
+          "margin": "145px 0 108px 0",
+          "margin_laptop": "85px 0 58px 0",
+          "margin_mobile": "55px 0 48px 0",
+          "section_title": "related products",
+          "enable_carousel": true,
+          "number_per_row": 5,
+          "number_of_rows": 1,
+          "auto_speed": "5",
+          "show_dots": false,
+          "show_nav": true,
+          "nav_style": "nav-top__right",
+          "card_style": "vertical-default",
+          "prd_img_ft": "img-br-100",
+          "card_border": false,
+          "card_shadow": false
+        }
+      },
+      "template-cart": {
+        "type": "template-cart",
+        "settings": {
+          "cart_instruction": true,
+          "shipping_calc": true,
+          "show_sc_fs": true,
+          "show_recent": true,
+          "c_list_hd_bg": "#fafafa",
+          "c_list_hd": "#555555",
+          "c_sidebar_hd_bg": "#fafafa",
+          "c_sidebar_hd": "#555555",
+          "c_sidebar_bd_bg": "#fcfcfc",
+          "c_sidebar_bd": "#666666"
+        }
+      },
+      "products-collection-carousel": {
+        "type": "products-collection-carousel",
+        "settings": {
+          "show_section": true,
+          "title": "recommended products",
+          "desc": "",
+          "collection_name": "smart-watches",
+          "auto_speed": "5",
+          "wrap_around": true,
+          "show_dots": false,
+          "show_nav": true,
+          "nav_style": "nav-top__right",
+          "nav_border": "#e6e6e6",
+          "nav_bg": "#ffffff",
+          "nav_color": "#999999",
+          "c_nav_h_bg": "#293242",
+          "nav_box_shadow": false,
+          "card_style": "vertical-default",
+          "prd_img_ft": "img-br-97",
+          "card_border": false,
+          "card_shadow": false,
+          "number_per_row": 5,
+          "margin": "120px 0 120px 0",
+          "margin_laptop": "80px 0 80px 0",
+          "margin_mobile": "50px 0 50px 0"
+        }
+      },
+      "template-list-collections": {
+        "type": "template-list-collections",
+        "settings": {
+          "margin": "60px 0 180px 0",
+          "card_style": "rect",
+          "col_num": "3",
+          "row_num": "3"
+        }
+      },
+      "banner-image-text": {
+        "type": "banner-image-text",
+        "settings": {
+          "layout": "full-width-container",
+          "banner_bg": "shopify:\/\/shop_images\/collection-header-5.jpg",
+          "layout_h": "fixed-height",
+          "ch_desk": "750",
+          "ch_tablet": "",
+          "ch_mobile": "",
+          "has_minheight": true,
+          "content_style": "green-style2",
+          "content_pos": "left",
+          "mobile_layout": "default",
+          "main_title": "GO AHEAD. DO LAUNDRY\nFROM THE COUCH.",
+          "sub_title": "Morbi volutpat nunc in sagittis sollicitudin. Aliquam in\nsarcu ante. Pellentesque venenatis ...",
+          "color_main_title": "#303130",
+          "sub_color": "#5e6260",
+          "show_content_bg": true,
+          "c_textbg": "rgba(255, 255, 255, 0.8)",
+          "btn1_title": "READ MORE",
+          "btn1_link": "",
+          "btn1_style": "btn-default"
+        }
+      },
+      "template-collection": {
+        "type": "template-collection",
+        "blocks": {
+          "template-collection-0": {
+            "type": "filter_by_tags",
+            "settings": {
+              "type": "checkbox",
+              "tick_style": "tick-rectangle",
+              "title": "brand",
+              "tags_list": "Armani, Bulgari, Dolce & Gabbana, Cristian Dior, Givenchy"
+            }
+          },
+          "template-collection-3": {
+            "type": "advertise_image",
+            "settings": {
+              "img": "shopify:\/\/shop_images\/erik-mclean-AnRxcupEQT0-unsplash.jpg",
+              "subtitle": "HUAWEI WATCH",
+              "title": "TIMELESS DESIGN",
+              "advertise_text_style": "top-left",
+              "advertise_thp": "center",
+              "advertise_tvp": "v-center",
+              "advertise_ta": "text-center",
+              "color": "#ffffff"
+            }
+          },
+          "4a520192-5688-4a24-b243-73eeb661bec1": {
+            "type": "filter_by_price",
+            "settings": {
+              "title": "price"
+            }
+          },
+          "e1b2f03b-190e-445f-862f-40ef845900e5": {
+            "type": "filter_by_tags",
+            "settings": {
+              "type": "checkbox",
+              "tick_style": "tick-rectangle",
+              "title": "brand",
+              "tags_list": "Armani, Bulgari, Dolce & Gabbana, Cristian Dior, Givenchy"
+            }
+          }
+        },
+        "block_order": [
+          "template-collection-0",
+          "template-collection-3",
+          "4a520192-5688-4a24-b243-73eeb661bec1",
+          "e1b2f03b-190e-445f-862f-40ef845900e5"
+        ],
+        "settings": {
+          "filter_design": "advanced",
+          "show_sort": true,
+          "filter_pos": "popup",
+          "show_grid_switch": false,
+          "show_page_sizer": false,
+          "page_sizer_nums": "10,20,30",
+          "show_active_tags": true,
+          "color_bg_at": "#f7f7f7",
+          "color_bd_at": "#ececec",
+          "show_result_text": true,
+          "products_per_row": "3",
+          "number_row": "6",
+          "card_style": "vertical-default",
+          "card_img_height": "square",
+          "prd_img_ft": "img-br-100",
+          "card_border": false,
+          "card_shadow": false,
+          "load_mode": "default"
+        }
+      },
+      "1579598611535": {
+        "type": "text-with-image-parallax",
+        "blocks": {
+          "1579598611535-0": {
+            "type": "text",
+            "settings": {
+              "content_style": "parallax-style1",
+              "content_pos": "center",
+              "content_vpos": "middle",
+              "content_align": "text-center",
+              "content_effect": "flip-horizontal",
+              "top_title": "",
+              "main_title": "UPGRADE YOUR\nDRIVING EXPERIENCE",
+              "sub_title": "",
+              "color_top_title": "#fefefe",
+              "color_main_title": "#ffffff",
+              "sub_color": "#dedfdf",
+              "show_content_bg": false,
+              "c_textbg": "#ffffff",
+              "em_color": "#ffffff",
+              "em_bg_color": "#a8bf00",
+              "strong_color": "#ffffff",
+              "strong_bg_color": "#2c7800",
+              "btn1_title": "",
+              "btn1_style": "btn-transparent",
+              "btn2_title": "SHOP ORI-E",
+              "btn2_link": "shopify:\/\/products\/ori-e-black-white-racing-sneaker",
+              "btn2_style": "btn-secondary"
+            }
+          },
+          "1590233704218": {
+            "type": "text",
+            "settings": {
+              "content_style": "parallax-style2",
+              "content_pos": "center",
+              "content_vpos": "middle",
+              "content_align": "text-center",
+              "content_effect": "from-right",
+              "top_title": "",
+              "main_title": "OUTPERFORM\nYOUR COMPETITION",
+              "sub_title": "",
+              "color_top_title": "#fefefe",
+              "color_main_title": "#ffffff",
+              "sub_color": "#dedfdf",
+              "show_content_bg": false,
+              "c_textbg": "#ffffff",
+              "em_color": "#ffffff",
+              "em_bg_color": "#a8bf00",
+              "strong_color": "#ffffff",
+              "strong_bg_color": "#2c7800",
+              "btn1_title": "",
+              "btn1_link": "shopify:\/\/blogs\/news\/aiquam-mauris-libero",
+              "btn1_style": "btn-transparent",
+              "btn2_title": "SHOP NOW",
+              "btn2_link": "shopify:\/\/products\/ori-e-black-white-racing-sneaker",
+              "btn2_style": "btn-secondary"
+            }
+          }
+        },
+        "block_order": [
+          "1579598611535-0",
+          "1590233704218"
+        ],
+        "settings": {
+          "show": true,
+          "margin": "0",
+          "layout_w": "full-width-container",
+          "layout_h": "custom-height",
+          "ch_desc": "800",
+          "ch_tablet": "",
+          "ch_mobile": "",
+          "back_img": "shopify:\/\/shop_images\/Ori-1900x800.jpg",
+          "spot_style": "lookbook-spot__big",
+          "product_a": "ori-e-black-white-racing-sneaker",
+          "product_a_x": 38,
+          "product_a_y": 67,
+          "product_b": "",
+          "product_b_x": 0,
+          "product_b_y": 0,
+          "slide_transition": "slide",
+          "auto_speed": "7",
+          "show_paging": false,
+          "dots_color": "#ffffff",
+          "color_dots_h": "",
+          "show_nav": false,
+          "nav_color": "#ffffff",
+          "nav_style": "slideshow-nav__small"
+        }
+      },
+      "template-aboutus": {
+        "type": "template-aboutus",
+        "settings": {
+          "show": true,
+          "margin": "70px 0 90px 0",
+          "title": "Best Way to\nGrow Your Brand",
+          "description": "Praesent ut neque, Praesent tempor. Augue ac tempus finibus.",
+          "c_title": "#333333",
+          "c_desc": "#28282b",
+          "btn1_text": "READ MORE",
+          "btn1_link": "shopify:\/\/blogs\/news",
+          "btn1_style": "btn-default",
+          "btn2_text": "DISCOVER",
+          "btn2_link": "shopify:\/\/collections",
+          "btn2_style": "btn-third"
+        }
+      },
+      "service-promotion-1": {
+        "type": "service-promotion-1",
+        "blocks": {
+          "1584015500595": {
+            "type": "icon-text",
+            "settings": {
+              "promo_icon": "icon-ship",
+              "promo_title": "Free delivery",
+              "promo_text": "Cras pellentesque, nisi ac tempus pellentesque, orci sem commodo urna"
+            }
+          },
+          "1584017475916": {
+            "type": "icon-text",
+            "settings": {
+              "promo_icon": "icon-headset3",
+              "promo_title": "24\/h Customer service",
+              "promo_text": "Pellentesque habitant morbi tristue senectus et netus et malesuada fames"
+            }
+          },
+          "1584017609931": {
+            "type": "icon-text",
+            "settings": {
+              "promo_icon": "icon-lock-tall",
+              "promo_title": "Payment secured",
+              "promo_text": "Aenean porta adipiscing tortor, nec consequat nisi mollis sed aliquam om"
+            }
+          },
+          "1584017633176": {
+            "type": "icon-text",
+            "settings": {
+              "promo_icon": "icon-exchange-thin",
+              "promo_title": "Easy exchanges",
+              "promo_text": "Nam eget urna id tellus venenatis ullamcorper quis ut augue sagittis sed"
+            }
+          },
+          "1584017647081": {
+            "type": "icon-text",
+            "settings": {
+              "promo_icon": "icon-gift-box",
+              "promo_title": "Gift cart",
+              "promo_text": "Cras in semper massa, vel retrum ligula. Aenean consectetur nisl a ante"
+            }
+          },
+          "1584017668029": {
+            "type": "icon-text",
+            "settings": {
+              "promo_icon": "icon-return-2",
+              "promo_title": "14-day returns",
+              "promo_text": "Sed in mi purus. Morbi augue ex, congue a augue ut, hendrerit suscipit"
+            }
+          }
+        },
+        "block_order": [
+          "1584015500595",
+          "1584017475916",
+          "1584017609931",
+          "1584017633176",
+          "1584017647081",
+          "1584017668029"
+        ],
+        "settings": {
+          "show_promo": true,
+          "title": "Why Choose Us",
+          "description": "Aiquam auctor ut eros sed pharetra, at cursus consequat velit.",
+          "back_img": "",
+          "row_size": "3",
+          "box_style": "classic",
+          "back_color": "#ffffff",
+          "margin": "",
+          "padding": "80px 0 80px 0"
+        }
+      },
+      "text-with-image-parallax": {
+        "type": "text-with-image-parallax",
+        "blocks": {
+          "1584017715825": {
+            "type": "text",
+            "settings": {
+              "content_style": "parallax-style2",
+              "content_pos": "right-center",
+              "content_effect": "from-right",
+              "top_title": "Ready to explore",
+              "main_title": "ONE STEP\nAHEAD.",
+              "sub_title": "Find the full range of mobile smartphones,\nSmartWear & accessories in our...",
+              "color_top_title": "#fefefe",
+              "color_main_title": "#ffffff",
+              "sub_color": "#dedfdf",
+              "show_content_bg": false,
+              "c_textbg": "rgba(255, 255, 255, 0.8)",
+              "btn1_title": "READ MORE",
+              "btn1_link": "shopify:\/\/blogs\/news",
+              "btn1_style": "btn-transparent",
+              "btn2_title": "SHOP NOW",
+              "btn2_link": "shopify:\/\/collections",
+              "btn2_style": "btn-secondary"
+            }
+          }
+        },
+        "block_order": [
+          "1584017715825"
+        ],
+        "settings": {
+          "show": true,
+          "margin": "0 0 130px 0",
+          "layout_w": "full-width-container",
+          "layout_h": "relative-content",
+          "ch_desc": "500",
+          "ch_tablet": "",
+          "ch_mobile": "",
+          "back_img": "shopify:\/\/shop_images\/full_img5.png",
+          "spot_style": "lookbook-spot__big",
+          "product_a": "",
+          "product_a_x": 35,
+          "product_a_y": 55,
+          "product_b": "",
+          "product_b_x": 0,
+          "product_b_y": 0,
+          "slide_transition": "slide",
+          "auto_speed": "7",
+          "show_paging": false,
+          "dots_color": "#ffffff",
+          "color_dots_h": "",
+          "show_nav": false,
+          "nav_color": "#ffffff",
+          "nav_style": "slideshow-nav__small"
+        }
+      },
+      "team-slider": {
+        "type": "team-slider",
+        "blocks": {
+          "1584017775624": {
+            "type": "image",
+            "settings": {
+              "slide_img": "shopify:\/\/shop_images\/member1.jpg",
+              "name": "Hunter Gonzales",
+              "job_title": "President",
+              "description": "Sed urna diam, scelerisque a ultricies in, dignissim luctus ex, tempor felis dictum sed."
+            }
+          },
+          "1584017844508": {
+            "type": "image",
+            "settings": {
+              "slide_img": "shopify:\/\/shop_images\/member2.jpg",
+              "name": "Aiden Brown",
+              "job_title": "Chief Financial",
+              "description": "Cras at varius metus. Curabitur mattis tristique quam semper. Ut condimentum ac justo vitae fringilla. Nam lacinia nulla, bibendum ultrices..."
+            }
+          },
+          "1584017889060": {
+            "type": "image",
+            "settings": {
+              "slide_img": "shopify:\/\/shop_images\/member3.jpg",
+              "name": "Christine Peterson",
+              "job_title": "Director",
+              "description": "Praesent sit amet ipsum at mauris consequat. Doneca sollicitudin tellus. Donec justo enim, vehicula a viverra, fringilla fringilla ante"
+            }
+          },
+          "1584017911764": {
+            "type": "image",
+            "settings": {
+              "slide_img": "shopify:\/\/shop_images\/member4.jpg",
+              "name": "Mike Penson",
+              "job_title": "Marketing Manager",
+              "description": "Praesent ipsum  dollar sit amet at mauris consequat. Doneca fringilla tellus sollicitudin. Donec viverra, vehicula a enim, justo fringilla ante"
+            }
+          }
+        },
+        "block_order": [
+          "1584017775624",
+          "1584017844508",
+          "1584017889060",
+          "1584017911764"
+        ],
+        "settings": {
+          "show_section": true,
+          "margin": "0 0 150px 0",
+          "title": "Meet our Team",
+          "description": "Aliquam auctor ut eros sed pharetra, at cursus consequat velit.",
+          "slide_layout": "container",
+          "enable_carousel": true,
+          "auto_speed": "5",
+          "show_dots": false,
+          "show_nav": true,
+          "nav_style": "nav-top__center",
+          "number_per_row": 3
+        }
+      },
+      "manufacturer": {
+        "type": "manufacturer",
+        "blocks": {
+          "1584018000464": {
+            "type": "image",
+            "settings": {
+              "slide_img": "shopify:\/\/shop_images\/brand1.jpg"
+            }
+          },
+          "1584018027456": {
+            "type": "image",
+            "settings": {
+              "slide_img": "shopify:\/\/shop_images\/brand2.jpg"
+            }
+          },
+          "1584018035892": {
+            "type": "image",
+            "settings": {
+              "slide_img": "shopify:\/\/shop_images\/brand3.jpg"
+            }
+          },
+          "1584018044318": {
+            "type": "image",
+            "settings": {
+              "slide_img": "shopify:\/\/shop_images\/brand4.jpg"
+            }
+          },
+          "1584018052669": {
+            "type": "image",
+            "settings": {
+              "slide_img": "shopify:\/\/shop_images\/brand5.jpg"
+            }
+          },
+          "1584018061343": {
+            "type": "image",
+            "settings": {
+              "slide_img": "shopify:\/\/shop_images\/brand6.jpg"
+            }
+          },
+          "1584018069974": {
+            "type": "image",
+            "settings": {
+              "slide_img": "shopify:\/\/shop_images\/brand7.jpg"
+            }
+          },
+          "1584018080372": {
+            "type": "image",
+            "settings": {
+              "slide_img": "shopify:\/\/shop_images\/brand8.jpg"
+            }
+          }
+        },
+        "block_order": [
+          "1584018000464",
+          "1584018027456",
+          "1584018035892",
+          "1584018044318",
+          "1584018052669",
+          "1584018061343",
+          "1584018069974",
+          "1584018080372"
+        ],
+        "settings": {
+          "show_section": true,
+          "margin": "0 0 150px 0",
+          "title": "Manufacturers",
+          "description": "",
+          "slide_layout": "container",
+          "enable_carousel": true,
+          "auto_speed": "5",
+          "wrap_around": true,
+          "show_dots": false,
+          "show_nav": true,
+          "nav_style": "nav-top__center",
+          "cols": 6,
+          "gap": 30
+        }
+      },
+      "map": {
+        "type": "map",
+        "settings": {
+          "show_section": true,
+          "margin": "",
+          "height": "450px",
+          "show_form": true,
+          "style": "form-right",
+          "color_bg": "#f0f0f0",
+          "form_title": "QUICK CONTACT",
+          "name_text": "Enter your name",
+          "email_text": "Enter your e-mail*",
+          "review_text": "Write your review*",
+          "submit_text": "Send"
+        }
+      },
+      "template-blog": {
+        "type": "template-blog",
+        "settings": {
+          "blog_style": "blog-style1",
+          "per_page": 10,
+          "blog_date": true,
+          "show_comment": true,
+          "read_more": true,
+          "sidebar_pos": "none",
+          "blocks_gap": 40
+        }
+      },
+      "template-article": {
+        "type": "template-article",
+        "blocks": {
+          "template-article-0": {
+            "type": "collection_menu",
+            "settings": {}
+          },
+          "template-article-1": {
+            "type": "sidebar_newsletter",
+            "settings": {
+              "title": "Newsletter",
+              "text": "<p>Sign up to get the latest on sales, new releases and more …<\/p>",
+              "button": "Submit"
+            }
+          },
+          "template-article-2": {
+            "type": "recent_posts",
+            "settings": {
+              "title": "recent posts",
+              "blog": "news",
+              "show_count": "3"
+            }
+          },
+          "template-article-3": {
+            "type": "post_tags",
+            "settings": {
+              "title": "tag cloud"
+            }
+          }
+        },
+        "block_order": [
+          "template-article-0",
+          "template-article-1",
+          "template-article-2",
+          "template-article-3"
+        ],
+        "settings": {
+          "p_top": "48px",
+          "p_bottom": "170px",
+          "article_date": true,
+          "show_tags": true,
+          "show_comment": true,
+          "content_color": "#4a4a4a",
+          "article_author": true,
+          "enable_share": true,
+          "sidebar_pos": "right"
+        }
+      },
+      "template-search": {
+        "type": "template-search",
+        "blocks": {
+          "template-search-1": {
+            "type": "advertise_image",
+            "settings": {
+              "subtitle": "A 13\" notebook",
+              "title": "The power to\nmove you.",
+              "advertise_text_style": "top-left",
+              "advertise_thp": "left",
+              "advertise_tvp": "v-top",
+              "advertise_ta": "text-left",
+              "color": "#3a3a3a"
+            }
+          },
+          "ecfe9eb1-489a-4ed0-9258-0c5fcc507db2": {
+            "type": "filter_by_price",
+            "settings": {
+              "title": "price"
+            }
+          }
+        },
+        "block_order": [
+          "template-search-1",
+          "ecfe9eb1-489a-4ed0-9258-0c5fcc507db2"
+        ],
+        "settings": {
+          "margin": "60px 0 180px 0",
+          "products_per_row": "4",
+          "number_row": "4",
+          "sidebar_pos": "right"
+        }
+      },
+      "slideshow": {
+        "type": "slideshow",
+        "blocks": {
+          "1584952947703": {
+            "type": "image",
+            "settings": {
+              "slide_img": "shopify:\/\/shop_images\/collection-header-5.jpg",
+              "slide_mb_img": "",
+              "content_style": "green-style",
+              "mobile_layout": "default",
+              "content_pos": "left",
+              "content_effect": "from-right",
+              "top_title": "",
+              "main_title": "THE NEXT BIG THING",
+              "sub_title": "Take, view and share photos with the 17MP\ncamera and stunning 6\" display",
+              "color_top_title": "#333333",
+              "color_main_title": "#3f3f3f",
+              "sub_color": "#444",
+              "show_content_bg": true,
+              "c_textbg": "rgba(255, 255, 255, 0.8)",
+              "btn1_title": "TAKE A LOOK",
+              "btn1_link": "",
+              "btn1_style": "btn-default",
+              "btn2_title": "",
+              "btn2_link": "",
+              "btn2_style": "btn-secondary",
+              "html_content": ""
+            }
+          }
+        },
+        "block_order": [
+          "1584952947703"
+        ],
+        "settings": {
+          "margin": "0 0 0 0",
+          "slide_layout": "full-width-container",
+          "layout_h": "fixed-height",
+          "ch_desk": "750",
+          "ch_tablet": "",
+          "ch_mobile": "",
+          "has_minheight": true,
+          "slide_transition": "slide",
+          "auto_speed": "5",
+          "wrap_around": true,
+          "show_paging": true,
+          "dots_color": "#ffffff",
+          "color_dots_h": "",
+          "show_nav": true,
+          "nav_style": "slideshow-nav__big",
+          "nav_color": "#ffffff"
+        }
+      },
+      "cookie-notification": {
+        "type": "cookie-notification",
+        "settings": {
+          "show": true,
+          "style": "cookie-white",
+          "text": "This shop uses cookies to ensure you get the best experience on our website.",
+          "link_text": "Learn More",
+          "link_text_icon": "",
+          "link_style": "btn-text",
+          "close_text": "Got it",
+          "close_text_icon": "",
+          "close_style": "btn-third"
+        }
+      },
+      "text-with-image-masonry": {
+        "type": "text-with-image-masonry",
+        "blocks": {
+          "1588386869852": {
+            "type": "image",
+            "settings": {
+              "back_img": "shopify:\/\/shop_images\/masonry_1.jpg",
+              "content_hp": "left",
+              "content_vp": "v-bottom",
+              "content_style": "text-citrus1",
+              "sub_title": "",
+              "title": "",
+              "desc": "",
+              "sub_color": "#393939",
+              "color_title": "#333333",
+              "color_desc": "#444444",
+              "button_title": "",
+              "item_link": "",
+              "btn_style": "btn-default"
+            }
+          },
+          "1588387511645": {
+            "type": "image",
+            "settings": {
+              "back_img": "shopify:\/\/shop_images\/masonry_2.jpg",
+              "content_hp": "left",
+              "content_vp": "v-bottom",
+              "content_style": "text-citrus1",
+              "sub_title": "",
+              "title": "",
+              "desc": "",
+              "sub_color": "#393939",
+              "color_title": "#333333",
+              "color_desc": "#444444",
+              "button_title": "",
+              "item_link": "",
+              "btn_style": "btn-default"
+            }
+          },
+          "1588387539942": {
+            "type": "image",
+            "settings": {
+              "back_img": "shopify:\/\/shop_images\/masonry_3.jpg",
+              "content_hp": "left",
+              "content_vp": "v-bottom",
+              "content_style": "text-citrus1",
+              "sub_title": "",
+              "title": "",
+              "desc": "",
+              "sub_color": "#393939",
+              "color_title": "#333333",
+              "color_desc": "#444444",
+              "button_title": "",
+              "item_link": "",
+              "btn_style": "btn-default"
+            }
+          },
+          "1601287666239": {
+            "type": "image",
+            "settings": {
+              "back_img": "shopify:\/\/shop_images\/masonry_4.jpg",
+              "content_hp": "left",
+              "content_vp": "v-bottom",
+              "content_style": "text-citrus1",
+              "sub_title": "",
+              "title": "",
+              "desc": "",
+              "sub_color": "#393939",
+              "color_title": "#333333",
+              "color_desc": "#444444",
+              "button_title": "",
+              "item_link": "",
+              "btn_style": "btn-default"
+            }
+          }
+        },
+        "block_order": [
+          "1588386869852",
+          "1588387511645",
+          "1588387539942",
+          "1601287666239"
+        ],
+        "settings": {
+          "show": true,
+          "margin": "0 0 0 0",
+          "margin_laptop": "0 0 90px 0",
+          "margin_mobile": "0 0 75px 0",
+          "layout": "full-width-container",
+          "design": "design2",
+          "cols": 2,
+          "gap": 10,
+          "fit_margin": false,
+          "img_size": "design",
+          "img_effect": "c-e__i__zoom-in"
+        }
+      },
+      "newsletter": {
+        "type": "newsletter",
+        "settings": {
+          "show": true,
+          "color_section_bg": "rgba(0,0,0,0)",
+          "style": "3",
+          "section_width": "100%",
+          "title": "Sign Up for the\nLatest News, Trends\n& Exclusive Offers!",
+          "description": "SIGN UP FOR EMAILS",
+          "color_title": "#27272d",
+          "c_title_bg": "#f8f8f8",
+          "color_desc": "#ffffff",
+          "color_input_bg": "#ffffff",
+          "color_input": "#454648",
+          "color_btn_bg": "#444444",
+          "color_btn": "#ffffff",
+          "color_btn_hover": "#293242",
+          "c_form_bg": "#293242",
+          "section_margin": "-80px 0 0",
+          "section_padding": "0"
+        }
+      },
+      "store-info": {
+        "type": "store-info",
+        "blocks": {
+          "1588398658528": {
+            "type": "title_desc",
+            "settings": {
+              "pos": "right",
+              "title": "We provide solution for\nyour business",
+              "color_title": "#27282a",
+              "desc": "Suspendisse finibus orci id sapien auctor, vel tristique ex dictum. Maecenas arcu eros, bibendum sit amet massa ut pellentesque pharetra massa. Proin nisl magna, ultricies vitae auctor id, tempus in augue. Donec volutpat, ex in feugiat vehicula.\n\nLeo nisi ornare eros, iaculis tempor tortor urna eget sem. Ut a diam eu est egestas iaculis eu non mauris. Praesent sit amet ipsum at mauris consequat molestie. Donec a sollicitudin tellus. Donec justo enim, vehicula a aliquam viverra, fringilla fringilla ante.\n\nQuisque tincidunt purus odio, nec pellentesque ligula vehicula at. Proin sagittis purus sit amet felis lobortis scelerisque. Maecenas vitae accumsan ex. Praesent ut consectetur neque. Praesent tempor, augue ac tempus finibus, enim felis venenatis urna...",
+              "color_desc": "#4a4a4a",
+              "btn1_title": "READ MORE",
+              "btn1_link": "",
+              "btn1_style": "btn-default",
+              "btn2_title": "",
+              "btn2_link": "",
+              "btn2_style": "btn-secondary"
+            }
+          },
+          "1588398678215": {
+            "type": "image",
+            "settings": {
+              "pos": "left",
+              "image": "shopify:\/\/shop_images\/store_info1.jpg",
+              "width": "full",
+              "text_pos": "above",
+              "title": "<sup class=\"quote-symbol\">“<\/sup>Class aptent taciti sociosqu ad litora per\nhimenas. Sed nisl ex, condimentum ante quis\nCurabitur ac aliquet in suscipit.",
+              "color_title": "#27272d",
+              "desc": "",
+              "color_desc": "#333333"
+            }
+          },
+          "1588398711926": {
+            "type": "image",
+            "settings": {
+              "pos": "left",
+              "image": "shopify:\/\/shop_images\/store_info2.jpg",
+              "width": "boxed",
+              "text_pos": "inside",
+              "title": "",
+              "color_title": "#27272d",
+              "desc": "Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Sed nisl ex, condimentum tristique ante quis, pellentesque vehicula lacus. Curabitur ac aliquet est, in suscipit...",
+              "color_desc": "#333333"
+            }
+          },
+          "1588398767681": {
+            "type": "image",
+            "settings": {
+              "pos": "right",
+              "image": "shopify:\/\/shop_images\/store_info4.jpg",
+              "width": "full",
+              "text_pos": "above",
+              "title": "",
+              "color_title": "#27272d",
+              "desc": "",
+              "color_desc": "#333333"
+            }
+          }
+        },
+        "block_order": [
+          "1588398658528",
+          "1588398678215",
+          "1588398711926",
+          "1588398767681"
+        ],
+        "settings": {
+          "show": true,
+          "margin": "0 0 180px 0",
+          "blocks_gap": 10,
+          "color_back": "#ffffff"
+        }
+      },
+      "text-info": {
+        "type": "text-info",
+        "blocks": {
+          "1588398812568": {
+            "type": "text",
+            "settings": {
+              "pos": "left",
+              "title": "Who we are?",
+              "desc": "Maecenas arcu eros, bibendum sit amet massa ut, pellentesque pharetra massa. Proin nisl magna, ultricies vitae auctor id, tempus in augue. Donec volutpat, ex in feugiat vehicula, leo nisi ornare eros, iaculis tempor tortor urna eget sem. Ut a diam eu est egestas. \n\nEaculis eu non mauris. Praesent sit amet ipsum at mauris consequat molestie. Donec a sollicitudin tellus. Donec justo enim, vehicula a aliquam viverra, fringilla fringilla ante. Quisque tincidunt purus odio, nec pellentesque ligula vehicula at. Proin sagittis purus sit amet felis lobortis scelerisque.\n\nMaecenas vitae accumsan ex. Praesent ut consectetur neque. Praesent tempor, augue ac tempus finibus, enim felis venenatis urna, vitae commodo nunc velit iaculis elit. Nulla in elit non quam sollicitudin ultricies in quis metus. Curabitur tincidunt condi eget nibh."
+            }
+          },
+          "1588398816990": {
+            "type": "text-icon",
+            "settings": {
+              "pos": "right",
+              "title": "What we do",
+              "color_title": "#28282b",
+              "promo_icon1": "icon-lock-wide",
+              "promo_title1": "Payment Secured",
+              "promo_text1": "In ncec erat elementum, et venenatis purus nec. Aenean hendrerit semper bibendum. Pellentesque sagittis consec.",
+              "promo_icon2": "icon-truck",
+              "promo_title2": "Free Delivery",
+              "promo_text2": "Praesent viverra lorem eu enim imperdiet dapibus. Duis eget feugiat odio, quis rhoncus nulla.",
+              "promo_icon3": "icon-back-smooth-1",
+              "promo_title3": "30 - Day Returns",
+              "promo_text3": "In nec erat elementum, et venenatis purus nec. Aenean hendrerit semper bibendum. Pellentesque sagittis consec.",
+              "promo_icon4": "icon-headset4",
+              "promo_title4": "24\/h support",
+              "promo_text4": "Mauris interdum nulla ante dignissim, vel malesuada Mauris interdum nulla ante dignissim, vel malesuada",
+              "promo_icon5": "",
+              "promo_title5": "",
+              "promo_text5": ""
+            }
+          }
+        },
+        "block_order": [
+          "1588398812568",
+          "1588398816990"
+        ],
+        "settings": {
+          "show": true,
+          "margin": "0 0 75px 0",
+          "color_back": "#ffffff",
+          "color_title": "#28282b",
+          "color_desc": "#4a4a4a"
+        }
+      },
+      "product-recommendations": {
+        "type": "product-recommendations",
+        "settings": {
+          "show_recommend": true,
+          "margin": "145px 0 108px 0",
+          "section_title": "you may also like",
+          "enable_carousel": true,
+          "number_per_row": 5,
+          "number_of_rows": 2,
+          "auto_speed": "5",
+          "show_dots": false,
+          "show_nav": true,
+          "nav_style": "nav-top__right",
+          "card_style": "vertical-default",
+          "prd_img_ft": "img-br-97",
+          "card_border": false,
+          "card_shadow": false
+        }
+      },
+      "template-404": {
+        "type": "template-404",
+        "settings": {
+          "section_padding": "180px 0 220px 0",
+          "image_type": "404_1.png",
+          "custom_image": "",
+          "button_text": "BACK TO HOMEPAGE"
+        }
+      },
+      "template-collection-slideshow": {
+        "type": "template-collection-slideshow",
+        "blocks": {
+          "1594633883058": {
+            "type": "image",
+            "settings": {
+              "collection": "electronics",
+              "show_all": false,
+              "show_in_all_page": false,
+              "content_style": "green-style2",
+              "mobile_layout": "adjust",
+              "content_pos": "left",
+              "content_vpos": "middle",
+              "content_align": "text-left",
+              "content_effect": "from-right",
+              "top_title": "",
+              "main_title": "GO AHEAD. DO LAUNDRY\nFROM THE COUCH.",
+              "sub_title": "Take, view and share photos with the 17MP\ncamera and stunning 6\" display",
+              "color_top_title": "#333333",
+              "color_main_title": "#3f3f3f",
+              "sub_color": "#444444",
+              "show_content_bg": false,
+              "c_textbg": "#ffffff",
+              "em_color": "#ffffff",
+              "em_bg_color": "#a8bf00",
+              "strong_color": "#ffffff",
+              "strong_bg_color": "#2c7800",
+              "btn1_title": "TAKE A LOOK",
+              "btn1_link": "shopify:\/\/products\/adaptive-sound-player",
+              "btn1_style": "btn-default",
+              "btn2_title": "",
+              "btn2_style": "btn-secondary",
+              "html_content": ""
+            }
+          },
+          "1600162725950": {
+            "type": "image",
+            "settings": {
+              "collection": "electronics",
+              "show_all": false,
+              "show_in_all_page": false,
+              "content_style": "green-style2",
+              "mobile_layout": "adjust",
+              "content_pos": "right",
+              "content_vpos": "middle",
+              "content_align": "text-left",
+              "content_effect": "from-right",
+              "top_title": "",
+              "main_title": "YOUR IDEAS\nCOME TO LIFE.",
+              "sub_title": "Phasellus velit nisl, convallis et enim, egestas\nfermentum justo, Suspendisse ullam...",
+              "color_top_title": "#333333",
+              "color_main_title": "#333333",
+              "sub_color": "#333333",
+              "show_content_bg": true,
+              "c_textbg": "#ffffff",
+              "em_color": "#ffffff",
+              "em_bg_color": "#a8bf00",
+              "strong_color": "#ffffff",
+              "strong_bg_color": "#2c7800",
+              "btn1_title": "TAKE A LOOK",
+              "btn1_style": "btn-default",
+              "btn2_title": "",
+              "btn2_style": "btn-secondary",
+              "html_content": ""
+            }
+          },
+          "1600160768658": {
+            "type": "image",
+            "settings": {
+              "collection": "smart-watches",
+              "show_all": false,
+              "show_in_all_page": false,
+              "content_style": "green-style2",
+              "mobile_layout": "adjust",
+              "content_pos": "left",
+              "content_vpos": "middle",
+              "content_align": "text-left",
+              "content_effect": "from-right",
+              "top_title": "",
+              "main_title": "Immersive Experience,\nHigh Efficiency",
+              "sub_title": "Phasellus velit nisl, convallis et enim nec, egest\nfermentum justo. Suspendisse efficitur ullam...",
+              "color_top_title": "#303130",
+              "color_main_title": "#444444",
+              "sub_color": "#444444",
+              "show_content_bg": false,
+              "c_textbg": "#ffffff",
+              "em_color": "#ffffff",
+              "em_bg_color": "#a8bf00",
+              "strong_color": "#ffffff",
+              "strong_bg_color": "#2c7800",
+              "btn1_title": "TAKE A LOOK",
+              "btn1_link": "shopify:\/\/products\/smart-watch-1",
+              "btn1_style": "btn-default",
+              "btn2_title": "",
+              "btn2_style": "btn-secondary",
+              "html_content": ""
+            }
+          },
+          "1594634059862": {
+            "type": "image",
+            "settings": {
+              "collection": "sound-players",
+              "show_all": false,
+              "show_in_all_page": false,
+              "content_style": "green-style2",
+              "mobile_layout": "adjust",
+              "content_pos": "left",
+              "content_vpos": "middle",
+              "content_align": "text-left",
+              "content_effect": "flip-horizontal",
+              "top_title": "",
+              "main_title": "THE SMARTER WAY TO\nENJOY MUSIC",
+              "sub_title": "Phasellus velit, convallis et enim, egestas\nmentum justo. Suspendisse ullam...",
+              "color_top_title": "#333333",
+              "color_main_title": "#303030",
+              "sub_color": "#444444",
+              "show_content_bg": true,
+              "c_textbg": "#ffffff",
+              "em_color": "#ffffff",
+              "em_bg_color": "#a8bf00",
+              "strong_color": "#ffffff",
+              "strong_bg_color": "#2c7800",
+              "btn1_title": "TAKE A LOOK",
+              "btn1_link": "shopify:\/\/products\/wireless-curve-headset",
+              "btn1_style": "btn-default",
+              "btn2_title": "",
+              "btn2_style": "btn-secondary",
+              "html_content": ""
+            }
+          },
+          "1600161815236": {
+            "type": "image",
+            "settings": {
+              "collection": "sound-players",
+              "show_all": false,
+              "show_in_all_page": false,
+              "content_style": "green-style2",
+              "mobile_layout": "adjust",
+              "content_pos": "right",
+              "content_vpos": "middle",
+              "content_align": "text-left",
+              "content_effect": "from-right",
+              "top_title": "",
+              "main_title": "THE SMARTER WAY TO\nENJOY MUSIC",
+              "sub_title": "Take, view and share photos with the 17MP\ncamera and stunning 6\" display",
+              "color_top_title": "#333333",
+              "color_main_title": "#3f3f3f",
+              "sub_color": "#444444",
+              "show_content_bg": true,
+              "c_textbg": "#ffffff",
+              "em_color": "#ffffff",
+              "em_bg_color": "#a8bf00",
+              "strong_color": "#ffffff",
+              "strong_bg_color": "#2c7800",
+              "btn1_title": "TAKE A LOOK",
+              "btn1_link": "shopify:\/\/products\/noise-cancelling-headset",
+              "btn1_style": "btn-default",
+              "btn2_title": "",
+              "btn2_style": "btn-secondary",
+              "html_content": ""
+            }
+          }
+        },
+        "block_order": [
+          "1594633883058",
+          "1600162725950",
+          "1600160768658",
+          "1594634059862",
+          "1600161815236"
+        ],
+        "settings": {
+          "margin": "0 0 0 0",
+          "margin_laptop": "0 0 0 0",
+          "margin_mobile": "0 0 0 0",
+          "slide_layout": "full-width-container",
+          "layout_h": "fixed-height",
+          "ch_desk": "750",
+          "ch_tablet": "",
+          "ch_mobile": "",
+          "has_minheight": true,
+          "slide_transition": "slide",
+          "auto_speed": "5",
+          "wrap_around": true,
+          "show_paging": true,
+          "dots_color": "#ffffff",
+          "color_dots_h": "",
+          "show_nav": true,
+          "nav_style": "slideshow-nav__big",
+          "nav_color": "#ffffff"
+        }
+      },
+      "testimonials": {
+        "type": "testimonials",
+        "blocks": {
+          "1597634625164": {
+            "type": "text",
+            "settings": {
+              "c_bg": "#ffffff",
+              "add_quote": true,
+              "title": "Easy to Customise",
+              "c_title": "#333333",
+              "desc": "Donec ut ipsum in erat fringilla iaculis eu sit amet est. Curabitur tincidunt enim quis, varius purus. Nunc maximus, elit non dictum eu nulla. Mauris scelerisque pharetra felis.",
+              "c_desc": "#4a4a4a",
+              "name_user": "Ronaldo",
+              "link_user": "",
+              "c_name": "#90a900",
+              "prefix": "By",
+              "date": "on Oct 27, 2019",
+              "c_date": "#9a9a9a"
+            }
+          },
+          "1597634652277": {
+            "type": "text",
+            "settings": {
+              "c_bg": "#ffffff",
+              "add_quote": true,
+              "title": "Slim, Fast and Powerful",
+              "c_title": "#333333",
+              "desc": "Nam non erat sit amet ipsum euismod faucibus. Pellentesque lobortis\nnibh, non vulputate nulla interdum in. Nam tincidunt bibendum \u0003imperdiet. Sed eget elit cursus.",
+              "c_desc": "#4a4a4a",
+              "name_user": "Andre Bailey",
+              "link_user": "",
+              "c_name": "#90a900",
+              "prefix": "By",
+              "date": "on Apr 11, 2020",
+              "c_date": "#9a9a9a"
+            }
+          },
+          "1597634730325": {
+            "type": "text",
+            "settings": {
+              "c_bg": "#ffffff",
+              "add_quote": true,
+              "title": "Simple and Clean Design",
+              "c_title": "#333333",
+              "desc": "Donec ut ipsum in erat fringilla iaculis eu sit amet est. Curabitur tincidunt enim quis, varius purus. Nunc maximus, elit non dictum eu nulla. Mauris scelerisque pharetra felis.",
+              "c_desc": "#4a4a4a",
+              "name_user": "Alexis",
+              "link_user": "",
+              "c_name": "#90a900",
+              "prefix": "By",
+              "date": "on May 20, 2020",
+              "c_date": "#9a9a9a"
+            }
+          },
+          "1597634772751": {
+            "type": "text",
+            "settings": {
+              "c_bg": "#ffffff",
+              "add_quote": true,
+              "title": "Amazing Customer Support",
+              "c_title": "#333333",
+              "desc": "Donec ut ipsum in erat fringilla iaculis eu sit amet est. Curabitur tincidunt enim quis, varius purus. Nunc maximus, elit non dictum eu nulla. Mauris scelerisque pharetra felis.",
+              "c_desc": "#4a4a4a",
+              "name_user": "Harry",
+              "link_user": "",
+              "c_name": "#90a900",
+              "prefix": "By",
+              "date": "on 09 June, 2020",
+              "c_date": "#9a9a9a"
+            }
+          },
+          "1597634809883": {
+            "type": "text",
+            "settings": {
+              "c_bg": "#ffffff",
+              "add_quote": true,
+              "title": "Excellent Quality",
+              "c_title": "#333333",
+              "desc": "Donec ut ipsum in erat fringilla iaculis eu sit amet est. Curabitur tincidunt enim quis, varius purus. Nunc maximus, elit non dictum eu nulla. Mauris scelerisque pharetra felis.",
+              "c_desc": "#4a4a4a",
+              "name_user": "Gnarry",
+              "link_user": "",
+              "c_name": "#90a900",
+              "prefix": "By",
+              "date": "on July 17, 2020",
+              "c_date": "#9a9a9a"
+            }
+          }
+        },
+        "block_order": [
+          "1597634625164",
+          "1597634652277",
+          "1597634730325",
+          "1597634772751",
+          "1597634809883"
+        ],
+        "settings": {
+          "show": true,
+          "margin": "0 0 140px 0",
+          "layout_w": "full-width-container",
+          "layout_h": "relative-content",
+          "ch_desc": "500",
+          "ch_tablet": "",
+          "ch_mobile": "",
+          "back_img": "shopify:\/\/shop_images\/slide_bg1.jpg",
+          "c_bg": "#dde4f4",
+          "title": "Testimonials",
+          "c_title": "#32323a",
+          "desc": "Aliquam auctor ut eros sed pharetra, at cursus consequat velit.",
+          "c_desc": "#4a4a4a",
+          "number_per_row": 2,
+          "item_space": 30,
+          "slide_transition": "slide",
+          "auto_speed": "8",
+          "wrap_around": true,
+          "show_dots": true,
+          "dots_color": "#ffffff",
+          "color_dots_h": "",
+          "show_nav": false,
+          "nav_style": "slideshow-nav__small",
+          "nav_pos": "nav-middle",
+          "c_nav_bg": "#fcfcfc",
+          "c_nav_border": "#fcfcfc",
+          "c_nav": "#333333",
+          "c_nav_h_bg": "#90a900"
+        }
+      },
+      "template-product-sidebar-main": {
+        "type": "template-product-sidebar-main",
+        "settings": {
+          "margin": "60px 0 150px 0",
+          "margin_laptop": "45px 0 100px 0",
+          "margin_mobile": "36px 0 75px 0",
+          "img_position": "left",
+          "thumbs_pos": "thumbs-bottom",
+          "thumbs_style": "thumbs-rect",
+          "gap_thumbs": 20,
+          "show_prev_next": false,
+          "show_sku": true,
+          "show_vendor": false,
+          "show_product_type": true,
+          "show_buy_now": false,
+          "show_share_btns": true,
+          "show_question_form": false,
+          "show_payment_info": false,
+          "payment_title": "Guaranteed Safe Checkout",
+          "payment_svgs": "amazon_payments, american_express, apple_pay, bitcoin, dankort, diners_club, discover, dogecoin, dwolla, forbrugsforeningen, interac, google_pay, jcb, klarna, klarna-pay-later, litecoin, maestro, master, paypal, shopify_pay, sofort, visa"
+        }
+      },
+      "template-product-sidebar": {
+        "type": "template-product-sidebar",
+        "blocks": {
+          "template-product-sidebar-0": {
+            "type": "promotion",
+            "settings": {
+              "border_width": 2,
+              "color_border": "#e5e5e5",
+              "color_icon": "#478107",
+              "color_title": "#333333",
+              "color_desc": "#555555",
+              "promo_icon1": "icon-truck",
+              "promo_title1": "WE SHIPPING\nWORLDWIDE",
+              "promo_text1": "Cras pellentesque, nisi ac tempus pellentesqna",
+              "promo_icon2": "icon-headset2",
+              "promo_title2": "100% MONEY BACK\nGUARANTEE",
+              "promo_text2": "Pellenteque habitant morbi senectus et netus et male",
+              "promo_icon3": "icon-lock-wide",
+              "promo_title3": "100% SECURED\nPAYMENT",
+              "promo_text3": "Mauris interdum nulla ante dignissim, vel malesuada"
+            }
+          },
+          "template-product-sidebar-1": {
+            "type": "collection_carousel",
+            "settings": {
+              "bestseller_title": "bestsellers",
+              "bestseller_collection": "smart-watches",
+              "bestseller_show_count": 3,
+              "prd_img_ft": "img-br-97"
+            }
+          },
+          "template-product-sidebar-2": {
+            "type": "sidebar_advertise",
+            "settings": {
+              "subtitle": "Vacuum cleaner",
+              "title": "Your <b style=\"color:#293242\">smart<\/b>\ncleaning butler",
+              "advertise_text_style": "top-left",
+              "advertise_thp": "left",
+              "advertise_tvp": "v-bottom",
+              "advertise_ta": "text-center",
+              "color": "#222222"
+            }
+          }
+        },
+        "block_order": [
+          "template-product-sidebar-0",
+          "template-product-sidebar-1",
+          "template-product-sidebar-2"
+        ],
+        "settings": {
+          "gap_blocks": 60
+        }
+      },
+      "text-with-image4": {
+        "type": "text-with-image4",
+        "settings": {
+          "show": true,
+          "margin": "108px 0 125px 0",
+          "c_bg": "#ffffff",
+          "c_border": "#293242",
+          "w_border": 7,
+          "content_style": "text-blue2",
+          "title": "Ready for today.\nBuilt for tomorrow.",
+          "color_title": "#3c3c43"
+        }
+      },
+      "products-recently": {
+        "type": "products-recently",
+        "settings": {
+          "show": true,
+          "margin": "125px 0 145px 0",
+          "section_title": "Recently Viewed",
+          "enable_carousel": true,
+          "number_per_row": 3,
+          "number_of_rows": 5,
+          "auto_speed": "7",
+          "show_dots": false,
+          "show_nav": true,
+          "nav_style": "nav-top__right",
+          "card_style": "horizontal",
+          "prd_img_ft": "img-br-100"
+        }
+      },
+      "instagram": {
+        "type": "instagram",
+        "settings": {
+          "show": true,
+          "margin": "145px 0 10px 0",
+          "layout": "container",
+          "section_title": "#insta_venedor",
+          "c_title": "#333333",
+          "section_info": "Class aptent taciti sociosqu ad litora torquent.",
+          "c_desc": "#777777",
+          "btn_text": "",
+          "insta_layout": "carousel",
+          "hashtag": "#venedor_insta_orange",
+          "count": 10,
+          "grid_count": 5
+        }
+      },
+      "template-product-showcase": {
+        "type": "template-product-showcase",
+        "blocks": {
+          "template-product-showcase-0": {
+            "type": "information",
+            "settings": {
+              "target_product": "high-quality-music-player-default-layout-2",
+              "title": "All-Day Play",
+              "desc": "Donec semper, ante eget rutrum varius, orci\nmetus. Sed sed sapien id diam dictum ...",
+              "icon": "icon-play-1"
+            }
+          },
+          "template-product-showcase-1": {
+            "type": "information",
+            "settings": {
+              "target_product": "high-quality-music-player-default-layout-2",
+              "title": "Pure Adaptive Noise",
+              "desc": "Quisque ac quam id quam ullam. lorem corper\ndignissim ullamcorper utnisi...",
+              "icon": "icon-microphone-2"
+            }
+          },
+          "template-product-showcase-2": {
+            "type": "information",
+            "settings": {
+              "target_product": "high-quality-music-player-default-layout-2",
+              "title": "Charge and Go",
+              "desc": "Suspendisse nec nulla vitae justo lacinia ferment.\nCurabitur vitae erat fermentum viverra...",
+              "icon": "icon-microphone-1"
+            }
+          },
+          "template-product-showcase-3": {
+            "type": "information",
+            "settings": {
+              "target_product": "high-quality-music-player-default-layout-2",
+              "title": "Stereo Bluetooth",
+              "desc": "Mauris id magna ut dui pulvinar mattis in quis\nlorem.Vivamus eleifend, dui fringilla...",
+              "icon": "icon-speaker"
+            }
+          },
+          "template-product-showcase-4": {
+            "type": "information",
+            "settings": {
+              "target_product": "high-quality-music-player-default-layout-2",
+              "title": "Seemless Switching",
+              "desc": "Consectetur tincidunt, augue lacus sollicitudin\nsapien, interdum. Augue eros sed nulla...",
+              "icon": "icon-music"
+            }
+          },
+          "template-product-showcase-5": {
+            "type": "information",
+            "settings": {
+              "target_product": "high-quality-music-player-default-layout-2",
+              "title": "Noise Isolation",
+              "desc": "Praesent gravida malesuada faucibus. Etiam\nvehicula massa eget nisl ante, posuere...",
+              "icon": "icon-pause"
+            }
+          }
+        },
+        "block_order": [
+          "template-product-showcase-0",
+          "template-product-showcase-1",
+          "template-product-showcase-2",
+          "template-product-showcase-3",
+          "template-product-showcase-4",
+          "template-product-showcase-5"
+        ],
+        "settings": {
+          "show_section": true,
+          "margin": "130px 0 130px 0",
+          "margin_laptop": "90px 0 70px 0",
+          "margin_mobile": "60px 0 45px 0",
+          "layout": "full-width-container",
+          "has_minheight": true,
+          "color_title": "#413f3f",
+          "color_back": "#ededed",
+          "color_t": "#3c3c3c",
+          "color_desc": "#6a6a6a",
+          "color_ibg": "#ffffff",
+          "color_icon": "#3c3c3c"
+        }
+      },
+      "template-product-extra-images": {
+        "type": "template-product-extra-images",
+        "settings": {
+          "show_section": true,
+          "margin": "0 0 130px 0",
+          "margin_laptop": "0 0 70px 0",
+          "margin_mobile": "0 0 45px 0",
+          "width": "full-width-container",
+          "design": "grid",
+          "cols": 2,
+          "item_margin": 20,
+          "fit_margin": false,
+          "img_size": "design",
+          "img_anm": "c-e__i__zoom-in"
+        }
+      },
+      "template-product-extra-video": {
+        "type": "template-product-extra-video",
+        "settings": {
+          "show_section": true,
+          "margin": "0 0 145px 0",
+          "margin_laptop": "0 0 85px 0",
+          "margin_mobile": "0 0 55px 0",
+          "width": "full-width-container",
+          "cols": 1,
+          "item_space": 0,
+          "fit_margin": true,
+          "controls": true,
+          "autoplay": false,
+          "loop": true,
+          "mute": true,
+          "show_unmute": true,
+          "c_pause": "#ffffff",
+          "xp_pause": 50,
+          "yp_pause": 50
+        }
+      },
+      "service-promotion-2": {
+        "type": "service-promotion-2",
+        "blocks": {
+          "1601304925237": {
+            "type": "icon-text",
+            "settings": {
+              "promo_icon": "icon-truck",
+              "promo_title": "WE SHIPPING\nWORLDWIDE",
+              "promo_text": ""
+            }
+          },
+          "1601304993080": {
+            "type": "icon-text",
+            "settings": {
+              "promo_icon": "icon-money-back-1",
+              "promo_title": "100% MONEY BACK\nGUARANTEE",
+              "promo_text": ""
+            }
+          },
+          "1601305036536": {
+            "type": "icon-text",
+            "settings": {
+              "promo_icon": "icon-lock-wide",
+              "promo_title": "100% SECURE\nPAYMENT",
+              "promo_text": ""
+            }
+          },
+          "1601305054892": {
+            "type": "icon-text",
+            "settings": {
+              "promo_icon": "icon-back-smooth-1",
+              "promo_title": "14-DAY RETURN\nPOLICY",
+              "promo_text": ""
+            }
+          }
+        },
+        "block_order": [
+          "1601304925237",
+          "1601304993080",
+          "1601305036536",
+          "1601305054892"
+        ],
+        "settings": {
+          "show_promo": true,
+          "bg": "#293242",
+          "title": "",
+          "show_border": false,
+          "split_border": false,
+          "row_size": "4",
+          "item_padding": "22px 22px 22px 22px",
+          "item_space": 15,
+          "item_bg": "rgba(0,0,0,0)",
+          "c_icon": "#ffffff",
+          "c_title": "#ffffff",
+          "c_text": "#ffffff",
+          "margin": "",
+          "padding": "35px 0 35px 0"
+        }
+      },
+      "template-product-grid": {
+        "type": "template-product-grid",
+        "blocks": {
+          "template-product-grid-0": {
+            "type": "icon_text",
+            "settings": {
+              "promo_icon": "icon-ticksign",
+              "icon_width": 32,
+              "promo_title": "GENUINE GOODYEAR® FOOTWEAR",
+              "color_icon": "#293242",
+              "color_text": "#333333"
+            }
+          },
+          "template-product-grid-2": {
+            "type": "icon_text",
+            "settings": {
+              "promo_icon": "icon-back-smooth-2",
+              "icon_width": 32,
+              "promo_title": "30 Day Return Policy",
+              "color_icon": "#293242",
+              "color_text": "#333333"
+            }
+          },
+          "template-product-grid-1": {
+            "type": "icon_text",
+            "settings": {
+              "promo_icon": "icon-shield",
+              "icon_width": 32,
+              "promo_title": "Secure Checkout",
+              "color_icon": "#293242",
+              "color_text": "#333333"
+            }
+          }
+        },
+        "block_order": [
+          "template-product-grid-0",
+          "template-product-grid-2",
+          "template-product-grid-1"
+        ],
+        "settings": {
+          "width": "full-width-container",
+          "margin": "40px 0 250px 0",
+          "margin_laptop": "30px 0 150px 0",
+          "margin_mobile": "30px 0 75px 0",
+          "img_count": "1",
+          "img_position": "left",
+          "show_prev_next": false,
+          "show_sku": false,
+          "show_vendor": false,
+          "show_product_type": true,
+          "show_buy_now": false,
+          "show_share_btns": false,
+          "show_question_form": false,
+          "show_payment_info": false,
+          "payment_title": "Guaranteed Safe Checkout",
+          "payment_svgs": "amazon_payments, american_express, apple_pay, bitcoin, dankort, diners_club, discover, dogecoin, dwolla, forbrugsforeningen, interac, google_pay, jcb, klarna, klarna-pay-later, litecoin, maestro, master, paypal, shopify_pay, sofort, visa",
+          "badge_style": "classic",
+          "badge_position": "side-fixed"
+        }
+      },
+      "template-product-extra-images-grid": {
+        "type": "template-product-extra-images-grid",
+        "settings": {
+          "show_section": true,
+          "margin": "0 0 140px 0",
+          "margin_laptop": "0 0 90px 0",
+          "margin_mobile": "0 0 65px 0",
+          "width": "full-width-container",
+          "design": "masonry2",
+          "cols": 2,
+          "item_margin": 10,
+          "fit_margin": false,
+          "img_size": "design",
+          "img_anm": "c-e__i__zoom-in"
+        }
+      },
+      "template-product-sticky-layout": {
+        "type": "template-product-sticky-layout",
+        "settings": {
+          "margin": "60px 0 150px 0",
+          "margin_laptop": "45px 0 100px 0",
+          "margin_mobile": "30px 0 75px 0",
+          "thumbs_style": "thumbs-rect",
+          "gap_thumbs": 20,
+          "show_sku": true,
+          "show_vendor": false,
+          "show_product_type": true,
+          "show_buy_now": false,
+          "show_question_form": false,
+          "show_payment_info": false,
+          "payment_title": "Guaranteed Safe Checkout",
+          "payment_svgs": "amazon_payments, american_express, apple_pay, bitcoin, dankort, diners_club, discover, dogecoin, dwolla, forbrugsforeningen, interac, google_pay, jcb, klarna, klarna-pay-later, litecoin, maestro, master, paypal, shopify_pay, sofort, visa",
+          "nav_desc_title": "See Full Description",
+          "show_share_btns": true
+        }
+      },
+      "template-product-sticky-form": {
+        "type": "template-product-sticky-form",
+        "blocks": {
+          "template-product-sticky-form-0": {
+            "type": "icon_text",
+            "settings": {
+              "icon": "icon-information",
+              "icon_width": 20,
+              "info": "24 Hours Delivery",
+              "color_icon": "#478107",
+              "color_text": "#444444"
+            }
+          },
+          "template-product-sticky-form-1": {
+            "type": "icon_text",
+            "settings": {
+              "icon": "icon-information",
+              "icon_width": 20,
+              "info": "100% Secure Payment",
+              "color_icon": "#478107",
+              "color_text": "#444444"
+            }
+          }
+        },
+        "block_order": [
+          "template-product-sticky-form-0",
+          "template-product-sticky-form-1"
+        ],
+        "settings": {
+          "margin": "60px 0 170px 0",
+          "margin_laptop": "45px 0 140px 0",
+          "show_buy_now": false
+        }
+      },
+      "text-with-image-tiles": {
+        "type": "text-with-image-tiles",
+        "settings": {
+          "margin": "",
+          "layout": "full-width-container",
+          "cols": 2,
+          "item_margin": 0,
+          "fit_margin": true
+        }
+      },
+      "template-product-service-promotion": {
+        "type": "template-product-service-promotion",
+        "blocks": {
+          "1601549120010": {
+            "type": "icon-text",
+            "settings": {
+              "promo_icon": "icon-truck",
+              "promo_title": "We shipping for all orders $75+",
+              "promo_text": ""
+            }
+          },
+          "1601549136972": {
+            "type": "icon-text",
+            "settings": {
+              "promo_icon": "icon-money-back-1",
+              "promo_title": "30-Day Return\nPolicy",
+              "promo_text": ""
+            }
+          },
+          "1601549186695": {
+            "type": "icon-text",
+            "settings": {
+              "promo_icon": "icon-back-smooth-1",
+              "promo_title": "Easy Self-Service Returns",
+              "promo_text": ""
+            }
+          },
+          "1601549149895": {
+            "type": "icon-text",
+            "settings": {
+              "promo_icon": "icon-lock-wide",
+              "promo_title": "100% Secured\nCheckout",
+              "promo_text": ""
+            }
+          }
+        },
+        "block_order": [
+          "1601549120010",
+          "1601549136972",
+          "1601549186695",
+          "1601549149895"
+        ],
+        "settings": {
+          "show_promo": true,
+          "bg": "#293242",
+          "title": "",
+          "show_border": false,
+          "split_border": false,
+          "row_size": "4",
+          "item_padding": "22px 22px 22px 22px",
+          "item_space": 15,
+          "item_bg": "rgba(0,0,0,0)",
+          "c_icon": "#ffffff",
+          "c_title": "#ffffff",
+          "c_text": "#999999",
+          "margin": "0",
+          "margin_laptop": "0",
+          "margin_mobile": "0",
+          "padding": "35px 0 35px 0"
+        }
+      },
+      "template-product-classic": {
+        "type": "template-product-classic",
+        "blocks": {
+          "template-product-classic-0": {
+            "type": "icon_text",
+            "settings": {
+              "promo_icon": "icon-truck",
+              "icon_width": 32,
+              "promo_title": "Free Delivery",
+              "color_icon": "#333333",
+              "color_text": "#333333"
+            }
+          },
+          "template-product-classic-1": {
+            "type": "icon_text",
+            "settings": {
+              "promo_icon": "icon-headset2",
+              "icon_width": 32,
+              "promo_title": "24\/h support",
+              "color_icon": "#333333",
+              "color_text": "#333333"
+            }
+          },
+          "template-product-classic-2": {
+            "type": "icon_text",
+            "settings": {
+              "promo_icon": "icon-back-smooth-1",
+              "icon_width": 32,
+              "promo_title": "30 - Day returns",
+              "color_icon": "#333333",
+              "color_text": "#333333"
+            }
+          },
+          "template-product-classic-3": {
+            "type": "icon_text",
+            "settings": {
+              "promo_icon": "icon-lock-wide",
+              "icon_width": 32,
+              "promo_title": "payment secured",
+              "color_icon": "#333333",
+              "color_text": "#333333"
+            }
+          }
+        },
+        "block_order": [
+          "template-product-classic-0",
+          "template-product-classic-1",
+          "template-product-classic-2",
+          "template-product-classic-3"
+        ],
+        "settings": {
+          "margin": "40px 0 120px 0",
+          "margin_laptop": "40px 0 90px 0",
+          "margin_mobile": "40px 0 75px 0",
+          "img_position": "left",
+          "thumbs_pos": "thumbs-left",
+          "thumbs_style": "thumbs-circle",
+          "gap_thumbs": 20,
+          "show_prev_next": true,
+          "show_sku": true,
+          "show_vendor": false,
+          "show_product_type": true,
+          "show_buy_now": false,
+          "show_share_btns": true,
+          "show_question_form": false,
+          "show_payment_info": false,
+          "payment_title": "Guaranteed Safe Checkout",
+          "payment_svgs": "amazon_payments, american_express, apple_pay, bitcoin, dankort, diners_club, discover, dogecoin, dwolla, forbrugsforeningen, interac, google_pay, jcb, klarna, klarna-pay-later, litecoin, maestro, master, paypal, shopify_pay, sofort, visa",
+          "badge_style": "classic",
+          "badge_position": "bottom-full"
+        }
+      },
+      "template-product-center-image": {
+        "type": "template-product-center-image",
+        "blocks": {
+          "template-product-center-image-0": {
+            "type": "icon_text",
+            "settings": {
+              "promo_icon": "icon-truck",
+              "icon_width": 35,
+              "promo_title": "We Shipping\nWorldWide",
+              "color_icon": "#333333",
+              "color_text": "#333333"
+            }
+          },
+          "template-product-center-image-1": {
+            "type": "icon_text",
+            "settings": {
+              "promo_icon": "icon-money-back-1",
+              "icon_width": 40,
+              "promo_title": "100% Money Back\nGuarantee",
+              "color_icon": "#333333",
+              "color_text": "#333333"
+            }
+          },
+          "template-product-center-image-3": {
+            "type": "icon_text",
+            "settings": {
+              "promo_icon": "icon-lock-wide",
+              "icon_width": 36,
+              "promo_title": "100% Secured\nPayment",
+              "color_icon": "#333333",
+              "color_text": "#333333"
+            }
+          },
+          "template-product-center-image-2": {
+            "type": "icon_text",
+            "settings": {
+              "promo_icon": "icon-back-smooth-1",
+              "icon_width": 32,
+              "promo_title": "14-Day Return\nPolicy",
+              "color_icon": "#333333",
+              "color_text": "#333333"
+            }
+          }
+        },
+        "block_order": [
+          "template-product-center-image-0",
+          "template-product-center-image-1",
+          "template-product-center-image-3",
+          "template-product-center-image-2"
+        ],
+        "settings": {
+          "width": "container-1500",
+          "margin": "60px 0 170px 0",
+          "margin_laptop": "45px 0 120px 0",
+          "margin_mobile": "36px 0 75px 0",
+          "thumbs_style": "thumbs-circle",
+          "gap_thumbs": 20,
+          "show_prev_next": true,
+          "show_sku": true,
+          "show_vendor": false,
+          "show_product_type": true,
+          "show_buy_now": false,
+          "show_question_form": false,
+          "show_payment_info": false,
+          "payment_title": "Guaranteed Safe Checkout",
+          "payment_svgs": "amazon_payments, american_express, apple_pay, bitcoin, dankort, diners_club, discover, dogecoin, dwolla, forbrugsforeningen, interac, google_pay, jcb, klarna, klarna-pay-later, litecoin, maestro, master, paypal, shopify_pay, sofort, visa",
+          "nav_desc_title": "See Full Description",
+          "show_share_btns": true,
+          "badge_style": "modern",
+          "badge_position": "bottom-full"
+        }
+      },
+      "template-product-extra-images-center": {
+        "type": "template-product-extra-images-center",
+        "settings": {
+          "show_section": true,
+          "margin": "0 0 140px 0",
+          "margin_laptop": "0 0 90px 0",
+          "margin_mobile": "0 0 65px 0",
+          "width": "full-width-container",
+          "design": "masonry3",
+          "cols": 2,
+          "item_margin": 0,
+          "fit_margin": true,
+          "img_size": "design",
+          "img_anm": "c-e__i__zoom-in"
+        }
+      },
+      "template-pages-tabs": {
+        "type": "template-pages-tabs",
+        "blocks": {
+          "6c5b1f1e-4091-460d-83b0-9a64e01c4247": {
+            "type": "level0",
+            "settings": {
+              "s_t": "data treatment",
+              "p_t": "How does Venedor use my Personal Details?",
+              "p_c": ""
+            }
+          },
+          "959e6126-bb7a-42f6-a60a-ffe368bfdfc2": {
+            "type": "level1",
+            "settings": {
+              "s_t": "Introduction",
+              "b_t": "",
+              "b_c": "<p>Maecenas in mattis justo nulla aliquam dictum erat, max imus interdum. Sed sollic at ligula semper aliquam sed sed mi, aliquam dictum erat, vitae inter dum eleifend <strong><em>vitae suscipit<\/em><\/strong>. Aliquam erat a faucibus dapibus.<\/p><p> Faucibus con dimentum diam, vitae suscipit leo.  Aliquam vel erat a faucibus dapibus. Donec lobortis metus, fring eleifend quam leo. Nunc sit amet erat nibh. Sed vel mauris felis. Sed venenatis at nulla magna.<\/p>"
+            }
+          },
+          "effc2e78-5d97-4daa-be34-f956799d3076": {
+            "type": "level1",
+            "settings": {
+              "s_t": "Information we Collect",
+              "b_t": "Information We Collect",
+              "b_c": "<p>- Improve the shopping experience<\/p><p>- Contact them if there is any problem with any of their orders <\/p><p>- For other other logistical reasons.<\/p><p>- Process their online orders, including the sending of e-mails<\/p><p>- Inform them delivery status.<\/p><p>- Manage their account Venedor<\/p><p>- Process order returns.<\/p><p>- Respond to their queries.<\/p><p><\/p>"
+            }
+          },
+          "49dc3b80-04df-430b-a357-b89d74a68ebb": {
+            "type": "level1",
+            "settings": {
+              "s_t": "How does Venedor Protect My Personal Details?",
+              "b_t": "How does Venedor use my Personal Details?",
+              "b_c": "<p>Nullam venenatis ipsum lobortis nulla rhoncus vulputate. Phasellus semper blandit molestie. Morbi auctor nisi ac rhoncus, sit <strong><em>amet rhoncus<\/em><\/strong> diam viverra. Sed eget suscipit leo. Mauris nec consectetur orci. Maecenas commodo <br\/>leo facilisis maximus mollis sed odio.<\/p><p>Maecenas in mattis justo nulla aliquam dictum erat, max imus interdum. Sed sollic at ligula semper aliquam sed sed mi, aliquam dictum erat, vitae inter dum eleifend vitae suscipit. Aliquam erat a faucibus dapibus. Faucibus condimentum diam, vitae suscipit leo aliquam.<\/p>"
+            }
+          },
+          "cf6235b6-3a6a-4534-9cc4-3b15bf608956": {
+            "type": "level0",
+            "settings": {
+              "s_t": "use of our website",
+              "p_t": "Summary of Your Terms of Use",
+              "p_c": "<p>Where applicable, include a clause in your Terms of Use that:<\/p><p>- Introduces the agreement and gives its effective date<\/p><p>- Obtains acceptance of the agreement<\/p><p>- Refers and links to your other policies e.g. Privacy Policy<\/p><p>- Grants you the right to make changes to the agreement<\/p><p>- Sets the rules about user-generated content<\/p><p>- Sets the rules around payments and billing<\/p><p>- Sets the conditions under which you may suspend or terminate a user&#x27;s account<\/p><p>- Disclaims your responsibilities for the spread of malware, etc.<\/p><p>- Excludes implied warranties<\/p><p>- Limits your company&#x27;s liability<\/p><p>- Indemnifies your company against any losses your users cause<\/p><p>- Determines your legal jurisdiction<\/p>"
+            }
+          },
+          "25678e6c-4b36-421e-a0fd-c2538291a1cc": {
+            "type": "level0",
+            "settings": {
+              "s_t": "cookies policy",
+              "p_t": "What is a Cookie Policy?",
+              "p_c": "<p>A cookie policy is a legal document that provides information about the types of cookies used by your website or app, what those cookies do, and how users can control their cookie preferences.<\/p><p>In addition to cookies, the policy should outline other types of tracking technologies that may be used by your site — such as web beacons and pixel tags.<\/p><p>Your cookie policy should be accessible from the homepage of your website (either through the main menu, the footer, or both), and should be linked to within any relevant policies, such as your privacy policy.<\/p>"
+            }
+          }
+        },
+        "block_order": [
+          "6c5b1f1e-4091-460d-83b0-9a64e01c4247",
+          "959e6126-bb7a-42f6-a60a-ffe368bfdfc2",
+          "effc2e78-5d97-4daa-be34-f956799d3076",
+          "49dc3b80-04df-430b-a357-b89d74a68ebb",
+          "cf6235b6-3a6a-4534-9cc4-3b15bf608956",
+          "25678e6c-4b36-421e-a0fd-c2538291a1cc"
+        ],
+        "settings": {
+          "margin": "40px 0 160px 0",
+          "margin_laptop": "32px 0 80px 0",
+          "margin_mobile": "32px 0 50px 0",
+          "show_sb": true,
+          "c_ctn_pt": "#333333",
+          "c_ctn_bt": "#3f3f3f",
+          "c_ctn_pb": "#3f3f3f",
+          "c_ctn_em": "#497f10",
+          "c_ct_ic": "#444444",
+          "c_ct_tt": "#333333",
+          "c_ct_if": "#444444",
+          "show_ci": true,
+          "ci_icon1": "icon-location",
+          "ci_title1": "Address",
+          "ci_detail11": "Oxford Street 48\/188, London,",
+          "ci_detail12": "United Kingdom, 24-157",
+          "ci_detail13": "",
+          "ci_icon2": "icon-headset4",
+          "ci_title2": "Email us",
+          "ci_detail21": "flexkit.sppt@gmail.com",
+          "ci_detail22": "contact@venedor.com",
+          "ci_detail23": "",
+          "ci_icon3": "icon-phone-ring",
+          "ci_title3": "Call Us",
+          "ci_detail31": "+282 014 7191",
+          "ci_detail32": "+287 014 5183",
+          "ci_detail33": ""
+        }
+      },
+      "text-with-icon": {
+        "type": "text-with-icon",
+        "settings": {
+          "color_section_bg": "",
+          "section_margin": "",
+          "padding": "7px 0 7px 0",
+          "section_width": "full-width-container",
+          "section_align": "center",
+          "color_icon": "#f2f7e9",
+          "color_text": "#f2f7e9",
+          "color_icon_seperator": "#95be4f",
+          "size_icon": 18,
+          "size_font": 12
+        }
+      },
+      "header-mobile": {
+        "type": "header-mobile",
+        "blocks": {
+          "header-mobile-0": {
+            "type": "cart",
+            "settings": {
+              "cart_icon_name": "",
+              "size_icon": 17,
+              "header_cart_style": "show_amount",
+              "title": "My Cart",
+              "cart_color": "#312e2e",
+              "cart_icon": "#555555",
+              "amount_pos": "right",
+              "c_amount_bg": "#7bae23",
+              "c_amount_text": "#ffffff"
+            }
+          },
+          "header-mobile-1": {
+            "type": "search_box",
+            "settings": {
+              "search_style": "search-box-popup",
+              "search_icon": "icon-search",
+              "size_icon": 16,
+              "search_title": "Search",
+              "color_search": "#ffffff",
+              "color_search_h": "#cccccc",
+              "color_search_ib": "#ffffff",
+              "color_search_input": "#444444",
+              "color_bg": "rgba(0,0,0,0)"
+            }
+          }
+        },
+        "block_order": [
+          "header-mobile-0",
+          "header-mobile-1"
+        ],
+        "settings": {
+          "type": "3",
+          "padding": "25px 0 25px 0",
+          "c_bg": "#073982",
+          "c_text": "#ffffff",
+          "menu": "main-menu",
+          "menu_title": "Menu",
+          "c_mb_menu_bg": "#ffffff",
+          "menu_open_effect": "slide-left"
+        }
+      },
+      "1618247912f0b3d1c7": {
+        "type": "instagram",
+        "settings": {
+          "show": true,
+          "margin": "150px 0",
+          "layout": "container",
+          "section_title": "",
+          "c_title": "#333333",
+          "section_info": "",
+          "c_desc": "#777777",
+          "btn_text": "JOIN THE HYPE",
+          "insta_link": "https:\/\/www.instagram.com\/goodyearfootwear\/",
+          "insta_layout": "carousel",
+          "hashtag": "#goodyearfootwear",
+          "count": 8,
+          "grid_count": 5
+        }
+      },
+      "1618247937de798656": {
+        "type": "custom-content",
+        "settings": {
+          "margin": "0 0 0 0",
+          "layout": "container",
+          "html": "<br><br><br>\nTESTIMONIALS HERE\n<br><br><br>"
+        }
+      }
+    },
+    "content_for_index": [
+      "1579598611535",
+      "1579615647655",
+      "1579751776489",
+      "1579849986141",
+      "1579876806063",
+      "1579877186442",
+      "1618247912f0b3d1c7",
+      "1618247937de798656"
+    ]
+  }
+}

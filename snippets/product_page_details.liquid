@@ -1,0 +1,87 @@
+{% comment %}
+Renders product details block in product pages
+  Accepts:
+    - section: <Section> Parent section in which this snippet is rendered
+      = show_prev_next: <Boolean> show prev/next product buttons in same collection
+      = show_sku: <Boolean> show product sku
+      = show_vendor: <Boolean> show product vendor
+      = show_product_type: <Boolean> show product vendor
+      = show_buy_now: <Boolean> show buy_now button
+      = badge_position: <String> Position of badge (values: 'bottom-full', 'side-fixed')
+      = badge_style: <String> Product badge styles (values: 'Classic', 'Advanced')
+
+  Usage:
+    {% include 'product_page_details', section: section %}
+{% endcomment %}
+{%- assign current_variant = product.selected_or_first_available_variant -%}
+
+<h1 itemprop="name" class="product-name">{{ product.vendor }} | {{ product.title }}</h1>
+
+<div itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+  <meta itemprop="priceCurrency" content="{{ shop.currency }}" />
+  <meta itemprop="url" content="{{ product.url | within: collection }}" />
+  <meta itemprop="itemCondition" itemtype="http://schema.org/OfferItemCondition" content="http://schema.org/NewCondition"/>
+  <meta itemprop="seller" content="{{ shop.name | escape }}" />
+
+  {% render 'product_price', price: product.price, compare_at_price: product.compare_at_price %}
+
+  <div class="product-review">
+    {% render 'product_review', product: product %}
+  </div>
+
+  {%- if settings.enable_product_availability -%}
+  <link itemprop="availability" href="http://schema.org/{% if variant.available %}InStock{% else %}OutOfStock{% endif %}">
+  <div class="product-details__text">
+  <!--  <label>{{ 'products.product.availability' | t }}: </label> -->
+    <span class="in-stock">
+      {%- if product.selected_or_first_available_variant.inventory_management -%}
+        {%- assign inventory = product.selected_or_first_available_variant.inventory_quantity -%}
+        {%- if inventory > 0 -%}
+         {{ 'products.product.in_stock' | t }}
+        {%- else -%}
+          {{ 'products.product.out_of_stock' | t }}
+        {%- endif -%}
+      {%- else -%}
+        {{ 'products.product.many_in_stock' | t }}
+      {%- endif -%}
+    </span>
+  </div><!-- .inventory -->
+  {%- endif -%}
+
+  {%- if section.settings.show_product_type and product.type != blank -%}
+    <div class="product-details__text"><label>{{ 'products.product.type' | t }}:</label><span itemprop="brand"> {{ product.type }}</span></div>
+  {%- endif -%}
+
+  {%- if section.settings.show_sku and current_variant.sku != blank -%}
+  <div class="product-sku"><label>{{ 'products.product.sku' | t }}: </label><span itemprop="sku" class="sku">{{ current_variant.sku }}</span></div>
+  {%- endif -%}
+
+  {% if section.settings.show_vendor %}
+  <div class="product-vendor">
+    <label>{{ 'products.product.vendor' | t }}:</label><span itemprop="brand" class="brand"> {{ product.vendor }}</span>
+  </div>
+  {% endif %}
+
+  {%- if product.metafields.vndbasic['dealtime'] != blank -%}
+    {% render 'product_deal' with product.metafields.vndbasic['dealtime'] %}
+  {% endif %}
+  {% render 'product_form', show_buy_now: section.settings.show_buy_now, product: product %}
+
+  {% if section.settings.show_question_form %}
+    <a href="#form-contact-product" class="vpp-atv ds-flex align-center">{% render 'icon-support' %}{{ 'products.product.question' | t }}</a>
+  {% endif %}
+
+  {%- if section.settings.show_payment_info -%}
+    {% render 'payment_info', tt: section.settings.payment_title, img: section.settings.payments_img, svgs: section.settings.payment_svgs %}
+  {%- endif -%}
+
+  {%- if section.settings.show_share_btns and move_share_btn != true -%}
+    {% render 'product_share' %}
+  {%- endif -%}
+
+  {%- if section.settings.badge_position == 'side-fixed' -%}
+  <div class="product-badges side-fixed row">
+    {% include 'product_badge', blocks: section.blocks, style: section.settings.badge_style %}
+  </div>
+  {%- endif -%}
+</div>

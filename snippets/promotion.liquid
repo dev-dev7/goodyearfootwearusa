@@ -1,0 +1,36 @@
+{% comment %}
+Renders promotion text boxes
+  Accepts:
+    - promo_icon: <String> Name of the icon to show beside text
+    - promo_title: <String> Promotion title
+    - promo_text: <Number> Promotion text
+
+  Usage:
+    {% include 'promotion', promo_icon: promo_icon, promo_title: promo_title, promo_text: promo_text, promo_btn: promo_btn, promo_link: promo_link %}
+{% endcomment %}
+
+<div class="promo-container">
+  <div class="promo-icon">
+    {%- unless promo_icon == blank -%}
+      {% include 'include_icon', icon_name: promo_icon %}
+    {%- endunless -%}
+  </div><!-- .product-icon -->
+  <div class="promo-content">
+    {%- if promo_title != blank -%}
+      <b class="promo-title">{{ promo_title | newline_to_br }}</b>
+    {%- endif -%}
+
+    {%- if promo_text != blank -%}
+      <p class="promo-text">{{ promo_text | newline_to_br }}</p>
+    {%- endif -%}
+
+    {%- if promo_btn != blank -%}
+      <a class="btn btn-text" href="{{ promo_link }}">
+        {{ promo_btn }}
+        {%- if promo_btn_icon != blank -%}
+          {% include promo_btn_icon %}
+        {%- endif -%}
+      </a>
+    {%- endif -%}
+  </div><!-- .promo-content -->
+</div>

@@ -1,0 +1,11 @@
+{% comment %}
+Renders svg icon
+  Accepts:
+    - icon_name: {String} name of the svg icon to render
+
+  Usage:
+    {% include 'include_icon', icon_name: block.settings.icon_name %}
+{% endcomment %}
+{%- if icon_name != blank -%}
+  {% include icon_name %}
+{%- endif -%}

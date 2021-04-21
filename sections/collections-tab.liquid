@@ -1,0 +1,176 @@
+<div style="margin: {{ section.settings.margin }};">
+  <div class="container {{ section.settings.subtitle_style }}">
+    {% include 'collections_tab' with section, c_type: "section" %}
+  </div>
+</div>
+{% schema %}
+{
+  "name": "Collections Tab",
+  "class": "vs-collections-tab",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Settings"
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "Section margin",
+      "info": "Set margin for section top-right-bottom-left (e.g. 20px 15px 10px 0)",
+      "default": "0 0 180px 0"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section title",
+      "default": "latest products"
+    },
+    {
+      "type": "select",
+      "id": "subtitle_style",
+      "label": "Tab title style",
+      "options": [
+        { "value": "default", "label": "Small" },
+        { "value": "center-big", "label": "Big" },
+        { "value": "center-icon", "label": "With icon" },
+        { "value": "tab-title_bigger", "label": "Bigger" }
+      ],
+      "default": "center-big"
+    },
+    {
+      "type": "select",
+      "id": "tab_title_align",
+      "label": "Tab title font style",
+      "options": [
+        { "value": "justify-center", "label": "Center" },
+        { "value": "justify-start", "label": "Left" }
+      ],
+      "default": "justify-center"
+    },
+    {
+      "type": "select",
+      "id": "tab_title_style",
+      "label": "Tab title font style",
+      "options": [
+        { "value": "default", "label": "Default" },
+        { "value": "italic", "label": "Italic" }
+      ],
+      "default": "italic"
+    },
+    {
+      "type": "header",
+      "content": "Product card configuration"
+    },
+    {
+      "type": "select",
+      "id": "card_style",
+      "label": "Product card style",
+      "options": [
+        { "value": "vertical-advanced", "label": "Vertical advanced" },
+        { "value": "vertical-classic", "label": "Vertical classic" },
+        { "value": "vertical-default", "label": "Vertical default" },
+        { "value": "vertical-details", "label": "Vertical details" },
+        { "value": "vertical-modern", "label": "Vertical modern" },
+        { "value": "vertical-progressive", "label": "Vertical progressive" },
+        { "value": "horizontal-advanced", "label": "Horizontal advanced" },
+        { "value": "horizontal-classic", "label": "Horizontal classic" },
+        { "value": "horizontal-default", "label": "Horizontal default" },
+        { "value": "horizontal-progressive", "label": "Horizontal progressive" },
+        { "value": "horizontal-modern", "label": "Horizontal modern" }
+      ],
+      "default": "vertical-default"
+    },
+    {
+      "type": "radio",
+      "id": "prd_img_ft",
+      "label": "Add darkness to product images",
+      "options": [
+        { "value": "img-br-100", "label": "No" },
+        { "value": "img-br-97", "label": "Yes" }
+      ],
+      "default": "img-br-100",
+      "info": "Recommended for white background product images"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_border",
+      "label": "Show border around product cards",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "card_shadow",
+      "label": "Show boxshadow around product cards",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "cols",
+      "label": "Number of columns",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "range",
+      "id": "limit",
+      "label": "Number of products to show",
+      "min": 1,
+      "max": 20,
+      "step": 1,
+      "default": 10
+    },
+    {
+      "type": "text",
+      "id": "btn_title",
+      "label": "Button Title"
+    },
+    {
+      "type": "select",
+      "id": "btn_style",
+      "label": "Button Style",
+      "options": [
+        {"value": "btn-default", "label": "Default button"},
+        {"value": "btn-transparent", "label": "Transparent button"},
+        {"value": "btn-secondary", "label": "Secondary button"},
+        {"value": "btn-third", "label": "Third button"},
+        {"value": "btn-text", "label": "Text button"}
+      ],
+      "default": "btn-default"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection",
+      "name": "Collection",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "text",
+          "id": "icon",
+          "label": "Collection Icon",
+          "default": "icon-face"
+        }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "Collections Tab",
+    "category": "Collections",
+    "blocks": [
+      { "type": "collection" },
+      { "type": "collection" },
+      { "type": "collection" },
+      { "type": "collection" },
+      { "type": "collection" },
+      { "type": "collection" }
+    ]
+  }]
+}
+{% endschema %}

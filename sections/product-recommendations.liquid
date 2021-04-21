@@ -1,0 +1,180 @@
+{%- if section.settings.show_recommend -%}
+{%- assign number_per_row = section.settings.number_per_row -%}
+{%- assign number_of_rows = section.settings.number_of_rows -%}
+{%- assign section_title = section.settings.section_title -%}
+{%- assign enable_carousel = section.settings.enable_carousel -%}
+{%- assign limit = number_per_row | times: number_of_rows -%}
+{%- assign card_shadow = section.settings.card_shadow -%}
+{%- assign card_border = section.settings.card_border -%}
+{%- assign card_style = section.settings.card_style -%}
+{%- assign card_type = card_style | replace: '-', '_' | prepend: 'product_card_' -%}
+{%- assign prd_img_ft = section.settings.prd_img_ft -%}
+
+<div itemtype="http://schema.org/Product" style="margin: {{ section.settings.margin }};">
+
+  <div class="content-slideshow container {{ section.settings.nav_style }} {{ card_style }} {{ prd_img_ft }}">
+    <div class="product-recommendations" data-product-id="{{ product.id }}" data-limit="{{ limit }}">
+      {%- if recommendations.products_count > 0 -%}
+        {%- if section_title != blank -%}
+          <h3 class="block-title">{{ section_title }}</h3>
+        {%- endif -%}
+
+        {%- if enable_carousel -%}
+          <div class="items-carousel"
+            data-auto="{{ section.settings.auto_speed }}"
+            data-dots="{{ section.settings.show_dots }}"
+            data-nav="{{ section.settings.show_nav }}"
+            data-wraparound="true"
+            data-cellalign="left">
+        {%- else -%}
+          <div class="row">
+        {%- endif -%}
+          {%- for product in recommendations.products -%}
+            <div class="card-wrapper grid-items__{{ number_per_row }}">
+              {% include card_type, product: product, card_border: card_border, card_shadow: card_shadow %}
+            </div>
+          {%- endfor -%}
+        </div><!-- .items-carousel / .row -->
+      {%- endif -%}
+    </div>
+  </div><!-- .content-slideshow -->
+</div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "DataDriven Recommendation",
+  "tag": "section",
+  "class": "vs-product-recommendations",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_recommend",
+      "label": "Show Recommended Products",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "Section Margin",
+      "info": "Set margin for section top-right-bottom-left (e.g. 20px 15px 10px 0)",
+      "default": "110px 0 150px"
+    },
+    {
+      "type": "header",
+      "content": "Section Configuration"
+    },
+    {
+      "type": "text",
+      "id": "section_title",
+      "label": "Section Title",
+      "default": "you may also like"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_carousel",
+      "label": "Enable Carousel",
+      "info": "Disable to show products in grid layout",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "number_per_row",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "label": "Products to show per row",
+      "default": 5
+    },
+    {
+      "type": "range",
+      "id": "number_of_rows",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "label": "Number of rows",
+      "default": 2
+    },
+    {
+      "type": "text",
+      "id": "auto_speed",
+      "label": "Autoplay Speed",
+      "info": "5 means rotate every 5 seconds. 0 to disable auto rotate.",
+      "default": "5"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_dots",
+      "label": "Show Pagination Dots",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_nav",
+      "label": "Show Navigation",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "nav_style",
+      "label": "Navigator position",
+      "options": [
+        { "value": "nav-top__right", "label": "Top right" },
+        { "value": "nav-top__center", "label": "Top center" },
+        { "value": "nav-middle", "label": "Middle center" }
+      ],
+      "default": "nav-top__right"
+    },
+    {
+      "type": "header",
+      "content": "Product card configuration"
+    },
+    {
+      "type": "select",
+      "id": "card_style",
+      "label": "Product Card Style",
+      "options": [
+        { "value": "vertical-advanced", "label": "Vertical advanced" },
+        { "value": "vertical-classic", "label": "Vertical classic" },
+        { "value": "vertical-default", "label": "Vertical default" },
+        { "value": "vertical-modern", "label": "Vertical modern" },
+        { "value": "vertical-progressive", "label": "Vertical progressive" },
+        { "value": "vertical-details", "label": "Vertical details" },
+        { "value": "horizontal-advanced", "label": "Horizontal advanced" },
+        { "value": "horizontal-classic", "label": "Horizontal classic" },
+        { "value": "horizontal-default", "label": "Horizontal default" },
+        { "value": "horizontal-progressive", "label": "Horizontal progressive" },
+        { "value": "horizontal-modern", "label": "Horizontal modern" }
+      ],
+      "default": "vertical-default"
+    },
+    {
+      "type": "radio",
+      "id": "prd_img_ft",
+      "label": "Add darkness to product images",
+      "options": [
+        { "value": "img-br-100", "label": "No" },
+        { "value": "img-br-97", "label": "Yes" }
+      ],
+      "default": "img-br-100",
+      "info": "Recommended for white background product images"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_border",
+      "label": "Show border around product cards",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "card_shadow",
+      "label": "Show boxshadow around product cards",
+      "default": true
+    }
+  ]
+}
+{% endschema %}

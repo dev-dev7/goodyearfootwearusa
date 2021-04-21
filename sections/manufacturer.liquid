@@ -1,0 +1,199 @@
+{%- if section.settings.show_section -%}
+{%- assign enable_carousel = section.settings.enable_carousel -%}
+{%- assign slide_layout = section.settings.slide_layout -%}
+{%- assign block_title = section.settings.title -%}
+{%- assign description = section.settings.description -%}
+{%- assign enable_carousel = section.settings.enable_carousel -%}
+{%- assign show_dots = section.settings.show_dots -%}
+{%- assign show_nav = section.settings.show_nav -%}
+{%- assign wrap_around = section.settings.wrap_around -%}
+{%- assign cols = section.settings.cols -%}
+{%- assign auto_speed = section.settings.auto_speed -%}
+{%- assign gap = section.settings.gap | divided_by: 2 -%}
+
+<div class="position-relative slideshow content-slideshow team-slider" style="margin: {{ section.settings.margin }};">
+  <div class="{{ slide_layout }} {{ section.settings.nav_style }}">
+
+    {%- if block_title != blank -%}
+      <h2 class="block-title">{{ block_title }}</h2>
+    {%- endif -%}
+    {%- if description != blank -%}
+      <p class="block-description">{{ description }}</p>
+    {%- endif -%}
+
+    {%- if enable_carousel -%}
+      <div class="items-carousel"
+          data-auto="{{ auto_speed }}"
+          data-dots="{{ show_dots }}"
+          data-nav="{{ show_nav }}"
+          data-wraparound="{{ wrap_around }}"
+          data-cellalign="left"
+          style="margin-left:-{{ gap }}px;margin-right:-{{ gap }}px">
+    {%- else -%}
+      <div class="row" style="margin: 0 -{{ gap }}px;">
+    {%- endif -%}
+
+    {%- for block in section.blocks -%}
+      <div class="position-relative slide-item grid-items__{{ cols }}" style="padding:{{ gap }}px;" {{ block.shopify_attributes }}>
+        {%- if block.settings.slide_img != blank -%}
+          <div class="position-relative image-loading" style="padding-top:{{ 100 | divided_by: block.settings.slide_img.aspect_ratio }}%;">
+            <img class="image-bg lazyload" data-src="{{ block.settings.slide_img | img_url: 'master' }}" />
+          </div>
+        {%- else -%}
+          <div class="position-relative" style="padding-top: 50%">
+            <div class="placeholder">
+              <div class="ds-flex align-center justify-center" style="height: 100%">
+                {% render 'icon-avatar' %}
+              </div>
+            </div>
+          </div>
+        {%- endif -%}
+      </div><!-- .cardwrapper -->
+    {%- else -%}
+      {%- for i in (1..6) -%}
+        <div class="position-relative slide-item grid-items__{{ cols }}" style="padding:{{ gap }}px" {{ block.shopify_attributes }}>
+          <div class="position-relative" style="padding-top: 50%">
+            <div class="placeholder">
+              <div class="ds-flex align-center justify-center" style="height: 100%">
+                {% render 'icon-avatar' %}
+              </div>
+            </div>
+          </div>
+        </div><!-- .cardwrapper -->
+      {%- endfor -%}
+    {%- endfor -%}
+
+    </div><!-- .row / .items-carousel -->
+  </div><!-- slide_layout -->
+</div><!-- .content-slideshow.team-slider -->
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Manufacturers",
+  "tag": "section",
+  "class": "vs-initialize-slider",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_section",
+      "label": "Show/Hide this section",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Section Settings"
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "Section Margin",
+      "info": "Set margin for section top-right-bottom-left (e.g. 20px 15px 10px 0)",
+      "default": "0 0 150px 0"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Title",
+      "default": "Manufacturers"
+    },
+    {
+      "type": "text",
+      "id": "description",
+      "label": "Section Description"
+    },
+    {
+      "type": "select",
+      "id": "slide_layout",
+      "label": "Slide Layout",
+      "options": [
+        { "value": "container", "label": "Default" },
+        { "value": "full-width-container", "label": "Full Width" }
+      ],
+      "default": "container"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_carousel",
+      "label": "Enable slideshow",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Slideshow Settings"
+    },
+    {
+      "type": "text",
+      "id": "auto_speed",
+      "label": "Autoplay",
+      "info": "'5' for the slideshow to auto rotate every 5 seconds. '0' to disable auto rotate.",
+      "default": "5"
+    },
+    {
+      "type": "checkbox",
+      "id": "wrap_around",
+      "label": "Infinite rotate",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_dots",
+      "label": "Show Pagination Dots",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_nav",
+      "label": "Show Navigation",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "nav_style",
+      "label": "Navigator position",
+      "options": [
+        { "value": "nav-top__right", "label": "Top right" },
+        { "value": "nav-top__center", "label": "Top center" },
+        { "value": "nav-middle", "label": "Middle center" }
+      ],
+      "default": "nav-top__center"
+    },
+    {
+      "type": "range",
+      "id": "cols",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "label": "Number of image per row",
+      "default": 6
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "label": "Space between items",
+      "default": 30
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Image slide",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "slide_img",
+          "label": "Slide Image",
+          "info": "390*260px recommended"
+        }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "Manufacturers",
+    "category": "Image"
+  }]
+}
+{% endschema %}

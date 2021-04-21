@@ -1,0 +1,40 @@
+{% comment %}
+Renders newsletter signup form on sidebars
+  Accepts:
+    - block_title: <String> title of the block
+    - text: <String> description text to show under title
+    - button: <String> description text to show under title
+
+  Usage:
+    {% render 'sidebar_newsletter', block_title: section.settings.newsletter_title, text: section.settings.newsletter_text %}
+    {% render 'sidebar_newsletter', block_title: block.settings.title, text: block.settings.text %}
+{% endcomment %}
+
+<div class="newsletter-form text-center">
+  <h2 class="title">{{ block_title }}</h2>
+  <p class="description">{{ text | newline_to_br }}</p>
+
+  {%- if settings.newsletter_service == 'shopify-default' -%}
+    {% form 'customer', class: 'form-newsletter', id: form.id %}
+      <p class="newsletter-subtitle">{{ section.settings.description | newline_to_br }}</p>
+      {% render 'form_status', form: form, form_id: formId, success_message: 'general.newsletter_form.confirmation' | t %}
+      {% unless form.posted_successfully? %}
+        <div class="position-relative">
+          <input type="hidden" name="contact[tags]" value="newsletter">
+          <input type="email" name="contact[email]" class="input-strict" value="{% if customer %}{{ customer.email }}{% endif %}" placeholder="your@email.com" autocorrect="off" autocapitalize="off" required>
+          <button type="submit" name="commit" class="btn-icon">{% render 'icon-arrow-right' %}</button>
+        </div>
+        <button type="submit" name="subscribe" class="btn btn-default">{{ button | default: 'Submit' }}</button>
+      {% endunless %}
+    {% endform %}
+  {%- else -%}
+    {% assign form_action = settings.newsletter_form_action %}
+    <form action="{{ form_action }}" method="post" name="mc-embedded-subscribe-form" class="form-newsletter">
+      <div class="position-relative">
+        <input class="input-strict" placeholder="your@email.com" type="email" value="{% if customer %}{{ customer.email }}{% endif %}" name="EMAIL" required/>
+        <button type="submit" class="btn-icon">{% render 'icon-arrow-right' %}</button>
+      </div>
+      <button type="submit" name="subscribe" class="btn btn-default">{{ button | default: 'Submit' }}</button>
+    </form>
+  {%- endif -%}
+</div><!-- .newsletter-form -->

@@ -1,0 +1,105 @@
+{%- if section.settings.show -%}
+<div class="{{ section.settings.style }}">
+  <div class="container ds-flex align-center flex-wrap">
+    <p class="cookie-text">{{ section.settings.text }}</p>
+    <div class="ml-auto">
+      <a href="{{ section.settings.link | default: '#' }}" class="btn {{ section.settings.link_style }}">
+        {{ section.settings.link_text }}
+        {% include 'include_icon', icon_name: section.settings.link_text_icon %}
+      </a>
+      <button class="btn {{ section.settings.close_style }} btn-cookie-close">
+        {{ section.settings.close_text }}
+        {% include 'include_icon', icon_name: section.settings.close_text_icon %}
+      </button>
+    </div>
+  </div>
+</div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Cookie Notification",
+  "class": "cookie-notify-container",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show",
+      "label": "Show cookie notification",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Settings"
+    },
+    {
+      "type": "select",
+      "id": "style",
+      "label": "Notification design",
+      "options": [
+        { "value": "cookie-white", "label": "White style" },
+        { "value": "cookie-dark", "label": "Dark style" }
+      ],
+      "default": "cookie-white"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Notification text",
+      "default": "This shop uses cookies to ensure you get the best experience on our website."
+    },
+    {
+      "type": "text",
+      "id": "link_text",
+      "label": "Policy link text",
+      "default": "Learn More"
+    },
+    {
+      "type": "text",
+      "id": "link_text_icon",
+      "label": "Icon after text"
+    },
+    {
+      "type": "select",
+      "id": "link_style",
+      "label": "Policy link style",
+      "options": [
+        {"value": "btn-default", "label": "Default button"},
+        {"value": "btn-transparent", "label": "Transparent button"},
+        {"value": "btn-secondary", "label": "Secondary button"},
+        {"value": "btn-third", "label": "Third button"},
+        {"value": "btn-text", "label": "Text button"}
+      ],
+      "default": "btn-text"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Link to policy"
+    },
+    {
+      "type": "text",
+      "id": "close_text",
+      "label": "Close button text",
+      "default": "Got it"
+    },
+    {
+      "type": "text",
+      "id": "close_text_icon",
+      "label": "Icon after text"
+    },
+    {
+      "type": "select",
+      "id": "close_style",
+      "label": "Close button style",
+      "options": [
+        {"value": "btn-default", "label": "Default button"},
+        {"value": "btn-transparent", "label": "Transparent button"},
+        {"value": "btn-secondary", "label": "Secondary button"},
+        {"value": "btn-third", "label": "Third button"},
+        {"value": "btn-text", "label": "Text button"}
+      ],
+      "default": "btn-secondary"
+    }
+  ]
+}
+{% endschema %}

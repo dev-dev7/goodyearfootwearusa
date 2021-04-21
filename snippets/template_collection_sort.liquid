@@ -1,0 +1,33 @@
+{% comment %}
+Renders collection sorting options in collections page
+  - design: <String> classic / advanced design of filter elements
+
+  Usage:
+    {% render 'template_collection_sort', design: filter_design %}
+{% endcomment %}
+{%- assign d_sort = collection.sort_by | default: collection.default_sort_by -%}
+{%- if design == 'advanced' -%}
+{%- capture list -%}
+{%- for option in collection.sort_options -%}
+  {%- assign class_name = 'dd-pp__item' -%}
+  {%- if option.value == d_sort -%}
+    {%- assign d_name = option.name -%}
+    {%- assign class_name = 'dd-pp__item active' -%}
+  {%- endif -%}
+  <span data-value="{{ option.value }}" class="{{ class_name }}">{{ option.name }}</span>
+{%- endfor -%}
+{%- endcapture -%}
+<div class="sort-wrapper dd-pp__wrp position-relative">
+  <a id="sort-by" class="ds-flex align-center collection-sort__by dd-pp__atv" title="{{ d_name }}" href="#"><span>{{ d_name }}</span>{% render 'icon-dir-down' %}</a>
+  <div class="dd-pp__list">
+    <a href="#" class="dd-pp__close ds-block">{% render 'icon-close' %}</a>
+    {{ list }}
+  </div>
+</div>
+{%- else -%}
+<select id="sort-by" class="collection-sort__by" name="{{ d_sort }}">
+  {%- for option in collection.sort_options -%}
+    <option value="{{ option.value }}" {% if option.value == d_sort %}selected="selected"{% endif %}>{{ option.name }}</option>
+  {%- endfor -%}
+</select>
+{%- endif -%}

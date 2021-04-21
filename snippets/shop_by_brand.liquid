@@ -1,0 +1,35 @@
+{% comment %}
+Renders product search form with tags
+  Accepts:
+    - block_title: <String> block title
+    - brands_list: <Array> array of brands
+
+  Usage:
+    {% render 'shop_by_brand' %}
+{% endcomment %}
+
+{%- assign brands = brands_list | strip_newlines | split: ',' -%}
+
+{%- if block_title != blank -%}
+  <h3 class="block-title">{{ block_title }}</h3>
+{%- endif -%}
+
+<form action="/search" method="get" role="search" class="search-form search-box-fixed search-form__with-brand">
+  <div class="search-input-container">
+    <input type="text" name="q" class="sidebar-search__input" value="{{ search.terms | escape }}"
+      placeholder="{{ 'general.search.placeholder' | t }}">
+  </div>
+
+  <button type="submit" class="search-button search-with-brand">
+    {% render 'render_icon', icon_name: settings.search_icon %}
+  </button>
+</form>
+<ul class="list-style-none filter-list filter-tag">
+  {%- for brand in brands -%}
+    {%- unless brand == blank -%}
+      <li class="nav-level__0">
+        <a href="#" class="nav-list__link" data-brand="{{ brand | strip }}"><span class="ticksign">{% render 'icon-ticksign' %}</span>{{ brand | strip }}</a>
+      </li>
+    {%- endunless -%}
+  {%- endfor -%}
+</ul>

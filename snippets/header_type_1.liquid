@@ -1,0 +1,40 @@
+{%- liquid
+if config.header_menu_center
+  assign a_class = " mr-0"
+else
+  assign a_class = ""
+endif
+assign add_sticky_cart = true
+-%}
+<div role="banner" class="header header-type-1{% if config.header_sticky %} sticky-enable{% endif %}{% if settings.enable_mobile_sticky %} sticky-mobile-enable{% endif %}{% if settings.enable_mb_hd %} hide-on-mobile{% endif %}">
+  <div class="container ds-flex align-center flex-wrap">
+    {% render 'logo' %}
+
+    <button class="mobile-btn">
+      <span class="mobile-btn__line classic"></span>
+      <span class="mobile-btn__line classic"></span>
+      <span class="mobile-btn__line classic"></span>
+    </button>
+
+    {% include 'header_menu', blocks: blocks, m_n: config.menu, a_c: config.header_menu_center, s_di: config.show_dropdown_icon %}
+
+    <div class="links-group ds-flex align-center{{ a_class }}">
+      {%- for block in blocks -%}
+        {%- if block.type contains 'menu_' -%}
+          {%- continue -%}
+        {%- endif -%}
+        {%- if block.type == 'cart' -%}
+          {%- assign add_sticky_cart = false -%}
+        {%- endif -%}
+        {% include 'topbar_item', item: block %}
+      {%- endfor -%}
+    </div>
+
+    {%- if add_sticky_cart -%}
+      <div class="topbar-item sticky-header_cart cart-wrapper">
+        {% include 'cart_dropdown', cart_style: 'only_icon', amount_pos: 'left' %}
+      </div><!-- .topbar-item -->
+    {%- endif -%}
+  </div>
+</div><!-- .header-type-1 -->
+<style>.header-type-1{padding:4.1rem 0}.header-type-1 .header-menu-item:last-of-type>a{padding-right:0}.header-type-1 .search-box-fixed .header-search__input{font-weight:var(--font-weight-header-menu);letter-spacing:var(--font-space-header-menu)}@media all and (min-width: 992px){.header-type-1 .search-form:not(.ml-0){margin-left:6.8rem}}@media all and (max-width: 1399px){.header-type-1{padding:2.4rem 0}.header-type-1 .search-form{margin-left:1rem}}.sticky-active.header-type-1 .search-box-fixed .search-input-container{position:absolute;right:100%;left:auto;opacity:0;visibility:hidden;transition:all .35s}.sticky-active.header-type-1 .search-box-fixed:hover .search-input-container{opacity:1;visibility:visible}@media all and (min-width: 992px){.sticky-active.header-type-1 .search-form:not(.ml-0){margin-left:3rem}}</style>

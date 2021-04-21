@@ -1,0 +1,628 @@
+{%- liquid
+assign margin         = section.settings.margin
+assign padding        = section.settings.padding
+assign slide_layout   = section.settings.slide_layout
+assign layout_h       = section.settings.layout_h
+assign pos_product    = section.settings.pos_product
+assign layout_product = section.settings.layout_product
+assign color_bg       = section.settings.color_bg
+assign auto_speed     = section.settings.auto_speed
+assign dots_pos       = section.settings.dots_pos
+assign show_dots      = section.settings.show_dots
+assign nav_style      = section.settings.nav_style
+assign show_nav       = section.settings.show_nav
+assign wrap_around    = section.settings.wrap_around
+assign has_minheight  = section.settings.has_minheight
+
+assign slide_transition  = section.settings.slide_transition
+assign p_nav_style    = section.settings.p_nav_style
+assign p_auto_speed   = section.settings.p_auto_speed
+assign p_show_dots    = section.settings.p_show_dots
+assign p_show_nav     = section.settings.p_show_nav
+assign p_wrap_around  = section.settings.p_wrap_around
+assign has_minheight  = section.settings.has_minheight
+
+assign prd_img_ft = section.settings.prd_img_ft
+
+if layout_product == 'horizontal'
+  assign card_style = 'vertical-classic'
+else
+  assign card_style = 'vertical-default'
+endif
+
+assign card_type = card_style | replace: '-', '_' | prepend: 'product_card_'
+-%}
+
+<div style="margin:{{ margin }};padding:{{ padding }};background:{{ color_bg }}">
+  {%- if section.blocks.size > 0 -%}
+    <div class="slideshow-lookbook-2 {{ slide_layout }} product-layout-{{ layout_product }} ">
+      {%- if section.settings.title != blank -%}
+        <h2 class="block-title">{{ section.settings.title }}</h2>
+      {%- endif -%}
+      {%- if section.settings.description != blank -%}
+        <p class="block-description">{{ section.settings.description }}</p>
+      {%- endif -%}
+
+      {%- assign p_handles = '' -%}
+
+      <div class="ds-flex flex-wrap align-center">
+        <div class="medium-6 {{ layout_h }}">
+          <div class="flickity-carousel fade {{ nav_style }} lookbook-image {{ dots_pos }}"
+              data-auto="{{ auto_speed }}"
+              data-dots="{{ show_dots }}"
+              data-nav="{{ show_nav }}"
+              data-wraparound="{{ wrap_around }}">
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'product' -%}
+                {%- continue -%}
+              {%- endif -%}
+              {%- if block.settings.slide_img != blank -%}
+                {%- assign ar = block.settings.slide_img.aspect_ratio | default: 1 -%}
+                <div class="slide-item slide-{{ block.id }}" {{ block.shopify_attributes }}>
+                  <div class="image-container position-relative{% if has_minheight %} has-minheight{% endif %}"
+                    {% if layout_h == 'fixed-height' %}style="padding-top:{{ 100 | divided_by: ar }}%;"{% endif %}>
+                    {% render 'image', m_img: block.settings.slide_img %}
+
+                    {%- for index in (1..3) -%}
+                      {% capture p_i %}product_{{ index }}{% endcapture %}
+                      {% capture x_p_i %}product_{{ index }}_x{% endcapture %}
+                      {% capture y_p_i %}product_{{ index }}_y{% endcapture %}
+
+                      {%- assign l_p = block.settings[p_i] -%}
+
+                      {%- if l_p != blank -%}
+                        {%- assign p_handles = p_handles | append: l_p | append: ',' -%}
+                        <div class="lookbook-spot {{ block.settings.spot_style }}"
+                            style="top: {{ block.settings[y_p_i] }}%; left: {{ block.settings[x_p_i] }}%;">
+                          <div class="lookbook-switcher" data-product="{{ l_p }}">{% render 'icon-plus' %}</div>
+                        </div>
+                      {%- endif -%}
+                    {%- endfor -%}
+                  </div>
+
+              {%- else -%}
+                <div class="slide-item slide-{{ block.id }}" {{ block.shopify_attributes }}>
+                  <div class="image-container position-relative{% if has_minheight %} has-minheight{% endif %}" style="padding-top: 100%">
+                    <div class="image-bg">
+                      {% capture current %}{% cycle 1, 2 %}{% endcapture %}
+                      {{ 'lifestyle-' | append: current | placeholder_svg_tag: 'placeholder' }}
+                    </div><!-- image-bg -->
+                  </div>
+              {%- endif -%}
+
+                  {%- comment -%} Show Slideshow Content {%- endcomment -%}
+                  {% include 'slideshow_content', id: block.id, s_c: block.settings %}
+                </div><!-- .slide-item -->
+            {%- endfor -%}
+          </div><!-- .flickity-carousel -->
+        </div><!-- .medium-6 -->
+
+
+        <div class="lookbook-product medium-6 {{ layout_h }} {{ pos_product }} {{ layout_product }}">
+          <div class="flickity-carousel {{ slide_transition }} {{ p_nav_style }} {{ card_style }} {{ prd_img_ft }}"
+              data-auto="{{ p_auto_speed }}"
+              data-dots="{{ p_show_dots }}"
+              data-nav="{{ p_show_nav }}"
+              data-wraparound="{{ p_wrap_around }}">
+            {%- assign p_handles = p_handles | split: ',' -%}
+            {%- for p_handle in p_handles -%}
+              {%- assign l_product = all_products[p_handle] -%}
+              {%- if l_product != blank -%}
+                <div class="slide-item slide-lookbook-{{ p_handle }}">
+                  {% include card_type, product: l_product %}
+                </div>
+              {%- else -%}
+                <div class="slide-item slide-lookbook-111">
+                  {% render 'product_card', pp_index: 1 %}
+                </div>
+              {%- endif -%}
+            {%- else -%}
+              <div class="slide-item slide-lookbook-222">
+                {% render 'product_card', pp_index: 2 %}
+              </div>
+            {%- endfor -%}
+          </div><!-- .flickity-carousel -->
+        </div><!-- .medium-6 -->
+      </div><!-- .ds-flex.flex-wrap -->
+    </div><!-- .slideshow-lookbook -->
+  {%- endif -%}
+</div>
+<style>
+#shopify-section-{{ section.id }} .lookbook-image .flickity-page-dots .dot{color:{{ section.settings.dots_color }}}
+#shopify-section-{{ section.id }} .lookbook-image .flickity-page-dots .dot:hover,
+#shopify-section-{{ section.id }} .lookbook-image .flickity-page-dots .is-selected{color: {{ section.settings.color_dots_h | default: settings.c_theme }}}
+#shopify-section-{{ section.id }} .lookbook-image .flickity-prev-next-button{border-color: {{ section.settings.nav_color }};color:{{ section.settings.nav_color }}}
+#shopify-section-{{ section.id }} .lookbook-product .flickity-page-dots .dot{color:{{ section.settings.p_dots_color }}}
+#shopify-section-{{ section.id }} .lookbook-product .flickity-page-dots .dot:hover,
+#shopify-section-{{ section.id }} .lookbook-product .flickity-page-dots .is-selected{color:{{ section.settings.color_p_dots_h | default: settings.c_theme }}}
+#shopify-section-{{ section.id }} .lookbook-product .flickity-prev-next-button{border-color:{{ section.settings.p_nav_color }};color:{{ section.settings.p_nav_color }}}
+{% if layout_h == 'full-height' %}
+@media all and (min-width: 768px) {
+#shopify-section-{{ section.id }} .image-container{height:100vh}
+}
+{% endif %}
+</style>
+{% schema %}
+{
+  "name": "Slideshow with Lookbook 2",
+  "tag": "section",
+  "class": "vs-homepage-slideshow vs-lookbook-2",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Settings"
+    },
+    {
+      "type": "select",
+      "id": "slide_layout",
+      "label": "Section layout",
+      "options": [
+        { "value": "container", "label": "Fixed width" },
+        { "value": "full-width-container", "label": "Full width" }
+      ],
+      "default": "full-width-container"
+    },
+    {
+      "type": "select",
+      "id": "layout_h",
+      "label": "Slide Height",
+      "options": [
+        { "value": "fixed-height", "label": "Relative to content" },
+        { "value": "full-height", "label": "Full Height" }
+      ],
+      "default": "fixed-height"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section title"
+    },
+    {
+      "type": "text",
+      "id": "description",
+      "label": "Section description"
+    },
+    {
+      "type": "color",
+      "id": "color_bg",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Product card settings"
+    },
+    {
+      "type": "select",
+      "id": "pos_product",
+      "label": "Product position",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "right"
+    },
+    {
+      "type": "select",
+      "id": "layout_product",
+      "label": "Product Layout",
+      "options": [
+        { "value": "horizontal", "label": "Horizontal" },
+        { "value": "vertical", "label": "Vertical" }
+      ],
+      "default": "vertical"
+    },
+    {
+      "type": "radio",
+      "id": "prd_img_ft",
+      "label": "Add darkness to product images",
+      "options": [
+        { "value": "img-br-100", "label": "No" },
+        { "value": "img-br-97", "label": "Yes" }
+      ],
+      "default": "img-br-100",
+      "info": "Recommended for white background product images"
+    },
+    {
+      "type": "header",
+      "content": "Space settings"
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "Section margin",
+      "info": "Set margin for section top-right-bottom-left (e.g. 20px 15px 10px 0)"
+    },
+    {
+      "type": "text",
+      "id": "padding",
+      "label": "Section padding",
+      "info": "Set padding for section (e.g. 20px 15px 10px 0)"
+    },
+    {
+      "type": "checkbox",
+      "id": "has_minheight",
+      "label": "Set minimum height 320px on mobiles",
+      "info": "Background images and videos can be cropped when this option is enabled",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Image slideshow settings"
+    },
+    {
+      "type": "text",
+      "id": "auto_speed",
+      "label": "Autoplay",
+      "info": "'5' for the slideshow to auto rotate every 5 seconds. '0' to disable auto rotate.",
+      "default": "5"
+    },
+    {
+      "type": "checkbox",
+      "id": "wrap_around",
+      "label": "Infinite rotate",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_dots",
+      "label": "Show Pagination Dots",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "dots_pos",
+      "label": "Dots position",
+      "options": [
+        { "value": "dots-bottom", "label": "Bottom" },
+        { "value": "dots-left", "label": "Left" },
+        { "value": "dots-right", "label": "Right" },
+        { "value": "dots-top", "label": "top" }
+      ],
+      "default": "dots-left"
+    },
+    {
+      "type": "color",
+      "id": "dots_color",
+      "label": "Dots color",
+      "default": "#43474d"
+    },
+    {
+      "type": "color",
+      "id": "color_dots_h",
+      "label": "Dots hover color"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_nav",
+      "label": "Show Navigation",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "nav_style",
+      "label": "Navigator style",
+      "options": [
+        { "value": "slideshow-nav__big", "label": "Big" },
+        { "value": "slideshow-nav__small", "label": "Small" }
+      ],
+      "default": "slideshow-nav__small"
+    },
+    {
+      "type": "color",
+      "id": "nav_color",
+      "label": "Navigation Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Product slideshow settings"
+    },
+    {
+      "type": "text",
+      "id": "p_auto_speed",
+      "label": "Autoplay",
+      "info": "'5' for the slideshow to auto rotate every 5 seconds. '0' to disable auto rotate.",
+      "default": "0"
+    },
+    {
+      "type": "checkbox",
+      "id": "p_wrap_around",
+      "label": "Infinite rotate",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "p_show_dots",
+      "label": "Show Pagination Dots",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "p_dots_color",
+      "label": "Dots color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "color_p_dots_h",
+      "label": "Dots hover color"
+    },
+    {
+      "type": "checkbox",
+      "id": "p_show_nav",
+      "label": "Show Navigation",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "p_nav_style",
+      "label": "Navigator style",
+      "options": [
+        { "value": "slideshow-nav__big", "label": "Big" },
+        { "value": "slideshow-nav__small", "label": "Small" }
+      ],
+      "default": "slideshow-nav__small"
+    },
+    {
+      "type": "color",
+      "id": "p_nav_color",
+      "label": "Navigation Color",
+      "default": "#333333"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Image slide",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "slide_img",
+          "label": "Slide Image",
+          "info": "960*960px recommended"
+        },
+        {
+          "type": "header",
+          "content": "Product Lookbook"
+        },
+        {
+          "type": "select",
+          "id": "spot_style",
+          "label": "Lookbook spot style",
+          "options": [
+            {"value": "lookbook-spot__big", "label": "Big"},
+            {"value": "lookbook-spot__medium", "label": "Medium"},
+            {"value": "lookbook-spot__small", "label": "Small"}
+          ],
+          "default": "lookbook-spot__medium"
+        },
+        {
+          "type": "product",
+          "id": "product_1",
+          "label": "First product"
+        },
+        {
+          "type": "range",
+          "id": "product_1_x",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "Position X value",
+          "default": 35
+        },
+        {
+          "type": "range",
+          "id": "product_1_y",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "Position Y value",
+          "default": 55
+        },
+        {
+          "type": "product",
+          "id": "product_2",
+          "label": "Second product"
+        },
+        {
+          "type": "range",
+          "id": "product_2_x",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "Position X value",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "product_2_y",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "Position Y value",
+          "default": 0
+        },
+        {
+          "type": "product",
+          "id": "product_3",
+          "label": "Third product"
+        },
+        {
+          "type": "range",
+          "id": "product_3_x",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "Position X value",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "product_3_y",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "Position Y value",
+          "default": 0
+        },
+        {
+          "type": "header",
+          "content": "Content Settings"
+        },
+        {
+          "type": "select",
+          "id": "content_style",
+          "label": "Content style",
+          "options": [
+            {"value": "orange-style", "label": "Orange style"},
+            {"value": "citrus-style", "label": "Citrus style 1"},
+            {"value": "citrus-style2", "label": "Citrus style 2"},
+            {"value": "citrus-style3", "label": "Citrus style 3"},
+            {"value": "green-style", "label": "Green style 1"},
+            {"value": "green-style2", "label": "Green style 2"},
+            {"value": "yellow-style", "label": "Yellow style"},
+            {"value": "parallax-style1", "label": "Parallax style 1"},
+            {"value": "parallax-style2", "label": "Parallax style 2"},
+            {"value": "beige-style1", "label": "Beige Style1"},
+            {"value": "beige-style2", "label": "Beige Style2"},
+            {"value": "beige-style3", "label": "Beige Style3"},
+            {"value": "custom_html", "label": "Custom HTML"}
+          ],
+          "default": "beige-style3"
+        },
+        {
+          "type": "select",
+          "id": "mobile_layout",
+          "label": "Text style on mobile",
+          "options": [
+            { "value": "default", "label": "Show text in colored box" },
+            { "value": "adjust", "label": "Keep layout and adjust font size" }
+          ],
+          "default": "adjust"
+        },
+        {
+          "type": "select",
+          "id": "content_pos",
+          "label": "Content horizontal position",
+          "options": [
+            {"value": "left", "label": "Left"},
+            {"value": "left-center", "label": "Left Center"},
+            {"value": "center", "label": "Center"},
+            {"value": "right-center", "label": "Right Center"},
+            {"value": "right", "label": "Right"}
+          ],
+          "default": "center"
+        },
+        {
+          "type": "select",
+          "id": "content_vpos",
+          "label": "Content vertical position",
+          "options": [
+            {"value": "top", "label": "Top"},
+            {"value": "middle", "label": "Middle"},
+            {"value": "bottom", "label": "Bottom"}
+          ],
+          "default": "middle"
+        },
+        {
+          "type": "select",
+          "id": "content_align",
+          "label": "Text align",
+          "options": [
+            {"value": "text-left", "label": "Left"},
+            {"value": "text-center", "label": "Center"},
+            {"value": "text-right", "label": "Right"}
+          ],
+          "default": "text-left"
+        },
+        {
+          "type": "select",
+          "id": "content_effect",
+          "label": "Content effect",
+          "options": [
+            {"value": "none", "label": "None"},
+            {"value": "from-left", "label": "From left"},
+            {"value": "from-right", "label": "From right"},
+            {"value": "from-top", "label": "From top"},
+            {"value": "from-bottom", "label": "From bottom"},
+            {"value": "flip-vertical", "label": "Vertical Flip"},
+            {"value": "flip-horizontal", "label": "Horizontal Flip"}
+          ],
+          "default": "from-top"
+        },
+        {
+          "type": "textarea",
+          "id": "main_title",
+          "label": "Main title",
+          "default": "SET YOUR WATCH\nFORWARD"
+        },
+        {
+          "type": "color",
+          "id": "color_main_title",
+          "label": "Title color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_content_bg",
+          "label": "Add background to content",
+          "default": false
+        },
+        {
+          "type": "color",
+          "id": "c_textbg",
+          "label": "Text background color",
+          "default": "rgba(255, 255, 255, 0.8)"
+        },
+        {
+          "type": "paragraph",
+          "content": "Special Characters"
+        },
+        {
+          "type": "paragraph",
+          "content": "Text wrapped with <em></em> or <strong></strong> are styled by the following settings"
+        },
+        {
+          "type": "color",
+          "id": "em_color",
+          "label": "Emphasized text color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "em_bg_color",
+          "label": "Emphasized text background color",
+          "default": "#a8bf00"
+        },
+        {
+          "type": "color",
+          "id": "strong_color",
+          "label": "Strong text color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "strong_bg_color",
+          "label": "Strong text background color",
+          "default": "#2c7800"
+        }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "Slideshow with Lookbook 2",
+    "category": "Image",
+    "blocks": [
+      { "type": "image" },
+      { "type": "image" }
+    ]
+  }]
+}
+{% endschema %}

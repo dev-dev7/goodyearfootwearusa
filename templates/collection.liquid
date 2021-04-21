@@ -1,0 +1,13 @@
+{%- if settings.collection_bs == 'tcs' -%}
+  {% section 'template-collection-slideshow' %}
+{%- endif -%}
+{%- if settings.collection_bs == 'tcc' -%}
+  {% section 'collections-carousel' %}
+{%- endif -%}
+{% if collection.description != blank %}
+<div class="container custom-content">
+  {{ collection.description }}
+</div>
+{% endif %}
+{% section 'template-collection' %}
+{% section 'template-product-service-promotion' %}

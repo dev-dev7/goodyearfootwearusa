@@ -1,0 +1,251 @@
+{% comment %}
+This section is rendered in following product templates
+  - product.liquid
+  - product.grid-images.liquid
+  - product.media-center.liquid
+{% endcomment %}
+{%- liquid
+assign show_section = section.settings.show_section
+assign width = section.settings.width
+assign margin = section.settings.margin
+assign cols = section.settings.cols
+assign item_space = section.settings.item_margin | divided_by: 2 | plus: 0
+assign fit_margin = section.settings.fit_margin
+assign img_anm = section.settings.img_anm
+assign design = section.settings.design
+assign img_size = section.settings.img_size
+
+case design
+  when 'masonry1'
+    assign class = ' masonry-grid-wrapper design1'
+  when 'masonry2'
+    assign class = ' masonry-grid-wrapper design2'
+  when 'masonry3'
+    assign class = ' masonry-grid-wrapper design3'
+  else
+    assign class = ' masonry-grid-layout'
+endcase
+assign save_index = 0
+assign set_padding = 1
+assign mobile_padding = ''
+assign padding = ''
+
+assign has_ei = false
+for media in product.media
+  if media.alt contains '[vnd_extra]' and media.media_type == 'image'
+    assign has_ei = true
+    break
+  endif
+endfor
+-%}
+
+{%- if show_section and has_ei -%}
+<div class="{{ width }}">
+  <div class="items-container ds-flex flex-wrap{{ class }}">
+    <div class="grid-sizer width-100"></div>
+    {%- for img in product.images -%}
+      {%- if img.alt contains '[vnd_extra]' -%}
+        <div class="image-block-item grid-items__{{ cols }} {{ img_anm }}">
+          {%- if img_size == 'preserve' -%}
+            {%- if design == 'grid' -%}
+              {%- assign set_padding = save_index | modulo: cols -%}
+            {%- endif -%}
+            {%- if design == 'masonry1' and save_index > 4 -%}
+              {%- assign set_padding = save_index | minus: 5 | modulo: cols -%}
+            {%- endif -%}
+            {%- if design == 'masonry2' and save_index > 3 -%}
+              {%- assign set_padding = save_index | minus: 4 | modulo: cols -%}
+            {%- endif -%}
+            {%- if design == 'masonry3' and save_index > 4 -%}
+              {%- assign set_padding = save_index | minus: 5 | modulo: cols -%}
+            {%- endif -%}
+          {%- endif -%}
+
+          {%- assign ar = 100 | divided_by: img.aspect_ratio -%}
+          {%- capture mobile_padding -%}
+            {{ mobile_padding }}
+            #shopify-section-{{ section.id }} .image-block-item__{{ img.id }} {
+              padding-top: {{ ar | default: 30 }}%
+            }
+          {%- endcapture -%}
+
+          {%- if set_padding == 0 -%}
+            {%- capture padding -%}
+              {{ padding }}
+              #shopify-section-{{ section.id }} .image-block-item__{{ img.id }} {
+                padding-top:{{ 100 | divided_by: img.aspect_ratio }}%
+              }
+            {%- endcapture -%}
+          {%- endif -%}
+
+          <div class="position-relative image-block-item__{{ img.id }}">
+            <div class="image-container overflow-hidden height-100 width-100 image-loading">
+              <div class="image-bg lazyload" data-bg="{{ img | img_url: 'master' }}"></div>
+            </div>
+          </div>
+        </div>
+
+        {%- assign save_index = save_index | plus: 1 -%}
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+</div>
+
+{%- capture css -%}
+#shopify-section-{{ section.id }} { margin:{{ section.settings.margin_mobile }}; }
+@media all and (min-width: 768px) {
+  #shopify-section-{{ section.id }} { margin:{{ section.settings.margin_laptop }}; }
+}
+@media all and (min-width: 1400px) {
+  #shopify-section-{{ section.id }} { margin:{{ section.settings.margin }}; }
+}
+
+{%- if item_space > 0 -%}
+  #shopify-section-{{ section.id }} .items-container{
+    {% if fit_margin %}
+      margin:0 -7px
+    {% else %}
+      border-width:7px
+    {% endif %}
+  }
+  #shopify-section-{{ section.id }} .image-block-item .image-container{border:7px solid transparent}
+{%- endif -%}
+
+@media all and (min-width: 768px) {
+  #shopify-section-{{ section.id }} .items-container{
+    {% if fit_margin %}
+      margin:0 -{{ item_space }}px
+    {% else %}
+      border-width:{{ item_space }}px
+    {% endif %}
+  }
+  #shopify-section-{{ section.id }} .image-block-item .image-container{border:{{ item_space }}px solid transparent}
+}
+
+{{ padding }}
+@media all and (max-width: 767px) {
+  {{ mobile_padding }}
+}
+{%- endcapture -%}
+<style>{{ css | strip_newlines | remove: '  ' }}</style>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Extra Images",
+  "tag": "section",
+  "class": "vs-masonry-grid",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_section",
+      "label": "Show Section",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Section Space"
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "Section Margin on Desktop",
+      "info": "Set margin for section top-right-bottom-left (e.g. 20px 15px 10px 0).",
+      "default": "0 0 140px 0"
+    },
+    {
+      "type": "text",
+      "id": "margin_laptop",
+      "label": "Section Margin on Laptop",
+      "default": "0 0 90px 0"
+    },
+    {
+      "type": "text",
+      "id": "margin_mobile",
+      "label": "Section Margin on Mobile",
+      "default": "0 0 65px 0"
+    },
+    {
+      "type": "header",
+      "content": "Layout & Design"
+    },
+    {
+      "type": "select",
+      "id": "width",
+      "label": "Section Width",
+      "options": [
+        { "value": "container", "label": "Fixed Width" },
+        { "value": "container-1500", "label": "1500px" },
+        { "value": "full-width-container", "label": "Full Width" }
+      ],
+      "default": "full-width-container"
+    },
+    {
+      "type": "select",
+      "id": "design",
+      "label": "Design",
+      "options": [
+        { "value": "grid", "label": "Grid Layout" },
+        { "value": "masonry1", "label": "Masonry1" },
+        { "value": "masonry2", "label": "Masonry2" },
+        { "value": "masonry3", "label": "Masonry3" }
+      ],
+      "default": "masonry2",
+      "info": "Select layout of images"
+    },
+    {
+      "type": "range",
+      "id": "cols",
+      "label": "Number of columns",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "default": 2,
+      "info": "This setting is useful when you add more images than original design. Extra images are listed below the main layout and this option sets their grid layout."
+    },
+    {
+      "type": "range",
+      "id": "item_margin",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "label": "Space between images",
+      "default": 0
+    },
+    {
+      "type": "checkbox",
+      "id": "fit_margin",
+      "label": "Fit section width to the end",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Image Settings"
+    },
+    {
+      "type": "select",
+      "id": "img_size",
+      "label": "Image size",
+      "options": [
+        { "value": "preserve", "label": "Preserve original size" },
+        { "value": "design", "label": "Follow design" }
+      ],
+      "default": "design"
+    },
+    {
+      "type": "select",
+      "id": "img_anm",
+      "label": "Image animation on hover",
+      "options": [
+        {"value": "c-e__i__none", "label": "None"},
+        {"value": "c-e__i__zoom-in", "label": "Slow zoom in"},
+        {"value": "c-e__i__zoom-in-q", "label": "Quick zoom in"},
+        {"value": "c-e__i__shine", "label": "Shine"},
+        {"value": "c-e__i__bb", "label": "Blur & Darker"}
+      ],
+      "default": "c-e__i__zoom-in"
+    }
+  ]
+}
+{% endschema %}

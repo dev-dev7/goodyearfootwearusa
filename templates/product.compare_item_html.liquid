@@ -1,0 +1,44 @@
+{% layout none %}
+<div data-product-handle="{{ product.handle }}" class="compare-card position-relative compare-item__1">
+  <a href="#" data-product-handle="{{ product.handle }}" class="btn-compare ds-block is-active">{% render 'icon-close' %}</a>
+  <div class="product-img position-relative" style="padding-top:{{ 100 | divided_by: product.featured_image.aspect_ratio }}%;">
+    <a href="{{ product.url | within: collection }}" class="image-loading">
+      <img class="image-bg lazyload" data-src="{{ product.featured_image | img_url: '500x' }}"/>
+    </a>
+  </div>
+
+  <a href="{{ product.url | within: collection }}"><span class="ds-block">{{ product.title }}</span></a>
+  {% render 'product_price', price: product.price, compare_at_price: product.compare_at_price %}
+  {% include 'product_advanced_actions', product: product %}
+</div>
+
+<div data-product-handle="{{ product.handle }}" class="compare-card compare-desc compare-item__2">
+  {% render 'product_description', description: product.description, truncate: 60 %}
+</div>
+
+<div data-product-handle="{{ product.handle }}" class="compare-card compare-item__3">
+  <span class="in-stock">
+    {%- if product.selected_or_first_available_variant.inventory_management -%}
+      {%- assign inventory = product.selected_or_first_available_variant.inventory_quantity -%}
+      {%- if inventory > 0 -%}
+        {{ 'products.product.in_stock' | t }}
+      {%- else -%}
+        {{ 'products.product.out_of_stock' | t }}
+      {%- endif -%}
+    {%- else -%}
+      {{ 'products.product.many_in_stock' | t }}
+    {%- endif -%}
+  </span>
+</div>
+
+<div data-product-handle="{{ product.handle }}" class="compare-card compare-item__4">
+  {% render 'product_review', product: product %}
+</div>
+
+<div data-product-handle="{{ product.handle }}" class="compare-card compare-item__5">
+  <span> {{ product.type }}</span></div>
+</div>
+
+<div data-product-handle="{{ product.handle }}" class="compare-card compare-item__6">
+  <span itemprop="brand" class="brand"> {{ product.vendor }}</span>
+</div>

@@ -1,0 +1,171 @@
+$font-body: {{ settings.font_body.family }}, {{ settings.font_body.fallback_families }};
+$font-button-size: {{ settings.font_size_button }}px;
+
+.template-product #form-contact-product .vpp-bx {
+  width: 45rem;
+  padding: 3rem 4rem;
+
+  .btn-default {
+    margin-top: 0;
+  }
+
+  .block-title {
+    margin-bottom: 3rem;
+  }
+
+  @media all and (max-width: 567px) {
+    width: calc(100% - 40px);
+    padding: 1.5rem;
+  }
+}
+
+.shopify-payment-button button.shopify-payment-button__button--unbranded {
+  transition: all .3s cubic-bezier(.165, .84, .44, 1);
+  border-radius: 0;
+  padding: 0;
+  font-size: $font-button-size;
+
+  @media (min-width: 360px) {
+    width: 30.5rem;
+    .product-form-sticky & { width: 27rem; }
+  }
+}
+
+// = Product image
+.zoom-container {
+  position: absolute !important;
+  left: 0;
+  top: 0;
+  width: 50rem;
+  height: 50rem;
+  box-shadow: 0 .2rem 1.1rem rgba(0, 0, 0, .1);
+  transition: .35s;
+  z-index: -1;
+  visibility: hidden;
+  opacity: 0;
+
+  &.active {
+    opacity: 1;
+    visibility: visible;
+    z-index: 1;
+  }
+
+  @media all and (min-width: 1200px) {
+    display: block !important;
+  }
+}
+
+// Product badges
+.product-badges.side-fixed {
+  .product-badge:last-of-type .promo-container { margin-bottom: 0; }
+}
+
+// = Product Review form
+.tabs-content__item {
+  // Stampedio
+  div.stamped-container[data-widget-style],
+  div[data-widget-style] div.stamped-container {
+    margin: 0 !important;
+  }
+
+  #stamped-main-widget,
+  div[data-widget-style*=standard] .stamped-header {
+    margin: 0;
+  }
+
+  .fa-check-circle-o:before,
+  .fa-share-alt:before,
+  .fa-thumbs-down:before,
+  .fa-thumbs-up:before,
+  .stamped-fa-check-circle-o:before,
+  .stamped-fa-share-alt:before,
+  .stamped-fa-thumbs-down:before,
+  .stamped-fa-thumbs-up:before {
+    color: #ccc;
+    font-size: 1.5rem;
+  }
+
+  .stamped-review-header-title {
+    color: #444444;
+    font-family: $font-body;
+    font-size: 2rem;
+ }
+
+  p.stamped-review-content-body {
+    color: #5c5c5c;
+    font-family: Arial, sans-serif;
+    line-height: 2.3rem;
+  }
+
+  .stamped-review-footer {
+    margin-top: 15px;
+  }
+
+  // Write a review form
+  .new-review-form.stamped-visible {
+    font-family: Arial, sans-serif;
+  }
+
+  .stamped-form-label {
+    display: inline-block;
+    margin-bottom: 2px;
+    font-weight: 700;
+    letter-spacing: .02em
+  }
+
+  .stamped-form-contact {
+    margin-bottom: 10px;
+  }
+
+  .stamped-form-contact-email,
+  .stamped-form-contact-location,
+  .stamped-form-contact-name {
+    max-width: 500px;
+  }
+
+  input.stamped-form-input,
+  .stamped-form-input-textarea {
+    padding: 0 18px;
+    border-color: #c3c3c3;
+    border-radius: 3px;
+    color: #666666;
+    font-size: 1.4rem;
+    letter-spacing: .05em;
+    line-height: 4.8rem;
+  }
+
+  .stamped-form-input-textarea {
+    padding: 18px;
+    line-height: 1.2;
+  }
+
+  @media all and (min-width: 480px) {
+    .fa-check-circle-o,
+    .fa-share-alt,
+    .fa-thumbs-down,
+    .fa-thumbs-up,
+    .stamped-fa-check-circle-o,
+    .stamped-fa-share-alt,
+    .stamped-fa-thumbs-down,
+    .stamped-fa-thumbs-up {
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-align: center;
+      align-items: center;
+    }
+
+    .stamped-share-icon {
+      display: -ms-flexbox;
+      display: flex;
+    }
+
+    #stamped-review-vote a,
+    .stamped-review-vote a,
+    .stamped-review-footer #stamped-review-share, .stamped-review-footer .stamped-review-share {
+      display: inline-block;
+      padding: 5px 15px;
+      border: 1px solid #ccc !important;
+      border-radius: 1px;
+    }
+  }
+}

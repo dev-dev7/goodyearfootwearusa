@@ -1,0 +1,88 @@
+{% comment %}
+Renders collections carousel in sidebar
+  Accepts:
+    - block_title: <String> Block title
+    - collection_name: <Collection> Name of the collection to show
+    - show_count: <Number> Number of products to show at once
+    - auto_speed: <Number> Carousel autoplay speed, default is 6 when no value is set
+
+  Usage:
+    {% render 'sidebar_collection_carousel', block_title: section.settings.bestseller_title,
+        collection_name: section.settings.bestseller_collection, show_count: section.settings.bestseller_show_count,
+        prd_img_ft: section.settings.bestseller_prd_img_ft %}
+{% endcomment %}
+
+{%- liquid
+assign c_collection = collections[collection_name]
+if show_count == blank
+  assign show_count = 3
+endif
+-%}
+
+{%- if block_title != blank -%}
+  <h3 class="block-title">{{ block_title }}</h3>
+{%- endif -%}
+<div class="sidebar-carousel home-sidebar">
+  <div class="items-carousel {{ prd_img_ft }}"
+    data-auto="{{ auto_speed | default: 6 }}"
+    data-dots="false"
+    data-nav="true"
+    data-wraparound="true">
+    {%- unless c_collection == blank -%}
+      {%- if c_collection.products_count == 0 -%}
+        <p class="description slide-group">{{ 'collections.general.no_matches' | t }}</p>
+      {%- else -%}
+        {%- for product in c_collection.products -%}
+          {%- assign row = forloop.index | modulo: show_count -%}
+          {%- if row == 1 or show_count == 1 -%}
+            <div class="slide-group">
+          {%- endif -%}
+          {%- assign on_sale = false -%}
+          {%- if product.compare_at_price > product.price -%}
+            {%- assign on_sale = true -%}
+          {%- endif -%}
+
+          <div class="ds-flex slide-item">
+            <div class="product-img">
+              {%- if product.featured_image != blank -%}
+                <div class="position-relative image-loading" style="padding-top:{{ 100 | divided_by: product.featured_image.aspect_ratio }}%">
+                  <img class="image-bg lazyload" data-src="{{ product.featured_image.src | img_url: '100x' }}" />
+                </div>
+              {%- endif -%}
+            </div>
+            <div class="product-detail">
+              <h3 class="product-name">
+                <a href="{{ product.url | within: collection }}">{{ product.title }}</a>
+              </h3>
+              {% render 'product_price', price: product.price, compare_at_price: product.compare_at_price %}
+            </div>
+          </div>
+          {%- if row == 0 or forloop.last -%}
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      {%- endif -%}
+    {%- else -%}
+      {%- for i in (1..6) -%}
+        {%- assign row = forloop.index | modulo: show_count -%}
+        {%- if row == 1 or show_count == 1 -%}
+          <div class="slide-group">
+        {%- endif -%}
+          <div class="ds-flex slide-item">
+            <div class="product-img">
+              <div class="position-relative" style="padding-top:130%;">
+                {{ 'product-' | append: i | placeholder_svg_tag: 'placeholder' }}
+              </div>
+            </div>
+            <div class="product-detail">
+              <h3 class="product-name">Product {{ forloop.index }} Title</h3>
+              {% render 'product_price', price: 777, compare_at_price: 999 %}
+            </div>
+          </div>
+        {%- if row == 0 or forloop.last -%}
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    {%- endunless -%}
+  </div><!-- .items-carousel -->
+</div><!-- .sidebar-carousel -->

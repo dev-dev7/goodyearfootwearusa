@@ -1,0 +1,67 @@
+{% comment %}
+Renders images in layout 3 style
+  Accepts:
+    - text_image3: <Object> content type - section/block
+      = banner1: <Image> First image
+      = title1: <String> First image overlay text title
+      = subtitle1: <String> First image overlay text subtitle
+      = banner2: <Image> Second image
+      = title2: <String> Second image overlay text title
+      = subtitle2: <String> Second image overlay text subtitle
+
+  Usage:
+    {% render 'text_image3' with section %}
+    {% render 'text_image3' with block %}
+{% endcomment %}
+
+{%- liquid
+assign banner1 = text_image3.settings.banner1
+assign content1_style = text_image3.settings.content1_style
+assign title1 = text_image3.settings.title1
+assign color_title1 = text_image3.settings.color_title1
+assign desc1 = text_image3.settings.desc1
+assign color_desc1 = text_image3.settings.color_desc1
+assign banner2 = text_image3.settings.banner2
+assign content2_style = text_image3.settings.content2_style
+assign title2 = text_image3.settings.title2
+assign color_title2 = text_image3.settings.color_title2
+assign desc2 = text_image3.settings.desc2
+assign color_desc2 = text_image3.settings.color_desc2
+-%}
+
+<div class="image-layout3 row">
+  <div class="medium-6 col-padding">
+    {%- if banner1 != blank -%}
+      <div class="position-relative image-loading" style="padding-top:{{ 100 | divided_by: banner1.aspect_ratio }}%;">
+        <div class="image-bg lazyload" data-bg="{{ banner1 | img_url: 'master' }}"></div>
+    {%- else -%}
+      <div class="position-relative" style="padding-top:47.619%;">
+        {{ 'image' | placeholder_svg_tag: 'placeholder' }}
+    {%- endif -%}
+      <div class="text-content {{ content1_style }} v-center font-10">
+        <div class="text-left">
+          <h2 style="color:{{ color_title1 }}">{{ title1 }}</h3>
+          <p style="color:{{ color_desc1 }}">{{ desc1 | newline_to_br }}</p>
+        </div>
+      </div><!-- .text-content -->
+    </div><!-- .position-relative -->
+  </div><!-- .medium-6 col-padding -->
+
+  <div class="medium-6 col-padding">
+    {%- if banner2 != blank -%}
+      <div class="position-relative image-loading" style="padding-top:{{ 100 | divided_by: banner2.aspect_ratio }}%;">
+        <div class="image-bg lazyload" data-bg="{{ banner2 | img_url: 'master' }}"></div>
+    {%- else -%}
+      <div class="position-relative" style="padding-top:47.619%;">
+        {{ 'image' | placeholder_svg_tag: 'placeholder' }}
+    {%- endif -%}
+
+      <div class="text-content {{ content2_style }} v-center font-10">
+        <div class="text-left">
+          <h2 style="color:{{ color_title2 }}">{{ title2 | newline_to_br }}</h3>
+          <p style="color: {{ color_desc2}}">{{ desc2 | newline_to_br }}</p>
+        </div>
+      </div><!-- .text-content -->
+    </div><!-- .position-relative -->
+  </div><!-- .medium-6 col-padding -->
+</div><!-- .image-layout3 -->

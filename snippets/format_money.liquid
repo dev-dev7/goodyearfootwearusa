@@ -1,0 +1,14 @@
+{% comment %}
+Renders Money with trailing zero or without trailing zeros
+  Accepts:
+    - format_money: <Number> Price to format
+
+  Usage:
+    {% render 'format_money' with product.price %}
+{% endcomment %}
+
+{%- if settings.price_format == 'without_zero' -%}
+{{ format_money | money_without_trailing_zeros }}
+{%- else -%}
+{{ format_money | money }}
+{%- endif -%}

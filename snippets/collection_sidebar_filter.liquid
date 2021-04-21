@@ -1,0 +1,84 @@
+{% comment %}
+Renders tags filter block in sidebars
+  Accepts:
+    - block: content to show - section/block
+      - block_title: <String> title of the block
+      - block_type: <String> block type (vales: "color", checkbox")
+      - tags_list: <String> tags list
+    - c_tags: <String> collection tags
+    - cp: <Products> collection products list
+
+  Usage:
+    {% render 'collection_sidebar_filter' with block, c_tags: tags_list, max_p: max_p, min_p: min_p, cp: cp %}
+{% endcomment %}
+
+{%- liquid
+assign block_title = collection_sidebar_filter.settings.title
+assign block_type = collection_sidebar_filter.settings.type
+assign tick_style = collection_sidebar_filter.settings.tick_style
+assign tags_list = collection_sidebar_filter.settings.tags_list | strip_newlines | strip | replace: ', ', ',' | replace: ' ,', ',' | split: ','
+assign active_tags = c_tags | join: ',' | prepend: ',' | append: ',' | downcase
+-%}
+{%- if block_title != blank -%}
+  <h3 class="block-title">{{ block_title }}</h3>
+{%- endif -%}
+
+{%- if block_type == 'color' -%}
+
+<ul class="list-style-none filter-list filter-color">
+  {%- for tag in tags_list -%}
+    {%- if collection.all_tags contains tag -%}
+      {%- assign safeValue = tag | replace: '"', '&quot;' -%}
+      {%- assign downValue = tag | downcase -%}
+      {%- assign compare_tag = downValue | append: ',' | prepend: ',' -%}
+      <li class="nav-level__0">
+        <a href="#" data-color="{{ downValue }}" class="nav-list__link {{ tick_style }}{% if downValue == 'white' or downValue == '#fff' or downValue == '#ffffff'%} option-label-white{% endif %}" style="background-color:{{ downValue }}">
+          <span class="ticksign{% if active_tags contains compare_tag %} active{% endif %}">{% render 'icon-ticksign' %}</span>
+        </a>
+      </li>
+    {%- endif -%}
+  {%- endfor -%}
+</ul>
+
+{%- else -%}
+
+<ul class="list-style-none filter-list filter-tag">
+  {%- for tag in tags_list -%}
+    {%- if collection.all_tags contains tag -%}
+
+      {%- assign compare_tag = tag | append: ',' | prepend: ',' | downcase -%}
+      {%- assign tag_result = 0 -%}
+
+      {%- for pp in cp -%}
+        {%- if min_p != blank and min_p > pp.price_min -%}{%- continue -%}{%- endif -%}
+        {%- if max_p != blank and max_p < pp.price_max -%}{%- continue -%}{%- endif -%}
+        {%- assign ptag_arr = pp.tags | join: ',' | append: ',' | prepend: ',' | downcase -%}
+        {%- assign skip = false -%}
+        {%- for c_tag in c_tags -%}
+          {%- assign downtag = c_tag | downcase -%}
+          {%- unless ptag_arr contains downtag -%}
+            {%- assign skip = true -%}
+            {%- break -%}
+          {%- endunless -%}
+        {%- endfor -%}
+        {%- if skip -%}
+          {%- continue -%}
+        {%- endif -%}
+        {%- if ptag_arr contains compare_tag -%}
+          {%- assign tag_result = tag_result | plus: 1 -%}
+        {%- endif -%}
+      {%- endfor -%}
+
+      <li class="nav-level__0">
+        <a href="#" class="nav-list__link {{ tick_style }}" data-tag="{{ tag | downcase | strip }}">
+          <span class="ticksign{% if active_tags contains compare_tag %} active{% endif %}">
+            {% render 'icon-ticksign' %}
+          </span>
+          <span class="filter-content">{{ tag | strip }}</span>
+          <span class="filter-count">({{ tag_result }})</span></a>
+      </li>
+    {%- endif -%}
+  {%- endfor -%}
+</ul>
+
+{%- endif -%}

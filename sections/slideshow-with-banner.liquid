@@ -1,0 +1,452 @@
+<div class="{{ section.settings.slide_layout }} slideshow-banner">
+  <div class="row">
+    <div class="medium-8 col-padding">
+      <div class="flickity-carousel {{ section.settings.slide_transition }}"
+          data-auto="{{ section.settings.auto_speed }}"
+          data-wraparound="true"
+          data-dots="{{ section.settings.show_dots }}"
+          data-nav="{{ section.settings.show_nav }}">
+        {%- for block in section.blocks -%}
+          {%- if block.settings.slide_img != blank -%}
+
+            {%- assign ar = block.settings.slide_img.aspect_ratio | default: 1 -%}
+            <div class="slide-item slide-{{ block.id }}{% if section.settings.has_minheight %} has-minheight{% endif %}" style="padding-top:{{ 100 | divided_by: ar }}%" {{ block.shopify_attributes }}>
+              {% render 'image', m_img: block.settings.slide_img %}
+
+          {%- else -%}
+            <div class="slide-item slide-{{ block.id }}{% if section.settings.has_minheight %} has-minheight{% endif %}" style="padding-top: 84.41%" {{ block.shopify_attributes }}>
+              <div class="image-bg">
+                {% capture current %}{% cycle 1, 2 %}{% endcapture %}
+                {{ 'lifestyle-' | append: current | placeholder_svg_tag: 'placeholder' }}
+              </div><!-- image-bg -->
+          {%- endif -%}
+
+              {%- comment -%} Show Slideshow Content {%- endcomment -%}
+              {%- if block.settings.link_slider != blank and block.settings.button_title == blank -%}
+                <a href="{{ block.settings.link_slider }}" class="link-entire"></a>
+              {%- endif -%}
+
+              <div class="slideshow-content-adjust none">
+                <div class="text-{{ block.settings.content_pos }}">
+                  {%- if block.settings.use_html -%}
+                    {{ block.settings.html_content }}
+                  {%- else -%}
+                    {%- if block.settings.main_title != blank -%}
+                      <h2 class="font-body font-normal" style="background-color: {{ block.settings.title_bg | color_modify: 'alpha', 0.8 }};color: {{ block.settings.title_c }};">{{ block.settings.main_title | newline_to_br }}</h2>
+                    {%- endif -%}
+                    {%- if block.settings.desc != blank -%}
+                      <h3 class="font-normal" style="color: {{ block.settings.desc_color }};">{{ block.settings.desc | newline_to_br }}</h2>
+                    {%- endif -%}
+                    {%- if block.settings.button_title != blank -%}
+                      <a href="{{ block.settings.link_slider | default: '#' }}" class="btn {{ block.settings.btn_style }}">{{ block.settings.button_title }}</a>
+                    {%- endif -%}
+                  {%- endif -%}
+                </div><!-- .content-pos -->
+              </div><!-- .slideshow-content -->
+
+            </div><!-- .slide-item -->
+        {%- endfor -%}
+      </div><!-- .flickity-carousel -->
+    </div><!-- .medium-8 -->
+
+    <div class="medium-4 col-padding banners-container ds-flex flex-column space-between banner-layout_{{ section.settings.banner_layout }}">
+      <div class="position-relative banner1">
+        {%- if section.settings.banner1 != blank -%}
+          {%- assign ar = section.settings.banner1.aspect_ratio | default: 1 -%}
+          {%- capture padding -%}padding-top:{{ 100 | divided_by: ar }}%;{%- endcapture -%}
+          {%- capture m_p_b1 -%}
+            #shopify-section-{{ section.id }} .banner1 .height-100 {
+              {{ padding }}
+            }
+          {%- endcapture -%}
+          {%- if section.settings.banner_layout == 'default' -%}
+            <div class="position-relative" style="{{ padding }}">
+          {%- else -%}
+              <div class="position-relative height-100">
+          {%- endif -%}
+
+            {% render 'image', m_img: section.settings.banner1 %}
+          </div>
+        {%- else -%}
+          <div class="position-relative" style="padding-top: 113.51%;">
+            <div class="image-bg">
+              {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder' }}
+            </div><!-- image-bg -->
+          </div>
+        {%- endif -%}
+
+        <div class="text-content {{ section.settings.banner1_style }} v-center font-10">
+          <div class="center text-center">
+            {%- if section.settings.banner1_sub != blank -%}
+              <h3 class="font-body" style="color: {{ section.settings.banner1_sub_c }};">{{ section.settings.banner1_sub | newline_to_br }}</h4>
+            {%- endif -%}
+            {%- if section.settings.banner1_title != blank -%}
+              <h2 class="font-body" style="color: {{ section.settings.banner1_title_c }};">{{ section.settings.banner1_title | newline_to_br }}</h3>
+            {%- endif -%}
+          </div><!-- .v-center -->
+        </div><!-- .text-content -->
+      </div><!-- .position-relative.banner1 -->
+
+      <div class="position-relative banner2">
+        {%- if section.settings.banner2 != blank -%}
+          {%- assign ar = section.settings.banner2.aspect_ratio | default: 1 -%}
+          {%- capture padding -%}padding-top:{{ 100 | divided_by: ar }}%;{%- endcapture -%}
+          {%- capture m_p_b2 -%}
+            #shopify-section-{{ section.id }} .banner2 .height-100 {
+              {{ padding }}
+            }
+          {%- endcapture -%}
+          {%- if section.settings.banner_layout == 'default' -%}
+            <div class="position-relative" style="padding-top:{{ padding }}%;">
+          {%- else -%}
+            <div class="position-relative height-100">
+          {%- endif -%}
+            {% render 'image', m_img: section.settings.banner2 %}
+          </div>
+
+        {%- else -%}
+          <div class="position-relative" style="padding-top: 54.05%;">
+            <div class="image-bg">
+              {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder' }}
+            </div><!-- image-bg -->
+          </div>
+        {%- endif -%}
+
+        <div class="text-content {{ section.settings.banner2_style }} v-center font-10">
+          <div class="center text-center">
+            {%- if section.settings.banner2_sub != blank -%}
+              <h3 class="font-body" style="color: {{ section.settings.banner2_sub_c }};">{{ section.settings.banner2_sub | newline_to_br }}</h4>
+            {%- endif -%}
+            {%- if section.settings.banner2_title != blank -%}
+              <h2 class="font-body" style="color: {{ section.settings.banner2_title_c }};">{{ section.settings.banner2_title | newline_to_br }}</h3>
+            {%- endif -%}
+          </div><!-- .center -->
+        </div><!-- .text-content -->
+      </div><!-- .position-relative.banner2 -->
+    </div><!-- .medium-4.col-padding -->
+  </div><!-- .row -->
+</div><!-- .container.slideshow-banner -->
+
+{%- capture css -%}
+#shopify-section-{{ section.id }}{
+  margin:{{ section.settings.margin }}
+}
+#shopify-section-{{ section.id }} .flickity-page-dots .dot{
+  color:{{ section.settings.dots_color }}
+}
+#shopify-section-{{ section.id }} .flickity-page-dots .dot:hover,
+#shopify-section-{{ section.id }} .flickity-page-dots .is-selected{
+  color:{{ section.settings.color_dots_h | default: settings.c_theme }}
+}
+#shopify-section-{{ section.id }} .flickity-prev-next-button{
+  border-color:{{ section.settings.nav_color }};color: {{ section.settings.nav_color }}
+}
+@media all and (max-width: 767px){
+  {{ m_p_b1 }}
+  {{ m_p_b2 }}
+}
+{%- endcapture -%}
+<style>{{ css | strip_newlines | remove: '  ' }}</style>
+
+{% schema %}
+{
+  "name": "Slideshow & side banners",
+  "tag": "section",
+  "class": "vs-homepage-slideshow",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Settings"
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "Section Margin",
+      "info": "Set margin for section top-right-bottom-left (e.g. 20px 15px 10px 0)",
+      "default": "0 0 120px 0"
+    },
+    {
+      "type": "select",
+      "id": "slide_layout",
+      "label": "Section Layout",
+      "options": [
+        { "value": "container", "label": "Fixed Width" },
+        { "value": "full-width-container", "label": "Full Width" }
+      ],
+      "default": "container"
+    },
+    {
+      "type": "select",
+      "id": "banner_layout",
+      "label": "Section Layout",
+      "options": [
+        { "value": "default", "label": "Related to original image size" },
+        { "value": "yellow-design", "label": "Yellow style design" }
+      ],
+      "default": "yellow-design"
+    },
+    {
+      "type": "checkbox",
+      "id": "has_minheight",
+      "label": "Set minimum height 320px on mobiles",
+      "info": "Background images and videos can be cropped when this option is enabled",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Banner settings"
+    },
+    {
+      "type": "image_picker",
+      "id": "banner1",
+      "label": "Banner image 1",
+      "info": "370 x 420px recommended"
+    },
+    {
+      "type": "textarea",
+      "id": "banner1_sub",
+      "label": "Banner 1 subtitle",
+      "default": "DISCOVER OUR"
+    },
+    {
+      "type": "color",
+      "id": "banner1_sub_c",
+      "label": "Banner 1 subtitle color",
+      "default": "#2d2c2c"
+    },
+    {
+      "type": "textarea",
+      "id": "banner1_title",
+      "label": "Banner 1 title",
+      "default": "OUR NEW\nARRIVALS"
+    },
+    {
+      "type": "color",
+      "id": "banner1_title_c",
+      "label": "Banner 1 title color",
+      "default": "#323030"
+    },
+    {
+      "type": "select",
+      "id": "banner1_style",
+      "label": "Banner 1 content style",
+      "options": [
+        {"value": "text-green1", "label": "Green 1"},
+        {"value": "text-green2", "label": "Green 2"},
+        {"value": "text-green3", "label": "Green 3"},
+        {"value": "text-orange", "label": "Orange"},
+        {"value": "text-citrus1", "label": "Citrus 1"},
+        {"value": "text-citrus2", "label": "Citrus 2"},
+        {"value": "text-yellow1", "label": "Yellow 1"},
+        {"value": "text-yellow2", "label": "Yellow 2"},
+        {"value": "text-blue1", "label": "Blue 1"},
+        {"value": "text-blue2", "label": "Blue 2"},
+        {"value": "text-beige1", "label": "Beige 1"},
+        {"value": "text-beige2", "label": "Beige 2"},
+        {"value": "text-beige3", "label": "Beige 3"}
+      ],
+      "default": "text-yellow1"
+    },
+    {
+      "type": "image_picker",
+      "id": "banner2",
+      "label": "Banner image 2",
+      "info": "370 x 200px recommended"
+    },
+    {
+      "type": "textarea",
+      "id": "banner2_sub",
+      "label": "Banner 2 subtitle",
+      "default": "THE HALF PRICE SUMMER"
+    },
+    {
+      "type": "color",
+      "id": "banner2_sub_c",
+      "label": "Banner 2 subtitle color",
+      "default": "#2d2c2c"
+    },
+    {
+      "type": "textarea",
+      "id": "banner2_title",
+      "label": "Banner 2 title",
+      "default": "SALE"
+    },
+    {
+      "type": "color",
+      "id": "banner2_title_c",
+      "label": "Banner 2 title color",
+      "default": "#ffce26"
+    },
+    {
+      "type": "select",
+      "id": "banner2_style",
+      "label": "Banner 2 content style",
+      "options": [
+        {"value": "text-green1", "label": "Green 1"},
+        {"value": "text-green2", "label": "Green 2"},
+        {"value": "text-green3", "label": "Green 3"},
+        {"value": "text-orange", "label": "Orange"},
+        {"value": "text-citrus1", "label": "Citrus 1"},
+        {"value": "text-citrus2", "label": "Citrus 2"},
+        {"value": "text-yellow1", "label": "Yellow 1"},
+        {"value": "text-yellow2", "label": "Yellow 2"},
+        {"value": "text-blue1", "label": "Blue 1"},
+        {"value": "text-blue2", "label": "Blue 2"},
+        {"value": "text-beige1", "label": "Beige 1"},
+        {"value": "text-beige2", "label": "Beige 2"},
+        {"value": "text-beige3", "label": "Beige 3"}
+      ],
+      "default": "text-yellow2"
+    },
+    {
+      "type": "header",
+      "content": "Slideshow Settings"
+    },
+    {
+      "type": "select",
+      "id": "slide_transition",
+      "label": "Transition Effect",
+      "options": [
+        { "value": "slide", "label": "Slide" },
+        { "value": "fade", "label": "Fade" }
+      ],
+      "default": "slide"
+    },
+    {
+      "type": "text",
+      "id": "auto_speed",
+      "label": "Autoplay",
+      "info": "'5' means 5 seconds. '0' to disable auto rotate.",
+      "default": "5"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_dots",
+      "label": "Show pagination dots",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "dots_color",
+      "label": "Dots color",
+      "default": "#444444"
+    },
+    {
+      "type": "color",
+      "id": "color_dots_h",
+      "label": "Dots hover color"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_nav",
+      "label": "Show Navigation",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "nav_color",
+      "label": "Navigation Color",
+      "default": "#ffffff"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Image slide",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "slide_img",
+          "label": "Slide Image",
+          "info": "770x650px recommended"
+        },
+        {
+          "type": "select",
+          "id": "content_pos",
+          "label": "Content Position",
+          "options": [
+            {"value": "left", "label": "Left"},
+            {"value": "center", "label": "Center"},
+            {"value": "right", "label": "Right"}
+          ],
+          "default": "left"
+        },
+        {
+          "type": "textarea",
+          "id": "main_title",
+          "label": "Main title",
+          "default": "<b>A WIDE VARIETY</b>\nof styles available now"
+        },
+        {
+          "type": "color",
+          "id": "title_c",
+          "label": "Title color",
+          "default": "#333332"
+        },
+        {
+          "type": "color",
+          "id": "title_bg",
+          "label": "Title background color",
+          "default": "#fce312"
+        },
+        {
+          "type": "textarea",
+          "id": "desc",
+          "label": "Description",
+          "default": "Vestibulum pretium dui tellus, in eleifend,\nsed eu sem sagittis sodales"
+        },
+        {
+          "type": "color",
+          "id": "desc_color",
+          "label": "Description color",
+          "default": "#666666"
+        },
+        {
+          "type": "text",
+          "id": "button_title",
+          "label": "Button title",
+          "default": "SHOP NOW"
+        },
+        {
+          "type": "url",
+          "id": "link_slider",
+          "label": "Link To"
+        },
+        {
+          "type": "select",
+          "id": "btn_style",
+          "label": "Button Style",
+          "options": [
+            {"value": "btn-default", "label": "Default button"},
+            {"value": "btn-transparent", "label": "Transparent button"},
+            {"value": "btn-secondary", "label": "Secondary button"},
+            {"value": "btn-third", "label": "Third button"},
+            {"value": "btn-text", "label": "Text button"}
+          ],
+          "default": "btn-default"
+        },
+        {
+          "type": "checkbox",
+          "id": "use_html",
+          "label": "Use custom HTML for content",
+          "default": false
+        },
+        {
+          "type": "html",
+          "id": "html_content",
+          "label": "Custom HTML",
+          "info": "Write your own html/css for slideshow content"
+        }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "Slideshow & side banners",
+    "category": "Image",
+    "blocks": [
+      { "type": "image" },
+      { "type": "image" }
+    ]
+  }]
+}
+{% endschema %}

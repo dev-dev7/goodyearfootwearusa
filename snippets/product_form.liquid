@@ -1,0 +1,180 @@
+{% comment %}
+Renders product add cart form
+  Accepts:
+    - show_buy_now: <Boolean> show buy now button when this value is true
+
+  Usage:
+    {% render 'product_form', show_buy_now: section.settings.show_buy_now %}
+
+  Variables:
+    - d_name: downcased name of option
+    - r_name: real name of option, without [size], [color]
+    - anv:    available number of variants
+{% endcomment %}
+<script type="application/json" data-product-json>
+  {{ product | json }}
+</script>
+
+{%- unless product.has_only_default_variant -%}
+{%- capture product_options_html -%}
+  <div class="product-options">
+    {%- for option in product.options_with_values -%}
+      {%- assign d_name = option.name | downcase -%}
+      {%- assign r_name = option.name | remove: '[size]' | remove: '[color]' -%}
+      {%- assign anv = 0 -%}
+
+      {%- assign options_html = '' -%}
+      {%- capture option_name -%}option{{ forloop.index }}{%- endcapture -%}
+
+      {%- if d_name contains 'colour' or d_name contains 'color' -%}
+        {%- for value in option.values -%}
+          {%- if settings.hide_one_swatch -%}
+            {%- assign a_v = product.variants | where: option_name, value | where: "available", true -%}
+            {%- if a_v.size > 0 -%}
+              {%- assign anv = anv | plus: 1 -%}
+            {%- endif -%}
+          {%- endif -%}
+
+          {%- assign tooltip = value | split: '[svg]' | first | remove: '[image]' -%}
+          {%- assign safeValue = tooltip | downcase | replace: '"', '&quot;' | remove: ' ' -%}
+          {%- capture style -%}background-color:{{ safeValue }}{%- endcapture -%}
+          {%- if safeValue == 'white' or safeValue == '#fff' or safeValue == '#ffffff' -%}
+            {%- assign class_name = " option-label-white" -%}
+          {%- else -%}
+            {%- assign class_name = "" -%}
+          {%- endif -%}
+
+          {%- capture svg_tag -%}<span class="ticksign">{% render 'icon-ticksign' %}</span>{%- endcapture -%}
+
+          {%- if settings.color_swatch_type == 'variant_img' -%}
+            {%- assign class_name = ' option-img-variant' -%}
+            {%- assign c_v = product.variants | where: option_name, value | where: "featured_image" -%}
+            {%- if c_v[0].image != blank -%}
+              {%- if c_v[0].image.width > c_v[0].image.height -%}
+                {%- assign img_size = 'x60' -%}
+              {%- else -%}
+                {%- assign img_size = '60x' -%}
+              {%- endif -%}
+              {%- capture style -%}{{ style }};background-image:url({{ c_v[0].image.src | img_url: img_size }}){%- endcapture -%}
+            {%- endif -%}
+          {%- elsif settings.color_swatch_type == 'swatch_img' -%}
+            {%- if value contains '[image]' -%}
+              {%- assign class_name = ' option-img-custom' -%}
+              {%- assign swatch_url = safeValue | append: '.png' | file_img_url: '60x' -%}
+              {%- capture style -%}{{ style }};background-image:url({{ swatch_url }}){%- endcapture -%}
+            {%- elsif value contains '[svg]' -%}
+              {%- assign class_name = ' option-img-custom' -%}
+              {%- assign svg_name = value | split: '[svg]' | last -%}
+              {%- capture svg_tag -%}{% render 'render_icon', icon_name: svg_name %}{%- endcapture -%}
+            {%- endif -%}
+          {%- endif -%}
+          {%- capture options_html -%}
+            {{ options_html }}
+            <label data-value="{{ value }}"
+              class="option-label option-color{% if option.selected_value == value %} active{% endif %}{{ add_class }}{{ class_name }} tooltip"
+              style="{{ style }}" aria-description="{{ tooltip }}">
+              {{ svg_tag }}
+            </label>
+          {%- endcapture -%}
+        {%- endfor -%}
+      {%- else -%}
+        {%- capture options_html -%}
+        {%- for value in option.values -%}
+          {%- if settings.hide_one_swatch -%}
+            {%- assign a_v = product.variants | where: option_name, value | where: "available", true -%}
+            {%- if a_v.size > 0 -%}
+              {%- assign anv = anv | plus: 1 -%}
+            {%- endif -%}
+          {%- endif -%}
+          {%- assign safeValue = value | replace: '"', '&quot;' -%}
+          <label data-value="{{ safeValue }}" class="option-label{% if option.selected_value == value %} active{% endif %}">{{ value }}</label>
+        {%- endfor -%}
+        {%- endcapture -%}
+      {%- endif -%}
+
+      {%- if settings.product_option_style == 'swatch' -%}
+        <div class="product-single-option product-option__{{ settings.product_option_design }} ds-flex align-center flex-wrap" data-option-index="{{ option.position }}" >
+          {%- unless anv < 2 and settings.hide_one_swatch -%}
+            {%- if d_name != 'default' -%}
+              <label class="option-name">{{ r_name }}</label>
+            {%- endif -%}
+
+            {{ options_html }}
+          {%- endunless -%}
+
+          {% if d_name contains '[size]' %}
+            {%- if product.metafields.tab_size_guide.size_chart != blank -%}
+              <div class="size-chart">
+                <a class="btn btn-text link-page-popup" href="/pages/{{ product.metafields.tab_size_guide.size_chart }}">{{ 'products.product.size_chart' | t }}</a>
+              </div>
+            {%- elsif settings.show_global_sizechart and settings.global_sizechart != blank -%}
+              <div class="size-chart">
+                <a class="btn btn-text link-page-popup" href="/pages/{{ settings.global_sizechart }}">{{ 'products.product.size_chart' | t }}</a>
+              </div>
+            {%- endif -%}
+          {% endif %}
+
+        </div><!-- .product-single-option -->
+      {%- else -%}
+        <div class="product-single-option">
+          {% if r_name != 'default' %}
+            <label class="option-selector-name" for="{{ r_name | escape }}">{{ r_name }}</label>
+          {% endif %}
+
+          <select id="{{ r_name | escape }}" name="{{ r_name | escape }}" class="option-selector" data-option-index="{{ option.position }}">
+            {% for value in option.values %}
+              {% assign safeValue = value | replace: '"', '&quot;' %}
+              <option value="{{ safeValue }}" {% if option.selected_value == value %}selected{% endif %}>{{ value }}</option>
+            {% endfor %}
+          </select>
+        </div><!-- .product-single-option -->
+      {%- endif -%}
+    {%- endfor -%}
+  </div><!-- .product-options -->
+{%- endcapture -%}
+{%- endunless -%}
+
+{%- capture actual_options -%}
+{% for variant in product.variants %}
+  {% if variant.available %}
+    <option {% if variant == product.selected_or_first_available_variant %} selected="selected" {% endif %} data-policy="{{ variant.inventory_policy }}" data-inventory-management="{{ variant.inventory_management }}" data-quantity="{{ variant.inventory_quantity }}" value="{{ variant.id }}">{{ variant.title }} - {{ variant.price | money_with_currency }}</option>
+  {% else %}
+    <option disabled="disabled">
+      {{ variant.title }} - {{ 'products.product.sold_out' | t }}
+    </option>
+  {% endif %}
+{% endfor %}
+{%- endcapture -%}
+
+{% form 'product', product, class: 'product-form', novalidate: 'novalidate', id: form.id %}
+  {{- product_options_html | strip_newlines | strip -}}
+  <select id="product-actual-select" name="id" style="display: none;">
+    {{- actual_options | strip_newlines | strip -}}
+  </select>
+
+  <div class="add-to-cart ds-flex flex-wrap">
+    <div class="qty-control position-relative">
+      <input type="number" name="quantity" value="1" min="1" class="quantity text-center">
+      <div class="reduce text-center">-</div>
+      <div class="increase text-center">+</div>
+    </div><!-- .qty-control -->
+    <div class="product-actions">
+      {% if product.available %}
+        <button type="submit" name="add" class="btn btn-default btn-add-cart btn-anm-cart btn-anm__{{ settings.anm_cart_btn }}"><span class="add-cart__text">{{ 'products.product.add_to_cart' | t }}</span><span class="spinner"></span></button>
+      {% else %}
+        <a href="javascript:;" class="btn btn-default btn-add-cart"><span class="add-cart__text">{{ 'products.product.sold_out' | t }}</span></a>
+      {% endif %}
+    </div><!-- .product-actions -->
+    {%- if settings.enable_wishlist -%}
+      <div class="btn btn-default btn-wishlist" data-product-handle="{{ handle }}" title="{{ 'customer.wishlist.add' | t }}" data-remove-title="{{ 'customer.wishlist.remove' | t }}">{% render 'render_icon', icon_name: settings.wishlist_icon %}<span>{{ 'customer.wishlist.add' | t }}</span></div>
+    {%- endif -%}
+
+    {%- if settings.enable_compare -%}
+      <div class="btn btn-default btn-compare" data-product-handle="{{ handle }}" title="{{ 'customer.compare.add' | t }}" data-remove-title="{{ 'customer.compare.remove' | t }}">{% render 'render_icon', icon_name: settings.compare_icon %}<span>{{ 'customer.compare.add' | t }}</span></div>
+    {%- endif -%}
+  </div><!-- .add-to-cart -->
+
+  {%- if show_buy_now and product.available -%}
+    {{ form | payment_button }}
+  {%- endif -%}
+{% endform %}

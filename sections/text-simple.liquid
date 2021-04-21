@@ -1,0 +1,98 @@
+{% comment %}
+Texts with simple design
+{% endcomment %}
+
+<div style="margin: {{ section.settings.margin }};">
+  <div class="container">
+    <div class="text-simple text-center{% if section.settings.show_border %} border{% endif %} {{ section.settings.section_style }}" style="border-color:{{ section.settings.color_border }};background-image:url('{{ section.settings.back_img | img_url: 'master' }}'">
+      <h2 style="background-color: {{ section.settings.color_title_bg }};color: {{ section.settings.color_title }}">{{ section.settings.title }}</h2>
+      <p style="color: {{ section.settings.color_desc }}">{{ section.settings.desc }}</p>
+    </div><!-- .text-simple -->
+  </div><!-- .container -->
+</div>
+
+{% schema %}
+{
+  "name": "Simple Text",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Settings"
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "Section Margin",
+      "info": "sequence: top-right-bottom-left (ex: 10px 0 10px 0)",
+      "default": "0 0 95px 0"
+    },
+    {
+      "type": "select",
+      "id": "section_style",
+      "label": "Section Style",
+      "options": [
+        {"value": "general", "label": "General"},
+        {"value": "citrus", "label": "Citrus style"}
+      ],
+      "default": "general"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_border",
+      "label": "Show Border",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "color_border",
+      "label": "Border color",
+      "default": "#e0e0e0"
+    },
+    {
+      "type": "image_picker",
+      "id": "back_img",
+      "label": "Background Image",
+      "info": "1170x200px recommended"
+    },
+    {
+      "type": "header",
+      "content": "Text Configuration"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Extra 25% & Free Delivery on orders of $150"
+    },
+    {
+      "type": "color",
+      "id": "color_title",
+      "label": "Title color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "color_title_bg",
+      "label": "Title background color",
+      "default": "#e84c3d"
+    },
+    {
+      "type": "text",
+      "id": "desc",
+      "label": "Description",
+      "default": "Donec vehicula libero in sapien commodo sodales. Lorem volutpat metus ligula, eu soldales ligula dictum."
+    },
+    {
+      "type": "color",
+      "id": "color_desc",
+      "label": "Description color",
+      "default": "#333538"
+    }
+  ],
+  "presets": [{
+    "name": "Simple text",
+    "category": "Text Section"
+  }]
+}
+{% endschema %}

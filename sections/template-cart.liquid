@@ -1,0 +1,320 @@
+{%- liquid
+assign ul_fs = true
+assign n_fsa = blank
+if settings.enable_fsa and settings.fsa_amount != blank and settings.show_fsa_cp
+  assign p_fsa = all_products[settings.fsa_amount]
+  assign n_fsa = p_fsa.price
+endif
+-%}
+
+<div class="cart-template container">
+  <h1 class="page-title">{{ 'cart.general.title' | t }}</h1>
+  <p class="sale-info">{{ 'cart.general.sale_info' | t }}</p>
+
+  {%- if cart.item_count > 0 -%}
+  <form action="/cart" method="post" novalidate>
+    <div class="row">
+      <div class="medium-12 large-8 huge-9 col-padding">
+        <div class="cart-list__wrapper">
+          <div class="cart-header ds-flex">
+            <div class="cart-list__img"></div>
+            <b class="cart-list__name text-center">{{ 'cart.label.product_name' | t }}</b>
+            <b class="product-price text-center">{{ 'cart.label.price' | t }}</b>
+            <b class="product-qty text-center">{{ 'cart.label.quantity' | t }}</b>
+            <div class="cart-actions"></div>
+          </div>
+
+          <div class="cart-list">
+            {%- for item in cart.items -%}
+              <div class="cart-item ds-flex align-center">
+                <div class="cart-list__img" data-label="{{ 'customer.order.product' | t }}">
+                  <a href="{{ item.url | within: collections.all }}" class="image-loading">
+                    <img class="cart__image lazyload" data-src="{{ item | img_url: '100x100', scale: 2 }}" alt="{{ item.title | escape }}">
+                  </a>
+                </div><!-- .cart-list__img -->
+
+                <div class="cart-item__info ds-flex align-center">
+                  <div class="cart-list__name">
+                    <h5 class="product-name">
+                      <a href="{{ item.url }}">{{ item.product.title }}</a>
+                      {%- unless item.variant.title contains 'Default' -%}
+                        <div class="cart-product__options">
+                          {%- for option in item.product.options -%}
+                            {%- assign r_name = option.name | remove: '[size]' | remove: '[color]' -%}
+                            {%- assign r_option = item.variant.options[forloop.index0] | remove: '[image]' -%}
+                            {%- assign r_option = r_option | split: '[svg]' | first -%}
+                            <i>{{ r_name }}: {{ r_option }}</i><br/>
+                          {%- endfor -%}
+                        </div>
+                      {%- endunless -%}
+                    </h5>
+                    {%- assign property_size = item.properties | size -%}
+                    {%- if property_size > 0 -%}
+                      <div>
+                        {%- for p in item.properties -%}
+                          {%- unless p.last == blank -%}
+                            {{ p.first }}:
+                            {%- if p.last contains '/uploads/' -%}
+                              <a href="{{ p.last }}">{{ p.last | split: '/' | last }}</a>
+                            {%- else -%}
+                              {{ p.last }}
+                            {%- endif -%}
+                          {%- endunless -%}
+                        {%- endfor -%}
+                      </div>
+                    {%- endif -%}
+                  </div><!-- .cart-list__name -->
+
+                  <div class="product-price text-center">
+                    {%- if compare_at_price > price -%}
+                      <span class="old-price money">{% render 'format_money' with item.compare_at_price %}</span>
+                      <span class="sale-price current-price money">{% render 'format_money' with item.price %}</span>
+                    {%- else -%}
+                      <span class="current-price money">{% render 'format_money' with item.price %}</span>
+                    {%- endif -%}
+
+                    {%- for discount in item.discounts -%}
+                      <div>{{ discount.title }}</div>
+                    {%- endfor -%}
+                  </div><!-- .product-price -->
+
+                  <div class="qty-control position-relative">
+                    <div class="reduce text-center" onclick="var result = document.getElementById('updates_{{ item.id }}'); var qty = result.value; if( !isNaN( qty ) &amp;&amp; qty > 1 ) result.value--;return false;">-</div>
+                    <input type="number" name="updates[]" id="updates_{{ item.id }}" value="{{ item.quantity }}" min="1" class="quantity text-center" />
+                    <div class="increase text-center" onclick="var result = document.getElementById('updates_{{ item.id }}'); var qty = result.value; if( !isNaN( qty )) result.value++;return false;">+</div>
+                  </div><!-- .qty-control -->
+
+                  <div title="{{ 'cart.general.edit' | t }}" class="cart-actions ds-flex align-center">
+                    <a href="{{ item.url }}" class="edit">{% render 'icon-pencil' %}</a>
+                    <a href="{{routes.cart_change_url}}?id={{ item.key }}&amp;quantity=0" title="{{ 'cart.general.remove' | t }}" class="remove btn-remove-cart" data-id="{{ item.id }}" data-no-instant>{% render 'icon-close' %}</a>
+                  </div><!-- .cart-actions.ds-flex -->
+                </div><!-- .cart-item__info -->
+              </div><!-- .cart-item -->
+            {%- endfor -%}
+
+            <div class="buttons-container ds-flex flex-wrap">
+              <a href="/" class="btn btn-default">{{ 'cart.general.continue_shopping' | t }}</a>
+              <button type="submit" class="btn btn-default active ml-auto">{{ 'cart.general.update' | t }}</button>
+            </div><!-- .buttons-container -->
+          </div><!-- .cart-list -->
+        </div><!-- .cart-list__wrapper -->
+
+        {%- if n_fsa != blank and cart.total_price < n_fsa -%}
+          {%- assign a_p = cart.total_price | times: 100 | divided_by: n_fsa -%}
+          {%- assign a_m = n_fsa | minus: cart.total_price -%}
+          {%- capture a_m -%}{% render 'format_money' with a_m %}{%- endcapture -%}
+          <div class="vnd-crt-fsa width-100"><div class="vnd-crt-fsa-bar" style="width: {{ a_p }}%"></div></div>
+          <span class="cart-count">{{ 'cart.general.away_from_html' | t: amount: a_m }}</span>
+        {%- endif -%}
+
+        {%- if section.settings.cart_instruction -%}
+          <div class="cart-note">
+            <label for="CartSpecialInstructions">{{ 'cart.general.note' | t }}</label>
+            <textarea name="note" id="CartSpecialInstructions">{{ cart.note }}</textarea>
+          </div><!-- .cart-note -->
+        {%- endif -%}
+      </div>
+
+      <div class="medium-12 large-4 huge-3 col-padding sidebar">
+
+        <input type="submit" name="checkout" class="btn btn-default active btn-checkout" value="{{ 'cart.general.checkout' | t }}">
+
+        {%- if settings.enable_ctc -%}
+          {%- assign ctc_link = settings.ctc_link | default: '#' -%}
+          <div class="cart-tac position-relative">
+            <p class="tick-rectangle"><span class="ticksign">{% render 'icon-ticksign' %}</span><span class="cart-tac__text">{{ 'cart.general.terms_agreement_html' | t: link: ctc_link }}</span></p>
+          </div>
+        {%- endif -%}
+
+        {%- if n_fsa != blank and cart.total_price >= n_fsa -%}
+          {%- unless section.settings.show_sc_fs -%}
+            {%- assign ul_fs = false -%}
+          {%- endunless -%}
+          <div class="cart-freeshipping ds-flex align-start">{% render 'icon-information' %}<span>{{ 'cart.general.unlocked_free_shipping' | t }}</span></div>
+        {%- endif -%}
+
+        {%- if ul_fs and section.settings.shipping_calc -%}
+          <div class="shipping opened">
+            <h2 class="shipping-title expander ds-flex align-center">{{'cart.shipping.title' | t}}{% render 'icon-dir-down' %}</h2>
+            {% render 'shipping_calculator' %}
+          </div>
+        {%- endif -%}
+
+        <div class="cart-summary opened">
+          <h2 class="cart-summary__title expander ds-flex align-center">{{ 'cart.general.cart_totals' | t }}{% render 'icon-dir-down' %}</h2>
+          <div class="expandable">
+            {%- unless settings.cart_dd_only_total -%}
+            <div class="summary-item ds-flex">
+              <span>{{ 'cart.general.subtotal' | t }}</span>
+              <span class="ml-auto vnd-cart__total-origin">{% render 'format_money' with cart.original_total_price %}</span>
+            </div><!-- .summary-item.ds-flex -->
+            <div class="summary-item ds-flex">
+              <span>{{ 'cart.general.savings' | t }}</span>
+              <span class="ml-auto vnd-cart-discount">{% render 'format_money' with cart.total_discount %}</span>
+            </div><!-- .summary-item.ds-flex -->
+            {%- endunless -%}
+            <div class="summary-item ds-flex">
+              <span class="ml-auto">{{ 'cart.shipping.shipping_at_checkout' | t }}</span>
+            </div><!-- .summary-item.ds-flex -->
+            <div class="summary-total ds-flex">
+              <span class="vnd-cart__total-final">{{ 'cart.general.grand_total' | t }}</span>
+              <span class="product-price ml-auto"><span class="current-price money">{% render 'format_money' with cart.total_price %}</span></span>
+            </div><!-- .summary-total.ds-flex -->
+
+            <input type="submit" name="checkout" class="btn btn-default btn-checkout" value="{{ 'cart.general.checkout' | t }}">
+
+          </div><!-- .expandable -->
+        </div><!-- .cart-summary.opened -->
+      </div><!-- .medium-12.large-4.huge-3 -->
+    </div><!-- .row -->
+  </form>
+  {%- else -%}
+    <div class="ds-flex flex-column text-center cart-empty">
+      <p>{{ 'cart.general.empty' | t }}</p>
+      <a class="btn btn-default" href="/collections/all">{{ 'cart.general.continue_shopping' | t }}</a>
+    </div>
+  {%- endif -%}
+</div><!-- .cart-template.container -->
+{%- capture css -%}
+.cart-header{
+  background-color:{{ section.settings.c_list_hd_bg }};
+  color:{{ section.settings.c_list_hd }}
+}
+.cart-tac{
+  margin-bottom: 2rem;
+}
+.cart-summary__title,
+.shipping-title{
+  background:{{ section.settings.c_sidebar_hd_bg }};
+  color:{{ section.settings.c_sidebar_hd }}
+}
+.cart-template .expandable{
+  background-color:{{ section.settings.c_sidebar_bd_bg }};
+  color:{{ section.settings.c_sidebar_bd }}
+}
+.cart-freeshipping{
+  margin-bottom:2rem;
+  color:#555;
+}
+.cart-freeshipping svg{
+  width:1.6rem;
+  min-width:1.6rem;
+  height:1.2em;
+  margin-right:.6rem;
+  color:{{ settings.c_theme }};
+}
+.cart-note{
+  margin-top: 2.4rem;
+  margin-bottom: 4.8rem
+}
+.cart-note label,
+.cart-note textarea{
+  display: block;
+  width: 100%;
+  padding: 19px 30px;
+  border: 1px solid #efefef;
+  line-height: 19px
+}
+.cart-note label{
+  height: 57px;
+  border-bottom: 0;
+  background-color: #fafafa;
+  color: #555;
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: .2em;
+  text-transform: uppercase
+}
+.cart-note textarea{
+  min-height: 140px
+}
+@media all and (min-width: 1400px){
+  .cart-note {
+    margin-top: 3rem;
+    margin-bottom: 13rem;
+  }
+}
+@media all and (max-width: 480px){
+  .cart-template .btn-default{
+    height: 3.6rem;
+    padding: 0 1.1rem;
+    font-size: 1.1rem
+  }
+}
+{%- endcapture -%}
+<style>{{ css | strip_newlines | remove: '  ' }}</style>
+{% schema %}
+{
+  "name": "Cart Section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "cart_instruction",
+      "label": "Enable Special Instructions",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "shipping_calc",
+      "label": "Show Shipping Calculator",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_sc_fs",
+      "label": "Show Shipping Calculator even customer unlocked freeshipping",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_recent",
+      "label": "Show Recently Viewed Products",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "List"
+    },
+    {
+      "type": "color",
+      "id": "c_list_hd_bg",
+      "label": "Header background color",
+      "default": "#fafafa"
+    },
+    {
+      "type": "color",
+      "id": "c_list_hd",
+      "label": "Header text color",
+      "default": "#555555"
+    },
+    {
+      "type": "header",
+      "content": "Cart Summary (Sidebar)"
+    },
+    {
+      "type": "color",
+      "id": "c_sidebar_hd_bg",
+      "label": "Header background color",
+      "default": "#fafafa"
+    },
+    {
+      "type": "color",
+      "id": "c_sidebar_hd",
+      "label": "Header text color",
+      "default": "#555555"
+    },
+    {
+      "type": "color",
+      "id": "c_sidebar_bd_bg",
+      "label": "Body background color",
+      "default": "#fcfcfc"
+    },
+    {
+      "type": "color",
+      "id": "c_sidebar_bd",
+      "label": "Body text color",
+      "default": "#666666"
+    }
+  ]
+}
+{% endschema %}

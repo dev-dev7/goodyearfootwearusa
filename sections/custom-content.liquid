@@ -1,0 +1,45 @@
+<div style="margin: {{ section.settings.margin }};">
+  <div class="{{ section.settings.layout }}">
+    {{ section.settings.html }}
+  </div>
+</div><!-- layout -->
+
+{% schema %}
+{
+  "name": "Custom HTML",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Settings"
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "Section Margin",
+      "info": "Set margin for section top-right-bottom-left (e.g. 20px 15px 10px 0)",
+      "default": "0 0 0 0"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Section Width",
+      "options": [
+        { "value": "container", "label": "Fixed Width" },
+        { "value": "full-width-container", "label": "Full Width" }
+      ],
+      "default": "container"
+    },
+    {
+      "type": "html",
+      "id": "html",
+      "label": "Custom HTML",
+      "info": "Write your own html/css here"
+    }
+  ],
+  "presets": [{
+    "name": "Custom HTML",
+    "category": "Main Section"
+  }]
+}
+{% endschema %}

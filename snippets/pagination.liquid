@@ -1,0 +1,40 @@
+{% comment %}
+Renders pagination buttons in a grid style
+  Accepts:
+    - paginate: {Paginate} Pagination object from parent
+
+  Usage:
+    {% render 'pagination', paginate: paginate %}
+{% endcomment %}
+
+{%- if paginate.pages > 1 -%}
+<nav role="navigation" class="ml-auto pagination-container">
+  <ul class="pagination list-style-none ds-flex">
+    {%- if paginate.previous-%}
+      <li class="paginate-item">
+        <a href="{{ paginate.previous.url }}">{% render 'icon-dir-left' %}</a>
+      </li>
+    {%- endif -%}
+
+    {%- for part in paginate.parts -%}
+      {%- if part.is_link -%}
+        <li class="paginate-item">
+          <a href="{{ part.url }}">{{ part.title }}</a>
+        </li>
+      {%- else -%}
+        {%- if part.title == paginate.current_page -%}
+          <li class="paginate-item active" aria-current="page"><span>{{ part.title }}</span></li>
+        {%- else -%}
+          <li class="paginate-item"><span>{{ part.title }}</span></li>
+        {%- endif -%}
+      {%- endif -%}
+    {%- endfor -%}
+
+    {%- if paginate.next -%}
+      <li class="paginate-item">
+        <a href="{{ paginate.next.url }}">{% render 'icon-dir-right' %}</a>
+      </li>
+    {%- endif -%}
+  </ul>
+</nav>
+{%- endif -%}

@@ -1,0 +1,227 @@
+{%- liquid
+assign show = section.settings.show
+assign insta_layout = section.settings.insta_layout
+assign section_title = section.settings.section_title
+assign c_title = section.settings.c_title
+assign c_desc = section.settings.c_desc
+assign hashtag = section.settings.hashtag
+-%}
+{%- if show -%}
+<div class="{{ section.settings.layout }} text-center">
+  {%- unless insta_layout == 'newsletter' -%}
+    {%- if section_title != blank -%}
+      <h2 class="insta-title">{{ section_title }}</h2>
+    {%- endif -%}
+
+    {%- if section.settings.section_info != blank -%}
+      <h3 class="insta-desc">{{ section.settings.section_info | newline_to_br }}</h3>
+    {%- endif -%}
+  {%- endunless-%}
+
+  {%- if insta_layout == 'carousel' or insta_layout == 'slide' -%}
+    <div class="instagram-images items-carousel {{ insta_layout }}{% if insta_layout == 'slide' %} fade{% endif %}"
+      data-hashtag="{{ hashtag }}"
+      data-count="{{ section.settings.count }}"
+      data-grid="{{ section.settings.grid_count }}"
+      data-layout="{{ insta_layout }}"></div>
+  {%- else -%}
+    {%- if insta_layout == 'newsletter' -%}
+      <div class="ds-flex insta-newsletter__wrapper">
+    {%- endif -%}
+    <div class="instagram-images ds-flex {{ insta_layout }}"
+      data-hashtag="{{ hashtag }}"
+      data-count="{{ section.settings.count }}"
+      data-grid="{{ section.settings.grid_count }}"
+      data-layout="{{ insta_layout }}">
+      {%- if insta_layout == 'newsletter' -%}
+        <div class="col-padding grid-items__{{ section.settings.grid_count }}">
+          <a href="{{ section.settings.insta_link }}" class="section-heading__container">
+            <h3 class="insta-title">{{ section_title }}</h3>
+            <p class="insta-desc">{{ section.settings.section_info | newline_to_br }}</p>
+          </a>
+        </div>
+      {%- endif -%}
+      </div>
+  {%- endif -%}
+
+  {%- if insta_layout == 'newsletter' -%}
+    <div class="newsletter-form ds-flex flex-column justify-end">
+      {%- if settings.newsletter_popup_subtitle != blank-%}
+        <p class="newsletter-subtitle">{{ settings.newsletter_popup_subtitle | newline_to_br }}</p>
+      {%- endif -%}
+
+      {%- if settings.newsletter_popup_title != blank-%}
+        <h3 class="newsletter-title">{{ settings.newsletter_popup_title | newline_to_br }}</h3>
+      {%- endif -%}
+
+      {%- if settings.newsletter_popup_desc != blank-%}
+        <p class="newsletter-desc">{{ settings.newsletter_popup_desc | newline_to_br }}</p>
+      {%- endif -%}
+
+      {%- if settings.newsletter_service == 'shopify-default' -%}
+        {% form 'customer', class: 'form-newsletter position-relative', id: form.id %}
+          {% render 'form_status', form: form, form_id: formId, success_message: 'general.newsletter_form.confirmation' | t %}
+          {% unless form.posted_successfully? %}
+            <input type="hidden" name="contact[tags]" value="newsletter">
+            <input type="email" name="contact[email]" class="input-strict" value="{% if customer %}{{ customer.email }}{% endif %}" placeholder="Enter your email address" autocorrect="off" autocapitalize="off" required>
+            {%- if settings.newsletter_type == 'newsletter-style' -%}
+              <button type="submit" name="commit" class="btn-icon">{% render 'icon-arrow-right' %}</button>
+            {%- elsif settings.newsletter_type == 'textbox' -%}
+              <button type="submit" class="btn btn-default btn-newsletter">{{ settings.newsletter_popup_btn }}</button>
+            {%- else -%}
+              <button type="submit" name="commit" class="link-color btn-newsletter">{{ settings.newsletter_popup_btn }}&#32;&#62;</button>
+            {%- endif -%}
+          {% endunless %}
+        {% endform %}
+      {%- else -%}
+
+        <form action="{{ form_action }}" method="post" name="mc-embedded-subscribe-form" class="form-newsletter position-relative">
+          <input class="input-strict" placeholder="Enter your email address" type="email" value="{% if customer %}{{ customer.email }}{% endif %}" name="EMAIL" required/>
+          {%- if settings.newsletter_type == 'newsletter-style' -%}
+            <button type="submit" class="btn-icon">{% render 'icon-arrow-right' %}</button>
+          {%- elsif settings.newsletter_type == 'textbox' -%}
+            <button type="submit" class="btn btn-default btn-newsletter">{{ settings.newsletter_popup_btn }}</button>
+          {%- else -%}
+            <button type="submit" class="link-color btn-newsletter">{{ settings.newsletter_popup_btn }}&#32;&#62;</button>
+          {%- endif -%}
+        </form>
+      {%- endif -%}
+    </div>
+  </div>
+  {%- endif -%}
+
+  {%- if section.settings.btn_text != blank and section.settings.insta_layout != 'newsletter' -%}
+    <a class="btn btn-default insta-link" href="{{ section.settings.insta_link }}">{{ section.settings.btn_text }}</a>
+  {%- endif -%}
+</div><!-- .container.text-center -->
+{%- capture styles -%}
+#shopify-section-{{ section.id }}{
+  margin:{{ section.settings.margin }}
+}
+#shopify-section-{{ section.id }} .insta-title{
+  color:{{ c_title }}
+}
+#shopify-section-{{ section.id }} .insta-desc{
+  color:{{ c_desc }}
+}
+{%- endcapture -%}
+<style>{{ styles | strip_newlines | remove: '  ' }}</style>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Instagram",
+  "tag": "section",
+  "class": "vs-instagram",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "show",
+      "label": "Show section",
+      "default": true,
+      "info": "Show/hide this section"
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "Section Margin",
+      "info": "Set margin for section top-right-bottom-left (e.g. 20px 15px 10px 0)",
+      "default": "150px 0"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Section Layout",
+      "options": [
+        { "value": "container", "label": "Fixed Width" },
+        { "value": "full-width-container", "label": "Full Width" }
+      ],
+      "default": "container"
+    },
+    {
+      "type": "text",
+      "id": "section_title",
+      "label": "Section Title",
+      "default": "#insta_venedor"
+    },
+    {
+      "type": "color",
+      "id": "c_title",
+      "label": "Title color",
+      "default": "#333333"
+    },
+    {
+      "type": "textarea",
+      "id": "section_info",
+      "label": "Section description",
+      "default": "Class aptent taciti sociosqu ad litora torquent."
+    },
+    {
+      "type": "color",
+      "id": "c_desc",
+      "label": "Description color",
+      "default": "#777777"
+    },
+    {
+      "type": "text",
+      "id": "btn_text",
+      "label": "Button Text",
+      "default": "JOIN OUR COMMUNITY"
+    },
+    {
+      "type": "url",
+      "id": "insta_link",
+      "label": "Link To"
+    },
+    {
+      "type": "header",
+      "content": "Instagram Settings"
+    },
+    {
+      "type": "select",
+      "id": "insta_layout",
+      "label": "Layout style",
+      "options": [
+        { "value": "carousel", "label": "Carousel" },
+        { "value": "masonry", "label": "Masonry Layout" },
+        { "value": "grid", "label": "Grid Layout" },
+        { "value": "slide", "label": "Slide" },
+        { "value": "newsletter", "label": "With newsletter form" }
+      ],
+      "default": "carousel"
+    },
+    {
+      "type": "text",
+      "id": "hashtag",
+      "label": "Instagram hashtag",
+      "default": "#venedor_insta_orange"
+    },
+    {
+      "type": "range",
+      "id": "count",
+      "min": 1,
+      "max": 20,
+      "step": 1,
+      "label": "Number of images to show",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "grid_count",
+      "min": 1,
+      "max": 8,
+      "step": 1,
+      "label": "Number of images in a row",
+      "default": 5
+    }
+  ],
+  "presets": [{
+    "name": "Instagram",
+    "category": "Social"
+  }]
+}
+{% endschema %}

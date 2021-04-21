@@ -1,0 +1,127 @@
+{%- if settings.review_app contains 'ali' -%}
+  <script type="text/javascript" src="{{ 'jquery.min.js' | asset_url }}"></script>
+{%- else -%}
+  <script type="text/javascript" src="{{ 'jquery.min.js' | asset_url }}" defer></script>
+{%- endif -%}
+<script type="text/javascript" src="{{ 'vendor.min.js' | asset_url }}" defer></script>
+
+{%- if settings.enable_lazyload -%}
+<script type="text/javascript" src="{{ 'lazysizes.min.js' | asset_url }}" async></script>
+{%- else -%}
+<script type="text/javascript" src="{{ 'loadimages.min.js' | asset_url }}" defer></script>
+{%- endif -%}
+
+{%- if request.page_type == 'search' or request.page_type == 'collection' -%}
+<script type="text/javascript" src="{{ 'jRange.min.js' | asset_url }}" defer></script>
+{%- endif -%}
+
+{%- if request.page_type contains 'customers/' -%}
+<script src="{{ 'shopify_common.js' | shopify_asset_url }}" async></script>
+{{ "customer_area.js" | shopify_asset_url | script_tag }}
+{%- endif -%}
+
+{%- if request.page_type == 'cart' and cart.item_count > 0 -%}
+{{ '/services/javascripts/countries.js' | script_tag }}
+{{ 'shopify_common.js' | shopify_asset_url | script_tag }}
+<script type="text/javascript" src="{{ 'jquery.cart.min.js' | asset_url }}" defer></script>
+<script type="text/javascript" src="{{ 'vndCart.js' | asset_url }}" defer></script>
+{%- endif -%}
+
+<script>
+// Theme variables from shop settings
+vndTheme = {};
+vndTheme.stt = {};
+// template name
+var vndTpl = '{{ template }}';
+// Theme currency support type
+vndTheme.c_s_t = '{{ settings.currency_spt_type }}';
+// Theme shop currency
+vndTheme.shop_currency = "{{ shop.currency }}";
+vndTheme.s_c = "{{ cart.currency.iso_code }}";
+// Theme money format
+vndTheme.smw_cf = "{{ shop.money_with_currency_format }}";
+vndTheme.s_m_f = "{{ shop.money_format }}";
+vndTheme.m_f = '<span class="money">' + vndTheme.s_m_f + '</span>';
+// Theme price format
+vndTheme.p_f = '{{ settings.price_format }}';
+if(typeof vndCurrency==="undefined"){var vndCurrency={}};
+vndCurrency.format = '{{ settings.currency_format | default: "money_with_currency_format" }}';
+// Theme date texts (day, hour, minutes, second)
+vndTheme.t_d = "{{ 'date_formats.days' | t }}";
+vndTheme.t_h = "{{ 'date_formats.hours' | t }}";
+vndTheme.t_m = "{{ 'date_formats.minutes' | t }}";
+vndTheme.t_s = "{{ 'date_formats.seconds' | t }}";
+// Store locations
+vndTheme.s_loc = {};
+vndTheme.s_loc.lat = "{{ settings.store_lat | default: 40.6700 }}";
+vndTheme.s_loc.lng = "{{ settings.store_lng | default: -73.9400 }}";
+vndTheme.map_style = "{{ settings.map_style }}" || "1";
+// google api key
+vndTheme.gg_api_k = "{{ settings.google_api_key }}";
+// Theme newsletter service
+vndTheme.nsl_svc = "{{ settings.newsletter_service }}";
+// Theme enable newsletter popup
+vndTheme.ebl_nsl_pp = {{ settings.enable_newsletter_popup }};
+// Theme newsletter delay duration
+vndTheme.nsl_dl = '{{ settings.newsletter_delay }}' || '5';
+// Theme review
+vndTheme.rvw_app = '{{ settings.review_app }}';
+// Enable ajax cart
+vndTheme.stt.eb_ajx_crt = {{ settings.enable_ajax_cart }};
+vndTheme.stt.ajx_crt_eft = "{{ settings.cart_effect }}";
+// Enable ajax filter on collection pages
+vndTheme.stt.eb_ajx_flt = {{ settings.enable_ajax_filter }};
+// Enable scroll to main in collection page
+vndTheme.scr_tm = {{ settings.scroll_to_main }};
+// Enable scroll to top
+vndTheme.stt.eb_scrt = {{ settings.enable_scroll_top }};
+// Predictive search
+vndTheme.sch_pdtv = {{ settings.search_predictive }};
+// Predictive fields
+vndTheme.pdtv_fd = "{{ settings.predictive_fields }}";
+// Search limit
+vndTheme.sch_lmt = {{ settings.search_limit }};
+// Enable product image zoom in product pages
+vndTheme.ebl_prd_z = {{ settings.enable_product_zoom }};
+// Enable product images gallery in product pages
+vndTheme.ebl_prd_g = {{ settings.enable_product_gallery }};
+// Hide availability for untracked products
+vndTheme.hd_prd_av = {{ settings.hide_ut_prd_av }};
+// Instagram access_token
+vndTheme.insta_token = "{{ settings.insta_token }}";
+// Enable terms and conditions before checkout
+vndTheme.enable_ctc = {{ settings.enable_ctc }};
+vndTheme.lang = {
+  "search": {
+    "products":    "{{ 'general.search.predictive.products' | t }}",
+    "articles":    "{{ 'general.search.predictive.articles' | t }}",
+    "collections": "{{ 'general.search.predictive.collections' | t }}",
+    "pages":       "{{ 'general.search.predictive.pages' | t }}"
+  },
+  "product": {
+    "inStock": "{{ 'products.product.in_stock' | t }}",
+    "outStock": "{{ 'products.product.out_of_stock' | t }}",
+    "addToCart": "{{ 'products.product.add_to_cart' | t }}",
+    "preOrder": "{{ 'products.product.preorder' | t }}",
+    "soldOut": "{{ 'products.product.sold_out' | t }}"
+  },
+  "newsletter": {
+    "error404": "{{ 'general.newsletter_form.404' | t }}",
+    "error429": "{{ 'general.newsletter_form.429' | t }}",
+    "confirmation": "{{ 'general.newsletter_form.confirmation' | t }}",
+  },
+  "cart": {
+    "title": "{{ 'cart.general.title' | t }}",
+    "set_max_available_html": "{{ 'cart.general.set_max_available_html' | t }}",
+    "terms_warn": "{{ 'cart.general.terms_agreement_warning' | t }}"
+  }
+};
+</script>
+<script type="text/javascript" src="//cdn.shopify.com/s/javascripts/currencies.js" defer></script>
+<script type="text/javascript" src="{{ 'jquery.currencies.min.js' | asset_url }}" defer></script>
+<script type="text/javascript" src="{{ 'theme.min.js' | asset_url }}" defer></script>
+<script type="text/javascript" src="{{ 'theme-lazy.min.js' | asset_url }}" defer></script>
+<script type="text/javascript" src="{{ 'instantpage.min.js' | asset_url }}" async></script>
+{%- if settings.custom_script != blank -%}
+<script type="text/javascript" src="{{ 'custom.js' | asset_url }}" defer></script>
+{%- endif -%}

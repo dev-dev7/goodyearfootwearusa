@@ -1,0 +1,45 @@
+{% comment %}
+Renders product lookbook card which popups when +spot is clicked
+  Accepts:
+    - product: <Product> product to show
+
+  Usage:
+    {% render 'product_lookbook_card', product: product %}
+{% endcomment %}
+
+{%- if product != blank -%}
+<div class="product-card ds-flex lookbook-card">
+  <div class="product-img">
+    {%- if product.featured_image == blank -%}
+      <div class="main-product" style="padding-top:100%;">
+        {{ 'product-1' | placeholder_svg_tag: 'placeholder' }}
+      </div><!-- .main-product -->
+    {%- else -%}
+      <div class="main-product image-loading" style="padding-top:{{ 100 | divided_by: product.featured_image.aspect_ratio }}%;">
+        <img class="image-bg lazyload product-first-image" data-src="{{ product.featured_image | img_url: '400x' }}"/>
+      </div><!-- .main-product -->
+    {%- endif -%}
+  </div><!-- .product-image -->
+
+  <div class="product-detail">
+    {%- if settings.enable_product_type and product.type != blank -%}
+      <h4 class="product-type"><span>{{ product.type }}</span></h4>
+    {%- endif -%}
+
+    {%- if settings.enable_product_vendor and product.vendor != blank -%}
+      <h4 class="product-type">{{ product.vendor }}</h4>
+    {%- endif -%}
+
+    <h3 class="product-name">
+      <a href="{{ product.url | within: collection }}">{{ product.title }}</a>
+    </h3>
+
+    <div class="product-info">
+      {% render 'product_price', price: product.price, compare_at_price: product.compare_at_price %}
+      {% render 'product_review', product: product %}
+    </div>
+  </div><!-- .product-details -->
+
+  <a href="{{ product.url | within: collection }}" class="link-entire"></a>
+</div><!-- .product-card -->
+{%- endif -%}

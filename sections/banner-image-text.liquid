@@ -1,0 +1,276 @@
+{%- assign layout_h = section.settings.layout_h -%}
+<div class="{{ section.settings.layout }}{% if layout_h == 'full-height' %} full-height{% endif %} position-relative">
+  {%- if section.settings.banner_bg != blank -%}
+    <div class="banner {% if section.settings.has_minheight %} has-minheight{% endif %}">
+      {% render 'image', m_img: section.settings.banner_bg %}
+  {%- else -%}
+    <div class="banner {% if section.settings.has_minheight %} has-minheight{% endif %}">
+      {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder' }}
+  {%- endif -%}
+
+    {% include 'slideshow_content', id: section.id, s_c: section.settings, lh: section.settings.layout_h %}
+  </div><!-- .banner -->
+</div><!-- layout -->
+{%- capture css -%}
+{% case layout_h %}
+{% when 'fixed-height' %}
+  #shopify-section-{{ section.id }} .banner{
+    position:relative;
+    {% if section.settings.banner_bg != blank %}
+      padding-top:{{ 100 | divided_by: section.settings.banner_bg.aspect_ratio }}%
+    {% else %}
+      padding-top: 26.04%
+    {% endif %}
+  }
+{% when 'custom-height' %}
+  #shopify-section-{{ section.id }} .banner{
+    position:relative;
+    height:{{ section.settings.ch_desk | remove: 'px' | strip }}px
+  }
+  @media screen and (max-width: 1199px){
+    #shopify-section-{{ section.id }} .banner{
+      height:{{ section.settings.ch_tablet | remove: 'px' | strip }}px
+    }
+  }
+  @media screen and (max-width: 767px){
+    #shopify-section-{{ section.id }} .banner{
+      height:{{ section.settings.ch_mobile | remove: 'px' | strip }}px
+    }
+  }
+{%- endcase -%}
+{%- endcapture -%}
+<style>{{ css | strip_newlines | remove: '  ' }}</style>
+
+{% schema %}
+{
+  "name": "Banner Image and Text",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Banner Settings"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Section Width",
+      "options": [
+        { "value": "container", "label": "Fixed Width" },
+        { "value": "full-width-container", "label": "Full Width" }
+      ],
+      "default": "full-width-container"
+    },
+    {
+      "type": "image_picker",
+      "id": "banner_bg",
+      "label": "Background Image",
+      "info": "1920x Recommend"
+    },
+    {
+      "type": "header",
+      "content": "Background Image Configuration"
+    },
+    {
+      "type": "select",
+      "id": "layout_h",
+      "label": "Slide Height",
+      "options": [
+        { "value": "fixed-height", "label": "Relative to image ratio" },
+        { "value": "relative-content", "label": "Relative to text content" },
+        { "value": "custom-height", "label": "Custom Height" },
+        { "value": "full-height", "label": "Full Height" }
+      ],
+      "default": "fixed-height"
+    },
+    {
+      "type": "text",
+      "id": "ch_desk",
+      "label": "Custom Height on Desktop",
+      "info": "Set custom height of the section. Unit is pixel.",
+      "default": "750"
+    },
+    {
+      "type": "text",
+      "id": "ch_tablet",
+      "label": "Custom Height on Tablet",
+      "info": "Device width < 1200px"
+    },
+    {
+      "type": "text",
+      "id": "ch_mobile",
+      "label": "Custom Height on Mobile",
+      "info": "Device width < 768px"
+    },
+    {
+      "type": "checkbox",
+      "id": "has_minheight",
+      "label": "Set minimum height 320px on mobiles",
+      "info": "Background images and videos can be cropped when this option is enabled",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "content_style",
+      "label": "Content style",
+      "options": [
+        {"value": "orange-style", "label": "Orange style"},
+        {"value": "citrus-style", "label": "Citrus style 1"},
+        {"value": "citrus-style2", "label": "Citrus style 2"},
+        {"value": "citrus-style3", "label": "Citrus style 3"},
+        {"value": "green-style", "label": "Green style 1"},
+        {"value": "green-style2", "label": "Green style 2"},
+        {"value": "parallax-style1", "label": "Parallax style 1"},
+        {"value": "parallax-style2", "label": "Parallax style 2"},
+        {"value": "beige-style1", "label": "Beige style 1"},
+        {"value": "beige-style2", "label": "Beige style 2"},
+        {"value": "beige-style3", "label": "Beige style 3"},
+        {"value": "custom_html", "label": "Custom HTML"}
+      ],
+      "default": "green-style2"
+    },
+    {
+      "type": "select",
+      "id": "content_pos",
+      "label": "Content horizontal position",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "content_vpos",
+      "label": "Content vertical position",
+      "options": [
+        {"value": "top", "label": "Top"},
+        {"value": "middle", "label": "Middle"},
+        {"value": "bottom", "label": "Bottom"}
+      ],
+      "default": "middle"
+    },
+    {
+      "type": "select",
+      "id": "content_align",
+      "label": "Text align",
+      "options": [
+        {"value": "text-left", "label": "Left"},
+        {"value": "text-center", "label": "Center"},
+        {"value": "text-right", "label": "Right"}
+      ],
+      "default": "text-left"
+    },
+    {
+      "type": "select",
+      "id": "mobile_layout",
+      "label": "Text style on mobile",
+      "options": [
+        { "value": "default", "label": "Show text in colored box" },
+        { "value": "adjust", "label": "Keep layout and adjust font size" }
+      ],
+      "default": "default"
+    },
+    {
+      "type": "textarea",
+      "id": "main_title",
+      "label": "Banner Title",
+      "default": "GO AHEAD. DO LAUNDRY\nFROM THE COUCH."
+    },
+    {
+      "type": "textarea",
+      "id": "sub_title",
+      "label": "Description",
+      "default": "Morbi volutpat nunc in sagittis sollicitudin. Aliquam in\nsarcu ante. Pellentesque venenatis ..."
+    },
+    {
+      "type": "color",
+      "id": "color_main_title",
+      "label": "Title Color",
+      "default": "#303130"
+    },
+    {
+      "type": "color",
+      "id": "sub_color",
+      "label": "Description Color",
+      "default": "#5e6260"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_content_bg",
+      "label": "Add background to content",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "c_textbg",
+      "label": "Text background color",
+      "default": "rgba(255, 255, 255, 0.8)"
+    },
+    {
+      "type": "paragraph",
+      "content": "Special Characters"
+    },
+    {
+      "type": "paragraph",
+      "content": "Text wrapped with <em></em> or <strong></strong> are styled by the following settings"
+    },
+    {
+      "type": "color",
+      "id": "em_color",
+      "label": "Emphasized text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "em_bg_color",
+      "label": "Emphasized text background color",
+      "default": "#a8bf00"
+    },
+    {
+      "type": "color",
+      "id": "strong_color",
+      "label": "Strong text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "strong_bg_color",
+      "label": "Strong text background color",
+      "default": "#2c7800"
+    },
+    {
+      "type": "header",
+      "content": "Button Configuration"
+    },
+    {
+      "type": "text",
+      "id": "btn1_title",
+      "label": "Button Text",
+      "default": "READ MORE"
+    },
+    {
+      "type": "url",
+      "id": "btn1_link",
+      "label": "Link To"
+    },
+    {
+      "type": "select",
+      "id": "btn1_style",
+      "label": "Button Style",
+      "options": [
+        {"value": "btn-default", "label": "Default button"},
+        {"value": "btn-transparent", "label": "Transparent button"},
+        {"value": "btn-secondary", "label": "Secondary button"},
+        {"value": "btn-third", "label": "Third button"},
+        {"value": "btn-text", "label": "Text button"}
+      ],
+      "default": "btn-default"
+    }
+  ],
+  "presets": [{
+    "name": "Banner Image with Text",
+    "category": "Image"
+  }]
+}
+{% endschema %}

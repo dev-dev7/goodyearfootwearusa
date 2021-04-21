@@ -1,0 +1,36 @@
+<div role="banner" class="header header-type-3{% if config.header_sticky %} sticky-enable{% endif %}{% if settings.enable_mobile_sticky %} sticky-mobile-enable{% endif %}{% if settings.enable_mb_hd %} hide-on-mobile{% endif %}">
+  <div class="container ds-flex align-center flex-wrap">
+    {%- for block in blocks -%}
+      {%- if block.type == 'search_box' -%}
+        {%- assign b_s = block -%}
+      {%- elsif block.type == 'cart' -%}
+        {%- assign b_c = block -%}
+      {%- endif -%}
+    {%- endfor -%}
+
+    <div class="header-left-group flex-1">
+      {% include 'topbar_item', item: b_s %}
+    </div>
+
+    <div class="logo-container">
+      {% render 'logo' %}
+    </div><!-- .logo-container -->
+
+    <div class="header-right-group flex-1">
+      {% include 'topbar_item', item: b_c %}
+    </div>
+
+    <button class="mobile-btn">
+      <span class="mobile-btn__line"></span>
+      <span class="mobile-btn__line"></span>
+      <span class="mobile-btn__line"></span>
+    </button>
+  </div><!-- .container -->
+
+  <div class="full-width-menu">
+    <div class="container">
+      {% include 'header_menu', blocks: blocks, m_n: config.menu, a_c: config.header_menu_center, s_di: config.show_dropdown_icon %}
+    </div>
+  </div><!-- .full-width-menu -->
+</div><!-- .header-type-3 -->
+<style>.header-type-3{padding-top:4.5rem}.header-type-3 .logo-container{margin-right:auto}.header-type-3.sticky-active{margin-bottom:0}.header-type-3 .header-menu>ul{-ms-flex-pack:justify;justify-content:space-between}.header-type-3 .icon-cart{font-size:1.4rem;font-style:italic;letter-spacing:.039em}.header-type-3 .cart-wrapper .money{font-size:1.4rem;font-weight:400}.header-type-3 .search-line-popup .header-search__input{width:25rem}@media all and (min-width: 992px){.template-index .header-type-3{margin-bottom:3rem}.header-type-3 .full-width-menu{margin-top:2.7rem;border-bottom:3px solid var(--c-theme)}.header-right-group{display:flex;justify-content:flex-end}.header-type-3 .header-menu-item:first-child>a{padding-left:0}.header-type-3 .header-menu-item:last-child>a{padding-right:0}.header-type-3 .search-input-container{position:relative;order:1}.header-type-3 .header-search__input{width:300px;font-style:italic}.header-type-3 .header-search__input.header-search__no-border{padding-left:0}.header-type-3 .search-button{order:0;margin-left:2rem;background:none}.header-type-3 .search-button svg{width:1.3rem;margin:0}.header-type-3 .search-box-fixed .search-button{margin-right:2px;margin-left:0}.header-type-3 .search-line-popup .search-input-container{left:6rem;right:auto}.header-type-3 .search-box-popup .search-input-container{right:auto;left:56px}.header-type-3 .cart-wrapper{margin-right:1rem}}@media all and (min-width: 1200px){.header-type-3 .header-menu-item>a{padding-top:1.7rem;padding-bottom:1.7rem}}@media all and (max-width: 991px){.header-type-3{padding-top:2rem;padding-bottom:2rem}.header-type-3 .logo-container{order:1}.header-type-3 .mobile-btn{order:3;margin-left:2.2rem}.header-left-group{order:2;margin-left:auto}.header-type-3 .header-right-group{order:5}}@media all and (max-width: 991px) and (min-width: 768px){.header-type-3 .topbar-item-search .header-search__input{width:170px;border:0;font-style:italic;text-align:right}}@media all and (max-width: 567px){.header-type-3 .search-button{width:3.2rem;height:3.2rem}}.sticky-active .promo-container{display:none}.sticky-active .search-form{display:-ms-flexbox;display:flex}@media all and (min-width: 992px){.sticky-active .full-width-menu{display:none}}</style>

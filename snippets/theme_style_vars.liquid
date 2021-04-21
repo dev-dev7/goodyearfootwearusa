@@ -1,0 +1,14 @@
+{%- capture css_vars -%}
+:root {
+  --c-theme: {{ settings.c_theme }};
+  --progress-bar-color: {{ settings.c_theme }};
+  --progress-bar-height: 4px;
+
+  --c-action-bg: {{ settings.c_action_bg }};
+  --c-action: {{ settings.c_action_text }};
+
+  --font-weight-header-menu: {{ settings.font_weight_header_menu }};
+  --font-space-header-menu: {{ settings.font_space_header_menu }};
+}
+{%- endcapture -%}
+<style>{{ css_vars | strip_newlines | remove: '  ' }}</style>

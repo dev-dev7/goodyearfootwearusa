@@ -1,0 +1,23 @@
+<div class="container page-compare position-relative">
+  <h1 class="page-title">{{ page.title }}</h1>
+  <a href="#" class="btn btn-text clear-cplst">{% render 'icon-trash-can' %}<span>{{ 'customer.remove_all' | t }}</span></a>
+</div>
+
+{% section 'template-compare' %}
+
+<style>
+.compare-grid.is-visible{max-height:2000px;transition:all .35s;visibility:visible;opacity:1}
+.tb-heading{width:26rem;min-width:26rem;padding: 30px 10px;border-right:1px solid #f7f7f7;border-bottom:1px solid #f7f7f7;color:#444444;font-size:1.3rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;}
+.compare-card{width:300px;min-width:300px;padding:30px 30px 33px 40px;border-bottom:1px solid #f7f7f7;}
+.compare-card .product-img{margin-bottom:3.4rem;}
+.compare-grid .spr-badge-caption{border-left:1px solid #acacac;padding-left:7px;color:#acacac;font-size:1.1rem;line-height:1;}.browse-more {margin:75px auto}
+.compare-grid .spr-badge{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;}
+.product-price{margin:6px 0 16px;}
+.current-price{color:{{settings.c_theme}};font-size:1.7rem;}
+.action-quickview{display:none;}.btn-default svg{display:none;}
+.compare-card .btn-compare{position:absolute;top:0;left:40px;background-color:transparent !important;cursor:pointer}
+.compare-card .btn-compare svg{display:block;width:9px;max-width:9px;}
+.compare-desc{padding:30px 15px 33px 40px;}.compare-desc .product-description{margin-bottom:0}.product-description__truncated-4 .product-description{display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4; overflow: hidden; }
+.clear-cplst{display:none;position:absolute;top:15px;right:15px;font-size:1.2rem;}.clear-cplst svg{width:13px;margin-right:7px;}
+@media all and (max-width: 767px){.tb-heading{width:120px;min-width:120px;padding:15px 10px;}.compare-card{width:200px;min-width:200px;padding:30px 15px 15px;}.compare-card .product-img{margin-bottom:1.2rem;}.clear-cplst{top:50px;right:auto;left:5px;}}
+</style>

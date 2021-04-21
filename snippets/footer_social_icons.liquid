@@ -1,0 +1,23 @@
+{% comment %}
+Renders social icons in the footer
+
+  Usage:
+    {% include 'footer_social_icons' %}
+{% endcomment %}
+
+{%- assign social_accounts = 'Facebook, Twitter, Pinterest, Instagram, Snapchat, Tumblr, YouTube, Vimeo, Linkedin' | split: ', ' -%}
+<ul class="social-icons__list ds-flex list-style-none flex-wrap">
+  {% for social in social_accounts %}
+    {% assign social_handle = social | handleize %}
+    {% capture social_link %}social_{{ social_handle }}_link{% endcapture %}
+    {% capture social_icon %}icon-{{ social_handle }}{% endcapture %}
+
+    {%- if settings[social_link] != blank -%}
+      <li class="footer-social__icon">
+        <a href="{{ settings[social_link] }}" target="_blank" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: social }}" class="social-link">
+          {% include 'include_icon', icon_name: social_icon %}
+        </a>
+      </li>
+    {%- endif -%}
+  {% endfor %}
+</ul>

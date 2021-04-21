@@ -1,0 +1,200 @@
+{% comment %}
+Renders latest news blogs in carousel
+  Accepts:
+    - latest_news: content type - section/block
+      = title: <String> Title of the section
+      = latest_blog: <Blog> Blog to show
+      = limit: <Number> limit number of products to show
+      = image_style: image size styles (values: "default", "fixed-height")
+      = ln_style: latest news item text styles (values: "default", "text-on-right", "text-override"})
+      = auto_speed: <Number> auto rotation speed of the carousel
+      = show_dots: <Boolean> show/hide pagination dots
+      = show_nav: <Boolean> show/hide carousel navigation
+      = nav_style: <String> position of the navigation (values: "nav-top__right", "nav-top__center", "nav-middle")
+      = wrap_around: <Boolean> loop carousel
+      = cell_align: <String> Align selected item to left, center or right
+      = cols: <Number> number of items to show at once
+      = show_date: <Boolean> show/hide date
+      = show_comment: <Boolean> show/hide comment count
+      = pos_date_comment: <String> comment date position
+      = color_title: <Color> color of article title
+      = size_title: <Number> font size of article title
+      = color_excerpt: <Color> color of article excerpt
+      = c_time: <Color> time text color
+      = bg_time: <Color> time background color
+      = bd_time: <Color> time border color
+      = c_cmt: <Color> comment text color
+      = bg_cmt: <Color> comment background color
+      = bd_cmt: <Color> comment border color
+      = btn_style: <String> read more button class name
+
+  Usage:
+    {% render 'latest_news' with section %}
+    {% render 'latest_news' with block %}
+{% endcomment %}
+
+{%- liquid
+assign latest_blog    = latest_news.settings.latest_blog
+assign image_style    = latest_news.settings.image_style
+assign ln_style       = latest_news.settings.ln_style
+assign auto_speed     = latest_news.settings.auto_speed
+assign show_dots      = latest_news.settings.show_dots
+assign show_nav       = latest_news.settings.show_nav
+assign nav_style      = latest_news.settings.nav_style
+assign wrap_around    = latest_news.settings.wrap_around
+assign cell_align     = latest_news.settings.cell_align
+assign cols           = latest_news.settings.cols
+assign show_excerpt   = latest_news.settings.show_excerpt
+assign show_date      = latest_news.settings.show_date
+assign show_comment   = latest_news.settings.show_comment
+assign pos_date_comment = latest_news.settings.pos_date_comment
+assign color_title    = latest_news.settings.color_title
+assign size_title     = latest_news.settings.size_title
+assign color_excerpt  = latest_news.settings.color_excerpt
+assign size_excerpt   = latest_news.settings.size_excerpt
+assign nav_box_shadow = latest_news.settings.nav_box_shadow
+-%}
+
+<div class="content-slideshow {{ nav_style }} latest-news-{{ latest_news.id }}">
+  {%- if latest_news.settings.title != blank -%}
+    <h3 class="block-title">{{ latest_news.settings.title }}</h3>
+  {%- endif -%}
+
+  {%- if latest_news.settings.desc != blank -%}
+    <p class="block-description">{{ latest_news.settings.desc }}</p>
+  {%- endif -%}
+
+  <div class="items-carousel {{ ln_style }} info-pos__{{ pos_date_comment }} {% if nav_box_shadow %} nav-box-shadow{% endif %}"
+    data-auto="{{ auto_speed | default: 5 }}"
+    data-dots="{{ show_dots }}"
+    data-nav="{{ show_nav }}"
+    data-wraparound="{{ wrap_around | default: 'true' }}"
+    data-cellalign="{{ cell_align | default: 'left' }}">
+
+    {%- unless latest_blog == blank -%}
+      {%- assign blog = blogs[latest_blog] -%}
+      {%- for article in blog.articles -%}
+        <div class="slide-item grid-items__{{ cols }}{% if show_date or show_comment %} ds-flex{% endif %}">
+          {%- if pos_date_comment != 'before-title' -%}
+          {%- if show_date or show_comment -%}
+            <div class="article-info">
+              {%- if show_date -%}
+                <time>{{ article.updated_at | date: "%d %b" }}</time>
+              {%- endif -%}
+              {%- if show_comment -%}
+                <span>{{ 'blogs.comments.with_count_html' | t: count: article.comments_count }}</span>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+          {%- endif -%}
+
+          {%- if ln_style != 'text-on-right' -%}
+            <div style="width:100%">
+          {%- endif -%}
+
+            {%- unless article.image == blank -%}
+              <div class="article-img position-relative size-{{ image_style }}">
+                {%- if image_style == 'default' -%}
+                  <div class="position-relative image-loading" style="padding-top:{{ 100 | divided_by: article.image.aspect_ratio }}%;">
+                {%- endif -%}
+                  <div class="image-bg lazyload" data-bg="{{ article.image | img_url: 'x360' }}"></div>
+                {%- if image_style == 'default' -%}
+                  </div><!-- .position-relative -->
+                {%- endif -%}
+              </div><!-- .article-img -->
+            {%- endunless -%}
+
+            <div class="article-detail">
+              {%- if pos_date_comment == 'before-title' -%}
+              {%- if show_date or show_comment -%}
+                <div class="article-info">
+                  {%- if show_date -%}
+                    <time class="article-date__day">{{ article.updated_at | date: "%d" }}</time>
+                    <time class="article-date__month">{{ article.updated_at | date: "%b" }}</time>
+                  {%- endif -%}
+                  {%- if show_comment and article.comments_count > 0 -%}
+                    <span class="article-comment__separator">/</span>
+                    <span>{{ 'blogs.comments.with_count_html' | t: count: article.comments_count }}</span>
+                  {%- endif -%}
+                </div>
+              {%- endif -%}
+              {%- endif -%}
+
+              <a href="{{ article.url }}" class="article-name">{{ article.title }}</a>
+              {%- if show_excerpt -%}
+                <div class="article-excerpt">{{ article.excerpt_or_content | truncatewords: 32 }}</div>
+              {%- endif -%}
+              <a href="{{ article.url }}" class="btn {{ latest_news.settings.btn_style | default: 'btn-default' }}">{{ 'blogs.article.read_more' | t }}</a>
+            </div><!-- .article-detail -->
+          {%- if ln_style != 'text-on-right' -%}
+            </div>
+          {%- endif -%}
+        </div><!-- .slide-item -->
+      {%- endfor -%}
+    {%- else -%}
+      {%- for i in (1..3) -%}
+        {% capture current %}{% cycle 1, 2 %}{% endcapture %}
+        <div class="slide-item grid-items__{{ cols }}{% if show_date_comment %} ds-flex{% endif %}">
+          {%- if pos_date_comment != "before-title" -%}
+          {%- if show_date or show_comment -%}
+            <div class="article-info">
+              {%- if show_date -%}
+                <time>08 JAN</time>
+              {%- endif -%}
+              {%- if show_comment -%}
+                <span>5 COM</span>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+          {%- endif -%}
+
+          <div class="article-img position-relative">
+            <div style="padding-top: {% if ln_style == 'text-override' %}200px{% else %}52.38%{% endif %};">
+              {{ 'lifestyle-' | append: current | placeholder_svg_tag: 'placeholder' }}
+            </div>
+          </div><!-- .article-img -->
+          <div class="article-detail">
+            {%- if pos_date_comment == "before-title" -%}
+            {%- if show_date or show_comment -%}
+              <div class="article-info">
+                {%- if show_date -%}
+                  <time class="article-date__day">08</time>
+                  <time class="article-date__month">JAN</time>
+                {%- endif -%}
+                {%- if show_comment -%}
+                  <span class="article-comment__separator">/</span>
+                  <span>5 COMMENTS</span>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+            {%- endif -%}
+
+            <span class="article-name">Curabitur Faucibus Aliquam</span>
+            <div class="article-excerpt">Sed blandit nulla nec nunc ullamcorper tristique. Mauris adipiscing cursus ante ultricies dictum sed lobortis Mauris adipiscing cursus ante ultricies dictum sed lobortis...</div>
+            <a href="#" class="btn {{ latest_news.settings.btn_style | default: 'btn-default' }}">{{ 'blogs.article.read_more' | t }}</a>
+          </div><!-- .article-detail -->
+        </div><!-- .slide-item -->
+      {%- endfor -%}
+    {%- endunless -%}
+  </div><!-- .items-carousel -->
+</div><!-- .content-slideshow -->
+<style>
+.latest-news-{{ latest_news.id }} .article-name{
+  color:{{ color_title }};
+  font-size:{{ size_title }}px
+}
+.latest-news-{{ latest_news.id }} .article-excerpt{
+  color:{{ color_excerpt }};
+  font-size:{{ size_excerpt }}px
+}
+.latest-news-{{ latest_news.id }} .article-info time{
+  border-color:{{ latest_news.settings.bd_time }};
+  background-color:{{ latest_news.settings.bg_time }};
+  color:{{ latest_news.settings.c_time }}
+}
+.latest-news-{{ latest_news.id }} .article-info span{
+  border-color:{{ latest_news.settings.bd_cmt }};
+  background-color:{{ latest_news.settings.bg_cmt }};
+  color:{{ latest_news.settings.c_cmt }}
+}
+</style>

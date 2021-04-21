@@ -1,0 +1,714 @@
+{%- liquid
+assign left_count = 0
+assign left_items = ""
+assign right_items = ""
+assign styles = ''
+-%}
+<div class="vs-topbar {{ section.settings.topbar_style }}" style="background-color:{{section.settings.topbar_bg}};color: {{section.settings.topbar_text_color}}">
+  {%- if section.settings.show_announcement -%}
+    <div class="announcement-bar position-relative" style="background-color: {{ section.settings.announcement_bg | default: settings.c_theme }}">
+      <h2 class="text-center" style="color: {{ section.settings.announcement_color | default: '#fff' }}">{{ section.settings.announcement_text | newline_to_br }}</h2>
+      {%- if section.settings.announcement_link != blank -%}
+        <a href="{{ section.settings.announcement_link }}" class="link-entire"></a>
+      {%- endif -%}
+    </div><!-- .announcement-bar -->
+  {%- endif -%}
+
+  {%- if section.settings.show_topbar -%}
+    {%- for block in section.blocks -%}
+      {%- if block.settings.position == 'left' -%}
+        {%- assign left_count = left_count | plus: 1 -%}
+        {%- capture left_items -%}{{ left_items }}{% include 'topbar_item', item: block %}{%- endcapture -%}
+      {%- else -%}
+        {%- capture right_items -%}{{ right_items }}{% include 'topbar_item', item: block %}{%- endcapture -%}
+      {%- endif -%}
+    {%- endfor -%}
+
+    <div class="container ds-flex align-center{% if section.settings.hide_mobile %} hide-on-mobile{% endif %}">
+      <div class="topbar-left">
+        {%- if left_count > 1 -%}
+          <a href="#" class="toplinks-dropdown">links{% render 'icon-dir-down' %}</a>
+          <div class="topbar-left__items ds-flex align-center">
+        {%- endif -%}
+        {{ left_items }}
+        {%- if left_count > 1 -%}
+          </div><!-- .topbar-left__items -->
+        {%- endif -%}
+      </div>
+
+      <div class="topbar-right ml-auto ds-flex align-center position-relative">
+        {{ right_items }}
+      </div><!-- .topbar-right -->
+    </div><!-- .container.ds-flex.align-center -->
+
+    {%- capture styles -%}
+      {%- if section.settings.show_border_top -%}
+        .vs-topbar{
+          border-top:3px solid {{ section.settings.topbar_border_color }}
+        }
+      {%- endif -%}
+
+      {%- if section.settings.show_border_bottom -%}
+        .vs-topbar{
+          border-bottom:1px solid {{ section.settings.topbar_border_color }}
+        }
+      {%- endif -%}
+
+      {%- if section.settings.show_item_border -%}
+        @media all and (min-width: 568px){
+          .vs-topbar .topbar-item{border-right:1px solid {{ section.settings.topbar_border_color }}}
+          .vs-topbar .topbar-item:first-child{border-left:1px solid {{ section.settings.topbar_border_color }}}
+        }
+      {%- endif -%}
+
+      {%- if section.settings.hide_mobile -%}
+        @media all and (max-width: 767px){
+          .vs-topbar{
+            border:0
+          }
+        }
+      {%- endif -%}
+    {%- endcapture -%}
+  {%- endif -%}
+</div><!-- .vs-topbar -->
+{%- assign styles = styles | strip_newlines | remove: '  ' -%}
+<style>{{ styles }}{% render 'style_topbar_items', blocks: section.blocks %}</style>
+{% schema %}
+{
+  "name": "Top Bar",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Announcement Configuration"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_announcement",
+      "label": "Show Announcement",
+      "default": false
+    },
+    {
+      "type": "textarea",
+      "id": "announcement_text",
+      "label": "Text"
+    },
+    {
+      "type": "color",
+      "id": "announcement_bg",
+      "label": "Background color"
+    },
+    {
+      "type": "color",
+      "id": "announcement_color",
+      "label": "Text color"
+    },
+    {
+      "type": "url",
+      "id": "announcement_link",
+      "label": "Link"
+    },
+    {
+      "type": "header",
+      "content": "Top Bar Configuration"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_topbar",
+      "label": "Show top bar",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_mobile",
+      "label": "Hide on mobile devices",
+      "default": false,
+      "info": "Device width is smaller than 768px"
+    },
+    {
+      "type": "select",
+      "id": "topbar_style",
+      "label": "Section style",
+      "options": [
+        { "value": "general", "label": "General" },
+        { "value": "citrus", "label": "Citrus demo style" },
+        { "value": "pharmacy", "label": "Pharmacy demo style" },
+        { "value": "item-wide", "label": "Wide space between links" }
+      ],
+      "default": "general"
+    },
+    {
+      "type": "color",
+      "id": "topbar_bg",
+      "label": "Background color",
+      "default": "rgba(0,0,0,0)"
+    },
+    {
+      "type": "color",
+      "id": "topbar_text_color",
+      "label": "Text color",
+      "default": "#757575"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_border_top",
+      "label": "Show top border",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_border_bottom",
+      "label": "Show bottom border",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_item_border",
+      "label": "Show separate line between items",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "topbar_border_color",
+      "label": "Border color",
+      "default": "#f4f4f4"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "cart",
+      "name": "Cart Dropdown",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "select",
+          "id": "position",
+          "label": "Position",
+          "options": [
+            { "value": "left", "label": "Left" },
+            { "value": "right", "label": "Right" }
+          ],
+          "default": "right"
+        },
+        {
+          "type": "select",
+          "id": "header_cart_style",
+          "label": "Cart style",
+          "options": [
+            { "value": "show_amount", "label": "Show cart amount beside the icon" },
+            { "value": "show_abs_amount", "label": "Show cart amount on the icon" },
+            { "value": "only_icon", "label": "Show only cart icon" }
+          ],
+          "default": "show_amount"
+        },
+        {
+          "type": "range",
+          "id": "size_icon",
+          "min": 12,
+          "max": 24,
+          "step": 1,
+          "unit": "px",
+          "label": "Icons size",
+          "default": 14
+        },
+        {
+          "type": "color",
+          "id": "cart_bg",
+          "label": "Cart background color",
+          "default": "rgba(0,0,0,0)"
+        },
+        {
+          "type": "color",
+          "id": "cart_color",
+          "label": "Cart text color",
+          "default": "#757575"
+        },
+        {
+          "type": "color",
+          "id": "cart_icon",
+          "label": "Cart icon color",
+          "default": "#b8b8b8"
+        },
+        {
+          "type": "paragraph",
+          "content": "Below settings only work when cart style is 'Show cart amount on the icon icon' or 'Show only cart icon'"
+        },
+        {
+          "type": "select",
+          "id": "amount_pos",
+          "label": "Cart amount position",
+          "options": [
+            { "value": "left", "label": "Left" },
+            { "value": "right", "label": "Right" }
+          ],
+          "default": "right"
+        },
+        {
+          "type": "color",
+          "id": "c_amount_bg",
+          "label": "Cart amount background",
+          "default": "#fee71b"
+        },
+        {
+          "type": "color",
+          "id": "c_amount_text",
+          "label": "Cart amount text color",
+          "default": "#363f46"
+        }
+      ]
+    },
+    {
+      "type": "login",
+      "name": "Customer Login Link",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Please allow customer accounts to show this link. [Learn More](https://help.shopify.com/en/manual/checkout-settings/customer-accounts)"
+        },
+        {
+          "type": "select",
+          "id": "position",
+          "label": "Position",
+          "options": [
+            { "value": "left", "label": "Left" },
+            { "value": "right", "label": "Right" }
+          ],
+          "default": "right"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "text",
+          "default": "Login"
+        },
+        {
+          "type": "text",
+          "id": "icon",
+          "label": "Icon"
+        },
+        {
+          "type": "range",
+          "id": "size_icon",
+          "min": 12,
+          "max": 24,
+          "step": 1,
+          "unit": "px",
+          "label": "Icons size",
+          "default": 14
+        }
+      ]
+    },
+    {
+      "type": "currency",
+      "name": "Currencies switcher",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "select",
+          "id": "position",
+          "label": "Position",
+          "options": [
+            { "value": "left", "label": "Left" },
+            { "value": "right", "label": "Right" }
+          ],
+          "default": "right"
+        }
+      ]
+    },
+    {
+      "type": "language",
+      "name": "Language switcher",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "select",
+          "id": "position",
+          "label": "Position",
+          "options": [
+            { "value": "left", "label": "Left" },
+            { "value": "right", "label": "Right" }
+          ],
+          "default": "right"
+        },
+        {
+          "type": "select",
+          "id": "lang_type",
+          "label": "Dropdown options",
+          "options": [
+            { "value": "weglot-default", "label": "Install weglot and use original style" },
+            { "value": "weglot-theme", "label": "Install weglot and use theme style" },
+            { "value": "lang-external", "label": "Custom options with external links" }
+          ],
+          "info": "We recommend to install Weglot Translate app and use theme style",
+          "default": "lang-external"
+        },
+        {
+          "type": "link_list",
+          "id": "lang_menu",
+          "label": "Custom ",
+          "info": "This works only when 'Dropdown Options' value is set to 'Custom options...'"
+        }
+      ]
+    },
+    {
+      "type":"menu_item",
+      "name":"Text with link",
+      "settings": [
+        {
+          "type": "select",
+          "id": "position",
+          "label": "Position",
+          "options": [
+            { "value": "left", "label": "Left" },
+            { "value": "right", "label": "Right" }
+          ],
+          "default": "left"
+        },
+        {
+          "type": "text",
+          "id": "icon",
+          "label": "Icon"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Navigation Title",
+          "default": "Contact Us"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Navigation link"
+        }
+      ]
+    },
+    {
+      "type":"search_box",
+      "name":"Search Box",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "select",
+          "id": "position",
+          "label": "Position",
+          "options": [
+            { "value": "left", "label": "Left" },
+            { "value": "right", "label": "Right" }
+          ],
+          "default": "left"
+        },
+        {
+          "type": "select",
+          "id": "search_style",
+          "label": "Style",
+          "options": [
+            { "value": "search-box-fixed", "label": "Show box" },
+            { "value": "search-box-popup", "label": "Popup box" },
+            { "value": "search-line-popup", "label": "Popup Line" },
+            { "value": "search-box-category", "label": "With category selection" }
+          ],
+          "default": "search-box-popup"
+        },
+        {
+          "type": "text",
+          "id": "search_icon",
+          "label": "Icon",
+          "default": "icon-search",
+          "info": "[Browse icons](https://docs.flexkitux.com/pages/icons-list.html)"
+        },
+        {
+          "type": "range",
+          "id": "size_icon",
+          "min": 12,
+          "max": 24,
+          "step": 1,
+          "unit": "px",
+          "label": "Icons size",
+          "default": 14
+        },
+        {
+          "type": "select",
+          "id": "search_btn_border",
+          "label": "Search box border",
+          "options": [
+            { "value": "0", "label": "Hide" },
+            { "value": "1", "label": "1px" },
+            { "value": "2", "label": "2px" }
+          ],
+          "default": "0"
+        },
+        {
+          "type": "paragraph",
+          "content": "Search Button Colors"
+        },
+        {
+          "type": "color",
+          "id": "color_search",
+          "label": "Search button color",
+          "default": "#555555"
+        },
+        {
+          "type": "color",
+          "id": "color_search_h",
+          "label": "Search button color on hover",
+          "default": "#555555"
+        },
+        {
+          "type": "paragraph",
+          "content": "Search Input Box Colors"
+        },
+        {
+          "type": "color",
+          "id": "color_search_ib",
+          "label": "Search input box border color",
+          "default": "#555555"
+        },
+        {
+          "type": "color",
+          "id": "color_search_input",
+          "label": "Search input box text color",
+          "default": "#555555"
+        },
+        {
+          "type": "color",
+          "id": "color_bg",
+          "label": "Search form background color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "header",
+          "content": "Search Categories",
+          "info": "This settings only works when the search box style is selected as With category selection"
+        },
+        {
+          "type": "textarea",
+          "id": "categories",
+          "label": "Categories",
+          "default": "Pretium, Veneatis, Suspendisse, Feugiat, Faucibus",
+          "info": "Separate words with comma(,)"
+        },
+        {
+          "type": "radio",
+          "id": "cat_type",
+          "label": "Category type",
+          "options": [
+            { "value": "product_type", "label": "Product type" },
+            { "value": "tag", "label": "Product tag" },
+            { "value": "vendor", "label": "Vendor" }
+          ],
+          "default": "product_type"
+        }
+      ]
+    },
+    {
+      "type":"wishlist",
+      "name":"Wishlist",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "select",
+          "id": "position",
+          "label": "Position",
+          "options": [
+            { "value": "left", "label": "Left" },
+            { "value": "right", "label": "Right" }
+          ],
+          "default": "left"
+        },
+        {
+          "type": "text",
+          "id": "icon",
+          "label": "Icon",
+          "default": "icon-heart"
+        },
+        {
+          "type": "range",
+          "id": "size_icon",
+          "min": 12,
+          "max": 24,
+          "step": 1,
+          "unit": "px",
+          "label": "Icons size",
+          "default": 14
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Wishlist button title",
+          "default": "Wishlist"
+        },
+        {
+          "type": "select",
+          "id": "item_count_pos",
+          "label": "Count position",
+          "options": [
+            { "value": "item-count__default", "label": "Default position" },
+            { "value": "item-count__left", "label": "Left" },
+            { "value": "item-count__right", "label": "Right" }
+          ],
+          "default": "item-count__default"
+        }
+      ]
+    },
+    {
+      "type":"compare",
+      "name":"Comparison List",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "select",
+          "id": "position",
+          "label": "Position",
+          "options": [
+            { "value": "left", "label": "Left" },
+            { "value": "right", "label": "Right" }
+          ],
+          "default": "left"
+        },
+        {
+          "type": "text",
+          "id": "icon",
+          "label": "Icon",
+          "default": "icon-repeat-circle"
+        },
+        {
+          "type": "range",
+          "id": "size_icon",
+          "min": 12,
+          "max": 24,
+          "step": 1,
+          "unit": "px",
+          "label": "Icons size",
+          "default": 14
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Button title",
+          "default": "Compare"
+        },
+        {
+          "type": "select",
+          "id": "item_count_pos",
+          "label": "Count position",
+          "options": [
+            { "value": "item-count__default", "label": "Default position" },
+            { "value": "item-count__left", "label": "Left" },
+            { "value": "item-count__right", "label": "Right" }
+          ],
+          "default": "item-count__default"
+        }
+      ]
+    },
+    {
+      "type":"checkout",
+      "name":"Checkout",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "select",
+          "id": "position",
+          "label": "Position",
+          "options": [
+            { "value": "left", "label": "Left" },
+            { "value": "right", "label": "Right" }
+          ],
+          "default": "left"
+        },
+        {
+          "type": "text",
+          "id": "icon",
+          "label": "Icon"
+        },
+        {
+          "type": "range",
+          "id": "size_icon",
+          "min": 12,
+          "max": 24,
+          "step": 1,
+          "unit": "px",
+          "label": "Icons size",
+          "default": 14
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Checkout link title",
+          "default": "Checkout"
+        }
+      ]
+    },
+    {
+      "type":"dropdown",
+      "name":"Dropdown",
+      "settings": [
+        {
+          "type": "select",
+          "id": "position",
+          "label": "Position",
+          "options": [
+            { "value": "left", "label": "Left" },
+            { "value": "right", "label": "Right" }
+          ],
+          "default": "left"
+        },
+        {
+          "type": "text",
+          "id": "icon",
+          "label": "Icon"
+        },
+        {
+          "type": "range",
+          "id": "size_icon",
+          "min": 12,
+          "max": 24,
+          "step": 1,
+          "unit": "px",
+          "label": "Icons size",
+          "default": 14
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Our brands"
+        },
+        {
+          "type": "url",
+          "id": "title_link",
+          "label": "Navigation link"
+        },
+        {
+          "type": "textarea",
+          "id": "types",
+          "label": "Product types",
+          "info": "Separate words with comma(,)",
+          "default": "Brand1,Brand2,Brand3"
+        }
+      ]
+    },
+    {
+      "type": "html",
+      "name": "Custom Text",
+      "settings": [
+        {
+          "type": "select",
+          "id": "position",
+          "label": "Position",
+          "options": [
+            { "value": "left", "label": "Left" },
+            { "value": "right", "label": "Right" }
+          ],
+          "default": "left"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Custom Text",
+          "default": "Default welcome message!"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

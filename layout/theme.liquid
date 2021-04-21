@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}" class="vnd-nsl-pp-{{ settings.anm_newsletter_pp }} vnd-qv-pp-{{ settings.anm_qv_pp }} vnd-zoom-pp-{{ settings.anm_zoom_pp }}">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="{{ settings.c_theme }}">
+  <link rel="canonical" href="{{ canonical_url }}">
+  <link rel="dns-prefetch" href="//shopify.com" crossorigin>
+  <link rel="dns-prefetch" href="//v.shopify.com" crossorigin>
+  {%- if settings.favicon != blank -%}<link rel="shortcut icon" href="{{ settings.favicon | img_url: '32x32' }}" type="image/png">{%- endif -%}
+  {%- capture seo_title -%}
+    {%- if request.page_type == 'search' and search.performed == true -%}
+      {{ 'general.search.heading' | t: count: search.results_count }}: {{ 'general.search.results_with_count_html' | t: terms: search.terms, count: search.results_count | strip_html }}
+    {%- else -%}
+      {{ page_title }}
+    {%- endif -%}
+    {%- if current_tags -%}
+      {%- assign meta_tags = '' -%}
+      {%- for tag in current_tags -%}
+        {%- unless tag contains 'price=' or tag contains 'page=' or tag contains 'show=' -%}
+          {%- assign meta_tags = meta_tags | append: ',' | append: tag -%}
+        {%- endunless -%}
+      {%- endfor -%}
+      {%- assign meta_tags = meta_tags | remove_first: ',' -%}
+      {%- if meta_tags != blank -%}
+      &ndash; {{ 'general.meta.tags' | t: tags: meta_tags -}}
+      {%- endif -%}
+    {%- endif -%}
+    {%- if current_page != 1 -%}
+      &ndash; {{ 'general.meta.page' | t: page: current_page }}
+    {%- endif -%}
+    {%- assign escaped_page_title = page_title | escape -%}
+    {%- unless escaped_page_title contains shop.name -%}
+      &ndash; {{ shop.name }}
+    {%- endunless -%}
+  {%- endcapture -%}
+  <title>{{ seo_title | strip }}</title>
+  {% if page_description -%}<meta name="description" content="{{ page_description | escape }}">{% endif -%}
+  {% render 'social_meta_tags' %}
+  {% render 'theme_style_vars' %}
+  {% render 'theme_style_tags' %}
+  <link rel="preload" as="script" href="{{ 'vendor.min.js' | asset_url }}">
+  <link rel="preload" as="script" href="{{ 'theme.min.js' | asset_url }}">
+  <link rel="preload" as="script" href="{{ 'theme-lazy.min.js' | asset_url }}">
+  <link rel="preload" as="script" href="{{ 'lazysizes.min.js' | asset_url }}">
+  {{ content_for_header }}
+</head>
+<body id="{{ page_title | handle }}" class="template-{{ template.name | handle }} {{ settings.bt_style }} {{ settings.product_action_pos }} {{ settings.product_action_style }} {{ settings.dot_style }} {{ settings.product_cd_align }} {{ settings.anm_img_loader }}{% if settings.vertical_card_wishlist %} product-card__btn-wishlist{% endif %} product-card__label-{{ settings.product_label_style }}">
+  {%- if settings.enable_top_promotion -%}{% section 'text-with-icon' %}{%- endif -%}
+  {% section 'top-bar' %}
+  {% section 'header' %}
+  {% if settings.enable_mb_hd %}
+    {% section 'header-mobile' %}
+  {% endif %}
+
+  <main role="main" id="MainContent" class="{{ settings.product_swatch_style }}">
+    {%- if settings.enable_breadcrumb -%}
+      {%- unless template == 'index' or template == 'cart' or template == 'list-collections' or template == '404' -%}
+        {% render 'bread_crumb' %}
+      {%- endunless -%}
+    {%- endif -%}
+    {{ content_for_layout }}
+  </main>
+  {% section 'footer' %}
+  {% section 'cookie-notification' %}
+  {% render 'popups' %}
+  {% render 'theme_script_tags' %}
+  {% include 'wisepops-generated' %}
+</body>
+</html>

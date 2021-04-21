@@ -1,0 +1,272 @@
+{%- if section.settings.show_promo -%}
+{%- assign count = section.settings.row_size -%}
+<div class="service-promo-3 {{ section.settings.style }}">
+  <div class="{{ section.settings.layout }} position-relative" style="padding:{{ section.settings.padding }};background-color:{{ section.settings.bg }}">
+    {%- if section.settings.title != blank -%}
+      <h3 class="block-title">{{ section.settings.title }}</h3>
+    {%- endif -%}
+    <div class="row">
+      {%- for block in section.blocks -%}
+        <div class="promo3-block position-relative large-{{ 12 | divided_by: count }}" {{ block.shopify_attributes }}>
+          {%- if block.settings.img != blank -%}
+            <div class="image-container position-relative">
+              {% render 'image', m_img: block.settings.img, element_type: 'image' %}
+            </div>
+          {%- endif -%}
+          <div class="promo3-block-text position-relative">
+            {%- if section.settings.show_index != blank -%}
+              <span class="promo3-block__index">{{ forloop.index }}</span>
+            {%- endif -%}
+            {%- if block.settings.title != blank -%}
+              <h4>{{ block.settings.title | newline_to_br }}</h4>
+            {%- endif -%}
+
+            {%- if block.settings.desc != blank -%}
+              <p>{{ block.settings.desc | newline_to_br }}</p>
+            {%- endif -%}
+
+            {%- if block.settings.title_btn != blank or block.settings.icon_btn != blank -%}
+              <a class="btn {{ block.settings.style_btn }}" href="{{ block.settings.link_btn }}">
+                {{ block.settings.title_btn }}
+                {% include 'include_icon', icon_name: block.settings.icon_btn %}
+              </a>
+            {%- endif -%}
+          </div><!-- .promo3-block-text -->
+        </div><!-- .row -->
+      {%- endfor -%}
+    </div><!-- .row -->
+  </div><!-- .container -->
+</div><!-- .service-promotion -->
+{%- capture styles -%}
+{%- if section.settings.split_border -%}
+.service-promo-3 .promo3-block::after{
+  content:'';
+  display:block;
+  position:absolute;
+  top:25%;
+  right:-1px;
+  height:60%;
+  width:1px;
+  filter:brightness(0.95)
+}
+{%- endif -%}
+@media all and (min-width: 992px) {
+  #shopify-section-{{ section.id }} .promo3-block {padding:{{ section.settings.item_padding }}}
+  #shopify-section-{{ section.id }} .service-promo-3 {margin:{{ section.settings.margin }}}
+  #shopify-section-{{ section.id }} .promo3-block::after{background-color:{{ section.settings.bg }}}
+  #shopify-section-{{ section.id }} .promo3-block:nth-of-type({{ count }})::after{content:none}
+}
+#shopify-section-{{ section.id }} .promo3-block:hover{background-color:{{ section.settings.bg }}}
+#shopify-section-{{ section.id }} h4{color:{{ section.settings.c_title }}}
+#shopify-section-{{ section.id }} p{color:{{ section.settings.c_desc }}}
+#shopify-section-{{ section.id }} .promo3-block__index{color:{{ section.settings.c_index }}}
+#shopify-section-{{ section.id }} .promo3-block:hover .promo3-block__index{color:{{ section.settings.c_index_hover }}}
+{%- endcapture -%}
+<style>{{ styles | strip_newlines | remove: '  ' }}</style>
+{%- endif -%}
+{% schema %}
+{
+  "name": "Service Promotion Type 3",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_promo",
+      "label": "Show section",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Section Layout",
+      "options": [
+        { "value": "container", "label": "Fixed Width" },
+        { "value": "col-padding", "label": "Full Width" }
+      ],
+      "default": "col-padding"
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "Section margin",
+      "info": "Set margin for section top-right-bottom-left (e.g. 20px 15px 10px 0)"
+    },
+    {
+      "type": "text",
+      "id": "padding",
+      "label": "Section padding",
+      "info": "Set padding for section top-right-bottom-left (e.g. 20px 15px 10px 0)",
+      "default": "0 0 0 0"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Title",
+      "default": "Together We Recycle"
+    },
+    {
+      "type": "select",
+      "id": "row_size",
+      "label": "Block count in one row",
+      "options": [
+        {"value": "1", "label": "1"},
+        {"value": "2", "label": "2"},
+        {"value": "3", "label": "3"},
+        {"value": "4", "label": "4"},
+        {"value": "5", "label": "5"},
+        {"value": "6", "label": "6"}
+      ],
+      "default": "3"
+    },
+    {
+      "type": "select",
+      "id": "style",
+      "label": "Style",
+      "options": [
+        { "value": "darkgreen", "label": "Style 1" },
+        { "value": "regal-blue", "label": "Style 2" }
+      ],
+      "default": "darkgreen"
+    },
+    {
+      "type": "text",
+      "id": "item_padding",
+      "label": "Item padding",
+      "info": "Set item padding - top-right-bottom-left (e.g. 20px 15px 10px 0)",
+      "default": "205px 0 115px 0"
+    },
+    {
+      "type": "checkbox",
+      "id": "split_border",
+      "label": "Show border between items",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_index",
+      "label": "Show index number",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "bg",
+      "label": "Background Color",
+      "default": "#f9f9f9"
+    },
+    {
+      "type": "color",
+      "id": "item_bg",
+      "label": "Active item background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "c_title",
+      "label": "Title color",
+      "default": "#2a2c2f"
+    },
+    {
+      "type": "color",
+      "id": "c_desc",
+      "label": "Description color",
+      "default": "#2a2c2f"
+    },
+    {
+      "type": "color",
+      "id": "c_index",
+      "label": "Index color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "c_index_hover",
+      "label": "Index hover color",
+      "default": "#cae500"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image-text",
+      "name": "Image and Text",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "img",
+          "label": "Service image",
+          "info": "Image size 200*212px recommended"
+        },
+        {
+          "type": "textarea",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "textarea",
+          "id": "desc",
+          "label": "Description"
+        },
+        {
+          "type": "text",
+          "id": "title_btn",
+          "label": "Button Title"
+        },
+        {
+          "type": "text",
+          "id": "icon_btn",
+          "label": "Name of the [icon](https://docs.flexkitux.com/pages/icons-list.html) after text"
+        },
+        {
+          "type": "select",
+          "id": "style_btn",
+          "label": "Button Style",
+          "options": [
+            {"value": "btn-default", "label": "Default button"},
+            {"value": "btn-transparent", "label": "Transparent button"},
+            {"value": "btn-secondary", "label": "Secondary button"},
+            {"value": "btn-third", "label": "Third button"},
+            {"value": "btn-text", "label": "Text button"},
+            {"value": "btn-icon", "label": "Icon button"}
+          ],
+          "default": "btn-default"
+        },
+        {
+          "type": "url",
+          "id": "link_btn",
+          "label": "Link To"
+        }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "Service Promotion Type 3",
+    "category": "Text Section",
+    "blocks": [
+      {
+        "type": "image-text",
+        "settings": {
+          "title": "Collection",
+          "desc": "Our stores accept your based Venedor clothing."
+        }
+      },
+      {
+        "type": "image-text",
+        "settings": {
+          "title": "Separation",
+          "desc": "Wearable items are set aside for reuse while the rest are recycled.",
+          "title_btn": "GET STARTED",
+          "style_btn": "btn-default"
+        }
+      },
+      {
+        "type": "image-text",
+        "settings": {
+          "title": "Delivery",
+          "desc": "To homeless, refugees persons and others in needs.",
+          "icon_btn": "icon-arrow-right",
+          "style_btn": "btn-icon"
+        }
+      }
+    ]
+  }]
+}
+{% endschema %}

@@ -1,0 +1,90 @@
+{% comment %}
+Renders product in a grid style
+  Accepts:
+    - product: <Product> product to show
+    - pp_index: <Number> product placeholder image number if product is not set
+    - card_style: <String> set card style (available values: "vertical-default", "vertical-advanced", "vertical-progressive", "horizontal-default", "horizontal-advanced", "horizontal-progressive")
+    - card_border: <Boolean> show border around product card
+    - card_shadow: <Boolean> show box shadow around product card
+
+  Usage:
+    {% render 'product_card', product: section.settings.product, card_style: section.settings.card_style, card_border: section.settings.card_border %}
+    {% render 'product_card', pp_index: pp_index, card_style: section.settings.card_style, card_border: section.settings.card_border, height: section.settings.height %}
+{% endcomment %}
+{%- liquid
+unless card_style or card_style != blank
+  assign card_style = 'vertical-default'
+endunless
+
+if product == blank and pp_index == blank
+  assign pp_index = 1
+endif
+-%}
+{%- unless product == blank -%}
+  {%- case card_style -%}
+    {%- when 'vertical-advanced' -%}
+      {% render 'product_card_vertical_advanced', collection: collection, product: product, card_border: card_border, card_shadow: card_shadow %}
+    {%- when 'vertical-classic' -%}
+      {% render 'product_card_vertical_classic', collection: collection, product: product, card_border: card_border, card_shadow: card_shadow %}
+    {%- when 'vertical-progressive' -%}
+      {% render 'product_card_vertical_progressive', collection: collection, product: product, card_border: card_border, card_shadow: card_shadow %}
+    {%- when 'vertical-modern' -%}
+      {% render 'product_card_vertical_modern', collection: collection, product: product, card_border: card_border, card_shadow: card_shadow %}
+    {%- when 'vertical-details' -%}
+      {% render 'product_card_vertical_details', collection: collection, product: product, card_border: card_border, card_shadow: card_shadow %}
+    {%- when 'horizontal-advanced' -%}
+      {% render 'product_card_horizontal_advanced', collection: collection, product: product, card_border: card_border, card_shadow: card_shadow %}
+    {%- when 'horizontal-default' -%}
+      {% render 'product_card_horizontal_default', collection: collection, product: product, card_border: card_border, card_shadow: card_shadow %}
+    {%- when 'horizontal-classic' -%}
+      {% render 'product_card_horizontal_classic', collection: collection, product: product, card_border: card_border, card_shadow: card_shadow %}
+    {%- when 'horizontal-progressive' -%}
+      {% render 'product_card_horizontal_progressive', collection: collection, product: product, card_border: card_border, card_shadow: card_shadow %}
+    {%- when 'horizontal-modern' -%}
+      {% render 'product_card_horizontal_modern', collection: collection, product: product, card_border: card_border, card_shadow: card_shadow %}
+    {%- else -%}
+      {% render 'product_card_vertical_default', collection: collection, product: product, card_border: card_border, card_shadow: card_shadow %}
+  {%- endcase -%}
+
+{%- else -%}
+  <div class="product-card {% if card_border == true %} show-border{% endif %}{% if card_shadow == true %} show-shadow{% endif %}">
+    <div class="product-img">
+      <div class="main-product" style="padding-top: 129.6296%;">
+        {{ 'product-' | append: pp_index | placeholder_svg_tag: 'placeholder' }}
+      </div><!-- .product-img -->
+    </div>
+
+    <div class="product-detail">
+      {%- if settings.enable_product_type -%}
+        <h4 class="product-type">GLITTER</h4>
+      {%- endif -%}
+
+      {%- if settings.enable_product_vendo -%}
+        <h4 class="product-type">ADAIDES</h4>
+      {%- endif -%}
+
+      {%- unless settings.show_name_after_price -%}
+        <h3 class="product-name">Bass Effect Audio Portable Wireless Speaker</h3>
+
+        <div class="product-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation...</div>
+      {%- endunless -%}
+
+      <div class="ds-flex product-info">
+        {% render 'product_price', price: 777, compare_at_price: 999 %}
+      </div>
+
+      {%- if settings.show_name_after_price -%}
+        <h3 class="product-name">Bass Effect Audio Portable Wireless Speaker</h3>
+        <div class="product-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation...</div>
+      {%- endif -%}
+
+      {%- if settings.show_card_swatches -%}
+        <ul class="swatch-group ds-flex flex-wrap">
+          <li><a href="#" class="color-swatch ds-flex active"><i style="background-color: black;"></i></a></li>
+          <li><a href="#" class="color-swatch ds-flex"><i style="background-color: white;"></i></a></li>
+          <li><a href="#" class="color-swatch ds-flex"><i style="background-color: grey;"></i></a></li>
+        </ul>
+      {%- endif -%}
+    </div><!-- .product-detail -->
+  </div><!-- .product-card -->
+{%- endunless -%}

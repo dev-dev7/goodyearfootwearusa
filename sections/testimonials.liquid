@@ -1,0 +1,379 @@
+{%- liquid
+assign margin = section.settings.margin
+assign layout_w = section.settings.layout_w
+assign layout_h = section.settings.layout_h
+assign block_title = section.settings.title
+assign desc = section.settings.desc
+assign auto_speed = section.settings.auto_speed
+assign slide_transition = section.settings.slide_transition
+assign show_dots = section.settings.show_dots
+assign show_nav = section.settings.show_nav
+assign nav_style = section.settings.nav_style
+assign nav_pos = section.settings.nav_pos
+assign wrap_around = section.settings.wrap_around
+assign number_per_row = section.settings.number_per_row
+assign item_space = section.settings.item_space | divided_by: 2
+-%}
+{%- if section.settings.show -%}
+<div class="vnd-st-testimonials position-relative" style="margin: {{ margin }};">
+  <div class="image-container">
+    {%- if section.settings.back_img != blank -%}
+      {% render 'image', m_img: section.settings.back_img %}
+    {%- endif -%}
+  </div><!-- .image-container -->
+
+  <div class="{{ layout_w }}{% if layout_h == 'full-height' %} full-height{% endif %} position-relative">
+
+    <div class="container">
+      {%- if block_title != blank -%}
+        <h2 class="block-title">{{ block_title }}</h2>
+      {%- endif -%}
+      {%- if desc != blank -%}
+        <p class="block-description">{{ desc }}</p>
+      {%- endif -%}
+
+      <div class="content-slideshow items-carousel {{ slide_transition }} {{ nav_style }} {{ nav_pos }}"
+        data-auto="{{ auto_speed }}"
+        data-dots="{{ show_dots }}"
+        data-nav="{{ show_nav }}",
+        data-pausehover="false",
+        data-wraparound="true">
+
+        {%- for block in section.blocks -%}
+          <div class="testimonial-block grid-items__{{ number_per_row }}" {{ block.shopify_attributes }}>
+            <div class="testimonial-wrapper" style="background-color:{{ block.settings.c_bg }}">
+              {%- if block.settings.title != blank -%}
+                <h3 class="testimonial_title" style="color:{{ block.settings.c_title }}">{% if block.settings.add_quote %}<span class="quotation">&ldquo;</span>{% endif %}{{ block.settings.title }}</h3>
+              {%- endif -%}
+
+              {%- if block.settings.desc != blank -%}
+                <p class="testimonial_content" style="color:{{ block.settings.c_desc }}">{{ block.settings.desc }}</p>
+              {%- endif -%}
+
+              {%- if block.settings.date != blank or block.settings.name_user != blank or block.settings.prefix != blank -%}
+                <p class="testimonial_date" style="color:{{ block.settings.c_date }}">{{ block.settings.prefix }} <span class="testimonial_author-name" style="color:{{ block.settings.c_name }}">{{ block.settings.name_user }} </span>{{ block.settings.date }}</p>
+              {%- endif -%}
+            </div><!-- .testimonial-wrapper -->
+            <div class="testimonial-triangle" style="color:{{ block.settings.c_bg }}"></div>
+          </div><!-- .grid-items__2 -->
+        {%- endfor -%}
+      </div><!-- .items-carousel -->
+    </div><!-- .container -->
+  </div><!-- .position-relative -->
+</div>
+<style>
+#shopify-section-{{ section.id }} .image-container{background-color:{{ section.settings.c_bg }}}
+#shopify-section-{{ section.id }} .block-title{color:{{ section.settings.c_title }}}
+#shopify-section-{{ section.id }} .block-description{color:{{ section.settings.c_desc }}}
+#shopify-section-{{ section.id }} .section-container{background-color:{{ section.settings.c_bg }}}
+#shopify-section-{{ section.id }} .flickity-page-dots .dot{color:{{ section.settings.dots_color }}}
+#shopify-section-{{ section.id }} .flickity-page-dots .dot:hover,
+#shopify-section-{{ section.id }} .flickity-page-dots .is-selected{color:{{ section.settings.color_dots_h | default: settings.c_theme }}}
+#shopify-section-{{ section.id }} .flickity-prev-next-button{border-color:{{ section.settings.c_nav_border }};background-color:{{ section.settings.c_nav_bg }};color:{{ section.settings.c_nav }}}
+#shopify-section-{{ section.id }} .flickity-prev-next-button:hover{border-color:{{ section.settings.c_nav_h_bg }} !important;background-color:{{ section.settings.c_nav_h_bg }} !important;}
+#shopify-section-{{ section.id }} .content-slideshow{margin:0 -{{ item_space }}px}
+#shopify-section-{{ section.id }} .testimonial-block{padding:0 {{ item_space }}px}
+</style>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Testimonials",
+  "class": "vs-initialize-slider",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show",
+      "label": "Show this section",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Section Settings"
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "Section margin",
+      "info": "Set margin for section top-right-bottom-left (e.g. 20px 15px 10px 0)",
+      "default": "150px 0 0 0"
+    },
+    {
+      "type": "select",
+      "id": "layout_w",
+      "label": "Slide width",
+      "options": [
+        { "value": "container", "label": "Fixed Width" },
+        { "value": "full-width-container", "label": "Full Width" }
+      ],
+      "default": "full-width-container"
+    },
+    {
+      "type": "select",
+      "id": "layout_h",
+      "label": "Slide Height",
+      "options": [
+        { "value": "relative-content", "label": "Relative to text content" },
+        { "value": "custom-height", "label": "Custom Height" },
+        { "value": "full-height", "label": "Full Height" }
+      ],
+      "default": "relative-content"
+    },
+    {
+      "type": "text",
+      "id": "ch_desc",
+      "label": "Custom Height on Desktop",
+      "info": "Set custom height of the section. Unit is pixel.",
+      "default": "500"
+    },
+    {
+      "type": "text",
+      "id": "ch_tablet",
+      "label": "Custom Height on Tablets",
+      "info": "Device width < 1200px"
+    },
+    {
+      "type": "text",
+      "id": "ch_mobile",
+      "label": "Custom Height on Mobile",
+      "info": "Device width < 768px"
+    },
+    {
+      "type": "image_picker",
+      "id": "back_img",
+      "label": "Background Image",
+      "info": "1920px*580px recommended"
+    },
+    {
+      "type": "color",
+      "id": "c_bg",
+      "label": "Background color",
+      "default": "#0e449f"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section title",
+      "default": "Testimonials"
+    },
+    {
+      "type": "color",
+      "id": "c_title",
+      "label": "Title color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "textarea",
+      "id": "desc",
+      "label": "Section description",
+      "default": "Aliquam auctor ut eros sed pharetra, at cursus consequat velit."
+    },
+    {
+      "type": "color",
+      "id": "c_desc",
+      "label": "Description color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Carousel settings"
+    },
+    {
+      "type": "range",
+      "id": "number_per_row",
+      "min": 1,
+      "max": 3,
+      "step": 1,
+      "label": "Number of testimonials to show in one slide",
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "item_space",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "label": "Space between blocks",
+      "default": 30
+    },
+    {
+      "type": "select",
+      "id": "slide_transition",
+      "label": "Transition Effect",
+      "options": [
+        { "value": "slide", "label": "Slide" },
+        { "value": "fade", "label": "Fade" }
+      ],
+      "default": "slide"
+    },
+    {
+      "type": "text",
+      "id": "auto_speed",
+      "label": "Autoplay",
+      "info": "unit is seconds. '0' to disable auto rotate.",
+      "default": "8"
+    },
+    {
+      "type": "checkbox",
+      "id": "wrap_around",
+      "label": "Loop carousel",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_dots",
+      "label": "Show pagination dots",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "dots_color",
+      "label": "Dots color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "color_dots_h",
+      "label": "Dots hover color"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_nav",
+      "label": "Show navigation",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "nav_style",
+      "label": "Navigator style",
+      "options": [
+        { "value": "slideshow-nav__big", "label": "Big" },
+        { "value": "slideshow-nav__small", "label": "Small" }
+      ],
+      "default": "slideshow-nav__small"
+    },
+    {
+      "type": "select",
+      "id": "nav_pos",
+      "label": "Navigator position",
+      "options": [
+        { "value": "nav-top__right", "label": "Top right" },
+        { "value": "nav-top__center", "label": "Top Center" },
+        { "value": "nav-middle", "label": "Middle center" }
+      ],
+      "default": "nav-middle"
+    },
+    {
+      "type": "color",
+      "id": "c_nav_bg",
+      "label": "Navigator background",
+      "default": "#fcfcfc"
+    },
+    {
+      "type": "color",
+      "id": "c_nav_border",
+      "label": "Navigator border",
+      "default": "#fcfcfc"
+    },
+    {
+      "type": "color",
+      "id": "c_nav",
+      "label": "Navigator color",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "c_nav_h_bg",
+      "label": "Navigator hover background color",
+      "default": "#c02e1d"
+    }
+  ],
+  "blocks": [{
+    "type": "text",
+    "name": "Text Block",
+    "settings": [
+      {
+        "type": "color",
+        "id": "c_bg",
+        "label": "Background color",
+        "default": "#ffffff"
+      },
+      {
+        "type": "checkbox",
+        "id": "add_quote",
+        "label": "Add quotation mark before title",
+        "default": true
+      },
+      {
+        "type": "textarea",
+        "id": "title",
+        "label": "Main title",
+        "default": "Easy to Customise"
+      },
+      {
+        "type": "color",
+        "id": "c_title",
+        "label": "Title color",
+        "default": "#07141c"
+      },
+      {
+        "type": "textarea",
+        "id": "desc",
+        "label": "Description",
+        "default": "Donec ut ipsum in erat fringilla iaculis eu sit amet est. Curabitur tincidunt enim quis, varius purus. Nunc maximus, elit non dictum eu nulla. Mauris scelerisque pharetra felis."
+      },
+      {
+        "type": "color",
+        "id": "c_desc",
+        "label": "Description color",
+        "default": "#333333"
+      },
+      {
+        "type": "text",
+        "id": "name_user",
+        "label": "Customer name",
+        "default": "Ronaldo"
+      },
+      {
+        "type": "url",
+        "id": "link_user",
+        "label": "Customer link"
+      },
+      {
+        "type": "color",
+        "id": "c_name",
+        "label": "Name color",
+        "default": "#222222"
+      },
+      {
+        "type": "text",
+        "id": "prefix",
+        "label": "Words before name",
+        "default": "By"
+      },
+      {
+        "type": "text",
+        "id": "date",
+        "label": "Review date",
+        "default": "on Oct 27, 2019"
+      },
+      {
+        "type": "color",
+        "id": "c_date",
+        "label": "Date color",
+        "default": "#9a9a9a"
+      }
+    ]
+  }],
+  "presets": [{
+    "name": "Testimonials",
+    "category": "Testimonials",
+    "blocks": [
+      { "type": "text" },
+      { "type": "text" }
+    ]
+  }]
+}
+{% endschema %}

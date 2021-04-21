@@ -1,0 +1,258 @@
+{%- if section.settings.show_promo -%}
+  {%- if section.settings.back_img != blank -%}
+    <div class="image-bg lazyload" data-bg="{{ section.settings.back_img | img_url: 'master'}}"></div>
+  {%- endif -%}
+  <div class="container position-relative promotion-layout__{{ section.settings.box_style }}">
+    {%- if section.settings.title != blank -%}
+      <h2 class="block-title">{{ section.settings.title }}</h2>
+    {%- endif -%}
+    {%- if section.settings.description != blank -%}
+      <p class="block-description">{{ section.settings.description }}</p>
+    {%- endif -%}
+    <div class="row">
+      {%- assign count = section.settings.row_size -%}
+      {%- for block in section.blocks -%}
+        <div class="large-{{ 12 | divided_by: count }} boxed {{ section.settings.box_style }} c-e__{{ section.settings.box_appear_effect }}" {{block.shopify_attributes}}>
+          {% include 'promotion',
+              promo_icon: block.settings.promo_icon, promo_title: block.settings.promo_title,
+              promo_text: block.settings.promo_text, promo_btn: block.settings.promo_btn_title,
+              promo_btn_icon: block.settings.promo_btn_icon, promo_link: block.settings.promo_btn_link %}
+        </div>
+      {%- endfor -%}
+    </div><!-- .row -->
+  </div><!-- .container.position-relative -->
+<style>
+#shopify-section-{{ section.id }}{
+  margin:{{ section.settings.margin }};
+  padding:{{ section.settings.padding_mobile }};
+  background-color:{{ section.settings.back_color }}
+}
+#shopify-section-{{ section.id }} .promo-title{
+  color:{{ section.settings.c_title }}
+}
+#shopify-section-{{ section.id }} .promo-text{
+  color:{{ section.settings.c_text }}
+}
+@media screen and (min-width: 768px){
+  #shopify-section-{{ section.id }}{
+    padding:{{ section.settings.padding_laptop }}
+  }
+}
+@media screen and (min-width: 1400px){
+  #shopify-section-{{ section.id }}{
+    padding:{{ section.settings.padding }}
+  }
+}
+</style>
+{%- endif -%}
+{% schema %}
+{
+  "name": "Service Promotion Type 1",
+  "tag": "section",
+  "class": "position-relative vs-service-promotion",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_promo",
+      "label": "Show Promotion Text",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Section Settings"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Title",
+      "default": "Why Choose Us"
+    },
+    {
+      "type": "text",
+      "id": "description",
+      "label": "Section Description",
+      "default": "Aiquam auctor ut eros sed pharetra, at cursus consequat velit."
+    },
+    {
+      "type": "header",
+      "content": "Style Settings"
+    },
+    {
+      "type": "image_picker",
+      "id": "back_img",
+      "label": "Background Image",
+      "info": "1920 x 670 recommended"
+    },
+    {
+      "type": "select",
+      "id": "row_size",
+      "label": "Block count in one row",
+      "options": [
+        {"value": "1", "label": "1"},
+        {"value": "2", "label": "2"},
+        {"value": "3", "label": "3"},
+        {"value": "4", "label": "4"}
+      ],
+      "default": "4"
+    },
+    {
+      "type": "select",
+      "id": "box_style",
+      "label": "Style",
+      "options": [
+        {"value": "classic", "label": "Classic"},
+        {"value": "advanced", "label": "Advanced"},
+        {"value": "modern", "label": "Modern"},
+        {"value": "layout-breaking", "label": "Layout Breaking"}
+      ],
+      "default": "classic"
+    },
+    {
+      "type": "header",
+      "content": "Appearing Effect"
+    },
+    {
+      "type": "select",
+      "id": "box_appear_effect",
+      "label": "Box appearing effect",
+      "options": [
+        {"value": "none", "label": "Classic"},
+        {"value": "fsa", "label": "Scale appear"}
+      ],
+      "default": "fsa"
+    },
+    {
+      "type": "header",
+      "content": "Color configuration"
+    },
+    {
+      "type": "color",
+      "id": "back_color",
+      "label": "Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "c_title",
+      "label": "Title color",
+      "default": "#333"
+    },
+    {
+      "type": "color",
+      "id": "c_text",
+      "label": "Text color",
+      "default": "#777"
+    },
+    {
+      "type": "header",
+      "content": "Space Settings"
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "Section margin",
+      "info": "Set margin for section top-right-bottom-left (e.g. 20px 15px 10px 0)",
+      "default": "0 0 0 0"
+    },
+    {
+      "type": "paragraph",
+      "content": "Section padding"
+    },
+    {
+      "type": "text",
+      "id": "padding",
+      "label": "On wide screens",
+      "info": "Set padding for section (e.g. 20px 15px 10px 0)",
+      "default": "80px 0 80px 0"
+    },
+    {
+      "type": "text",
+      "id": "padding_laptop",
+      "label": "On laptop",
+      "default": "60px 0 60px 0"
+    },
+    {
+      "type": "text",
+      "id": "padding_mobile",
+      "label": "On mobile",
+      "default": "35px 0 35px 0"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "icon-text",
+      "name": "Icon and Text",
+      "settings": [
+        {
+          "type": "text",
+          "id": "promo_icon",
+          "label": "Icon Name [Browse icons](https://docs.flexkitux.com/pages/icons-list.html)"
+        },
+        {
+          "type": "text",
+          "id": "promo_title",
+          "label": "Title"
+        },
+        {
+          "type": "textarea",
+          "id": "promo_text",
+          "label": "Text"
+        },
+        {
+          "type": "text",
+          "id": "promo_btn_title",
+          "label": "Button Title"
+        },
+        {
+          "type": "text",
+          "id": "promo_btn_icon",
+          "label": "Icon after text"
+        },
+        {
+          "type": "url",
+          "id": "promo_btn_link",
+          "label": "Button Link"
+        }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "Service Promotion Type 1",
+    "category": "Text Section",
+    "blocks": [
+      {
+        "type": "icon-text",
+        "settings": {
+          "promo_icon": "icon-truck",
+          "promo_title": "Free Delivery",
+          "promo_text": "Cras pellentesque, nisi ac tempus pellentesqna"
+        }
+      },
+      {
+        "type": "icon-text",
+        "settings": {
+          "promo_icon": "icon-headset2",
+          "promo_title": "24/h support",
+          "promo_text": "Pellenteque habitant morbi senectus et netus et male"
+        }
+      },
+      {
+        "type": "icon-text",
+        "settings": {
+          "promo_icon": "icon-back-smooth-1",
+          "promo_title": "30 - Day returns",
+          "promo_text": "In nec erat elementum, et venenatis purus nec"
+        }
+      },
+      {
+        "type": "icon-text",
+        "settings": {
+          "promo_icon": "icon-lock-wide",
+          "promo_title": "payment secured",
+          "promo_text": "Mauris interdum nulla ante dignissim, vel malesuada"
+        }
+      }
+    ]
+  }]
+}
+{% endschema %}

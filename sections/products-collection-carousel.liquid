@@ -1,0 +1,204 @@
+{%- if section.settings.show_section -%}
+<div class="container">
+  {% include 'products_collection_carousel' with section %}
+</div>
+<style>
+#shopify-section-{{ section.id }}{margin:{{ section.settings.margin_mobile }}}
+#shopify-section-{{ section.id }} .flickity-prev-next-button{border-color:{{ section.settings.nav_border }};background-color:{{ section.settings.nav_bg }};color:{{ section.settings.nav_color }}; }
+#shopify-section-{{ section.id }} .flickity-prev-next-button:hover{border-color:{{ section.settings.c_nav_h_bg }} !important;background-color:{{ section.settings.c_nav_h_bg }} !important;}
+@media screen and (min-width: 768px){
+  #shopify-section-{{ section.id }}{margin:{{ section.settings.margin_laptop }}}
+}
+@media screen and (min-width: 1400px){
+  #shopify-section-{{ section.id }}{margin:{{ section.settings.margin }}}
+}
+</style>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Products Carousel",
+  "tag": "section",
+  "class": "vs-initialize-slider",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_section",
+      "label": "Show Section",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section title",
+      "default": "recommended products"
+    },
+    {
+      "type": "textarea",
+      "id": "desc",
+      "label": "Section description"
+    },
+    {
+      "type": "collection",
+      "id": "collection_name",
+      "label": "Collection"
+    },
+    {
+      "type": "header",
+      "content": "Carousel settings"
+    },
+    {
+      "type": "text",
+      "id": "auto_speed",
+      "label": "Autoplay Speed",
+      "info": "5 means rotate every 5 seconds. 0 to disable auto rotate.",
+      "default": "5"
+    },
+    {
+      "type": "checkbox",
+      "id": "wrap_around",
+      "label": "Carousel loop",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_dots",
+      "label": "Show Pagination Dots",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_nav",
+      "label": "Show Navigation",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "nav_style",
+      "label": "Navigator position",
+      "options": [
+        { "value": "nav-top__right", "label": "Top right" },
+        { "value": "nav-top__center", "label": "Top center" },
+        { "value": "nav-middle", "label": "Middle center" }
+      ],
+      "default": "nav-top__right"
+    },
+    {
+      "type": "color",
+      "id": "nav_border",
+      "label": "Navigator border color",
+      "default": "#999999"
+    },
+    {
+      "type": "color",
+      "id": "nav_bg",
+      "label": "Navigator background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "nav_color",
+      "label": "Navigator icon color",
+      "default": "#999999"
+    },
+    {
+      "type": "color",
+      "id": "c_nav_h_bg",
+      "label": "Navigator hover background color",
+      "default": "#c02e1d"
+    },
+    {
+      "type": "checkbox",
+      "id": "nav_box_shadow",
+      "label": "Add box-shadow to navigators",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Product card configuration"
+    },
+    {
+      "type": "select",
+      "id": "card_style",
+      "label": "Product Card Style",
+      "options": [
+        { "value": "vertical-advanced", "label": "Vertical advanced" },
+        { "value": "vertical-classic", "label": "Vertical classic" },
+        { "value": "vertical-default", "label": "Vertical default" },
+        { "value": "vertical-modern", "label": "Vertical modern" },
+        { "value": "vertical-progressive", "label": "Vertical progressive" },
+        { "value": "vertical-details", "label": "Vertical details" },
+        { "value": "horizontal-advanced", "label": "Horizontal advanced" },
+        { "value": "horizontal-classic", "label": "Horizontal classic" },
+        { "value": "horizontal-default", "label": "Horizontal default" },
+        { "value": "horizontal-progressive", "label": "Horizontal progressive" },
+        { "value": "horizontal-modern", "label": "Horizontal modern" }
+      ],
+      "default": "vertical-default"
+    },
+    {
+      "type": "radio",
+      "id": "prd_img_ft",
+      "label": "Add darkness to product images",
+      "options": [
+        { "value": "img-br-100", "label": "No" },
+        { "value": "img-br-97", "label": "Yes" }
+      ],
+      "default": "img-br-100",
+      "info": "Recommended for white background product images"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_border",
+      "label": "Show border around product cards",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "card_shadow",
+      "label": "Show boxshadow around product cards",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "number_per_row",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "label": "Products to show per row",
+      "default": 5
+    },
+    {
+      "type": "header",
+      "content": "Space settings",
+      "info": "sequence: top-right-bottom-left (ex: 10px 0 10px 0)"
+    },
+    {
+      "type": "paragraph",
+      "content": "Adjust space between other sections"
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "Margin on desktop",
+      "default": "120px 0 120px 0"
+    },
+    {
+      "type": "text",
+      "id": "margin_laptop",
+      "label": "Margin on laptop",
+      "default": "80px 0 80px 0"
+    },
+    {
+      "type": "text",
+      "id": "margin_mobile",
+      "label": "Margin on mobile",
+      "default": "50px 0 50px 0"
+    }
+  ],
+  "presets": [{
+    "name": "Products Carousel",
+    "category": "Collections"
+  }]
+}
+{% endschema %}

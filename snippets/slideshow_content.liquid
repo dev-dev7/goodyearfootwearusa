@@ -1,0 +1,56 @@
+{% comment %}
+Renders image/video and text content of a slide show
+  Accepts:
+    - id: <Number> unique id of the block/section
+    - s_c: <Block> block/section of a slideshow
+    - lh: <String> layout_h of the settings
+
+  Usage:
+    {% include 'slideshow_content', id: block.id, s_c: block.settings, lh: section.settings.layout_h %}
+{% endcomment %}
+<div class="slideshow-content content-{{ id }} {% if lh == 'relative-content' %}relative-content{% else %}slideshow-content-{{ s_c.mobile_layout | default: 'adjust' }}{% endif %} {{ s_c.content_effect }}{{ content_type }} {{ s_c.content_vpos }}">
+  <div class="container ds-flex">
+    <div class="{{ s_c.content_pos }}{% if s_c.show_content_bg %} content-bg{% endif %} mobile-content-{{ s_c.mobile_layout | default: 'adjust' }}">
+      {%- if s_c.content_style == "custom_html" -%}
+        {{ s_c.html_content }}
+      {%- else -%}
+        <div class="{{ s_c.content_align }} {{ s_c.content_style }}{% if s_c.show_border %} content-text__border{% endif %} font-{{ s_c.font_size | default: 10 }}"{% if s_c.c_text_border %} style="border-color: {{ s_c.c_text_border }}"{% endif %}>
+          {%- if s_c.top_title != blank -%}
+            <h3 style="color: {{ s_c.color_top_title }};">{{ s_c.top_title | newline_to_br }}</h3>
+          {%- endif -%}
+
+          {%- if s_c.main_title != blank -%}
+            <h2 style="color: {{ s_c.color_main_title }};">{{ s_c.main_title | newline_to_br }}</h2>
+          {%- endif -%}
+
+          {%- if s_c.sub_title != blank -%}
+            <p style="color: {{ s_c.sub_color }};">{{ s_c.sub_title | newline_to_br }}</p>
+          {%- endif -%}
+
+          {%- if s_c.btn1_title != blank -%}
+            <a href="{{ s_c.btn1_link | default: '#' }}" class="btn {{ s_c.btn1_style }}">{{ s_c.btn1_title }}{% if s_c.btn1_title_icon != blank %}{% include 'include_icon', icon_name: s_c.btn1_title_icon %}{% endif %}</a>
+          {%- endif -%}
+
+          {%- if s_c.btn2_title != blank -%}
+            <a href="{{ s_c.btn2_link | default: '#' }}" class="btn {{ s_c.btn2_style }} btn-second">{{ s_c.btn2_title }}{%- if s_c.btn2_title_icon != blank -%}{% include 'include_icon', icon_name: s_c.btn2_title_icon %}{%- endif -%}</a>
+          {%- endif -%}
+        </div><!-- .content-style -->
+      {%- endif -%}
+    </div><!-- .content-pos -->
+  </div><!-- .container -->
+</div><!-- .slideshow-content -->
+{%- if s_c.btn1_link != blank and s_c.btn1_title == blank and s_c.btn2_title == blank -%}
+  <a href="{{ s_c.btn1_link }}" class="link-entire"></a>
+{%- endif -%}
+<style>
+.content-{{ id }} .content-bg{background-color:{{ s_c.c_textbg }}}
+.content-{{ id }} em{
+  background-color:{{ s_c.em_bg_color }};
+  color:{{ s_c.em_color }}
+}
+.content-{{ id }} strong{
+  background-color:{{ s_c.strong_bg_color }};
+  color:{{ s_c.strong_color }}
+}
+@media all and (max-width: 767px){.content-{{ id }}.slideshow-content-default .mobile-content-default { background-color: {{ s_c.c_textbg }}; }}
+</style>

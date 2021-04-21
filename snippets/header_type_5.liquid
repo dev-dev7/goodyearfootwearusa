@@ -1,0 +1,29 @@
+<div role="banner" class="header header-type-5{% if config.header_sticky %} sticky-enable{% endif %}{% if settings.enable_mobile_sticky %} sticky-mobile-enable{% endif %}{% if settings.enable_mb_hd %} hide-on-mobile{% endif %}">
+  <div class="container ds-flex align-center flex-wrap">
+    {% render 'logo' %}
+
+    <div class="ds-flex ml-auto">
+      {% include 'promotion', promo_icon: config.promo_icon1, promo_title: config.promo_title1, promo_text: config.promo_text1 %}
+      {% include 'promotion', promo_icon: config.promo_icon2, promo_title: config.promo_title2, promo_text: config.promo_text2 %}
+    </div><!-- .ds-flex.ml-auto -->
+
+    {%- for block in blocks -%}
+      {%- if block.type contains 'menu_' -%}
+        {%- continue -%}
+      {%- endif -%}
+      {% include 'topbar_item', item: block %}
+    {%- endfor -%}
+
+    <button class="mobile-btn">
+      <span class="mobile-btn__line"></span>
+      <span class="mobile-btn__line"></span>
+      <span class="mobile-btn__line"></span>
+    </button>
+  </div><!-- .container -->
+
+  <div class="full-width-menu">
+    {% include 'header_menu', blocks: blocks, m_n: config.menu, a_c: config.header_menu_center, s_di: config.show_dropdown_icon %}
+  </div><!-- .full-width-menu -->
+  <div class="header-menu__shadow"></div>
+</div><!-- .header-type-2 -->
+<style>.header-type-5{padding:4rem 0 0}.header-type-5 .cart-wrapper .icon-cart{padding:.9rem 1.2rem}.header-type-5 .icon-cart__count{font-weight:700}.header-type-5 .full-width-menu{margin-top:4rem}.header-type-5 .header-menu-item{-ms-flex-positive:1;flex-grow:1}.header-type-5 .header-menu-item:hover,.header-type-5 .header-menu-item.active{border-top:2px solid var(--c-theme)}.header-type-5 .header-menu-item:hover>a,.header-type-5 .header-menu-item.active>a{padding-top:1.4rem}@media all and (min-width: 992px){.header-type-5 .right-expander{display:none}.header-type-5 .header-menu-item>a{-ms-flex-pack:center;justify-content:center;padding-top:1.6rem;padding-bottom:1.6rem}.header-type-5 .search-button{width:4.1rem;height:4.1rem}.header-type-5 .search-box-popup .search-input-container{right:3.1rem}}@media all and (min-width: 768px){.header-type-5 .cart-wrapper{border:2px solid #312e2e}.header-type-5 .icon-cart svg{height:1.8rem}.header-type-5 .search-button{background-color:currentColor}.header-type-5 .search-button svg{color:#ffffff}.header-type-5 .cart-wrapper{margin-right:1rem}}.sticky-active .promo-container,.sticky-active .header-menu__shadow{display:none}.sticky-active .search-form{display:-ms-flexbox;display:flex}@media (min-width: 992px){.header-type-5 .right-expander{display:none}.header-type-5 .header-menu-item>a{-ms-flex-pack:center;justify-content:center;padding-top:1.6rem;padding-bottom:1.6rem}.header-type-5 .search-button{width:4.1rem;height:4.1rem}.header-type-5 .header-search__input{height:4.1rem;padding:0 1rem}.header-type-5 .icon-cart svg{height:1.9rem}.header-type-5 .cart-wrapper{border-color:var(--c-theme);color:var(--c-theme)}.header-type-5 .full-width-menu{border-top:1px solid #eaedf0;border-bottom:1px solid #dbdddf}.sticky-active .full-width-menu{display:none}}@media (min-width: 1200px){.header-type-5 .cart-wrapper .icon-cart{height:3.7rem}}@media (max-width: 991px){.header-type-5{padding-top:2.4rem}.header-type-5 .full-width-menu{margin-top:2rem}.header-type-5.sticky-active .full-width-menu{margin-top:0;border:0}.header-type-5 .cart-wrapper .icon-cart{height:3rem}.header-type-5 .mobile-btn{margin-left:1.2rem}.header-type-5 .search-button{padding:0}}.header-menu__shadow{background:transparent url({{ 'container_shadow.png' | asset_url}}) 50% 0 no-repeat;}</style>

@@ -1,0 +1,173 @@
+{%- layout none -%}
+{%- if settings.cart_effect != 'sidebar' -%}
+{%- if cart.items != empty -%}
+  <span class="cart-count"><span class="cart-total">{{ cart.item_count }}</span> {{ 'layout.cart.items_count' | t: count: cart.item_count }} {{ 'cart.general.in_cart' | t }}</span>
+
+  <ul class="items-list list-style-none">
+    {%- for item in cart.items -%}
+      <li class="cart-item ds-flex space-between position-relative">
+        <a href="{{ item.url }}" class="cart-item-image image-loading">
+          <img class="lazyload" data-src="{{ item | img_url: '100x' }}" alt="{{ item.title | escape }}" />
+        </a>
+        <div class="cart-item-details">
+          <p class="product-name">
+            <a href="{{ item.url }}">
+              <span>{{ item.product.title }}</span>
+              {%- if item.product.variants.size > 1 -%}
+                {%- assign r_name = item.variant.title | remove: '[image]' -%}
+                {%- assign r_name = r_name | split: '[svg]' | first -%}
+                <span class="variant_title"> - {{ r_name }}</span>
+              {%- endif -%}
+            </a>
+          </p>
+          <p class="product-quantity">
+            {{- item.quantity -}} <span style="font-size: 1.2rem;"> x </span><span class="product-price"><span class="current-price money">{% render 'format_money' with item.final_price %}</span></span>
+          </p>
+        </div><!-- .cart-item-details -->
+        <a href="{{ routes.cart_change_url }}?id={{ item.key }}&amp;quantity=0" class="btn-remove-cart" data-id="{{ item.variant_id }}" title="{{ 'cart.general.remove' | t }}" data-no-instant>{% render 'icon-close' %}</a>
+      </li>
+    {%- endfor -%}
+  </ul>
+
+  <div class="cart-checkout ds-flex">
+    <div class="cart-info">
+      {%- unless settings.cart_dd_only_total -%}
+      <div class="cart-summary">
+        <span class="label">{{ 'cart.label.original_price' | t }} : </span>
+        <span class="product-price"><span class="money">{% render 'format_money' with cart.original_total_price %}</span></span>
+      </div>
+      <div class="cart-summary">
+        <span class="label">{{ 'cart.label.discounted_price' | t }} : </span>
+        <span class="product-price"><span class="money">{% render 'format_money' with cart.total_discount %}</span></span>
+      </div>
+      <div class="cart-summary__total">
+        <span class="label">{{ 'cart.label.total' | t }} : </span>
+        <span class="product-price"><span class="current-price money">{% render 'format_money' with cart.total_price %}</span></span>
+      </div>
+      {%- endunless -%}
+    </div><!-- .cart-info -->
+
+    <div class="ml-auto text-right cart-actions">
+      <a href="/cart" class="btn btn-default" data-no-instant>
+        <span>{{ 'cart.general.view_cart' | t }}</span>
+      </a>
+      <a href="/checkout" class="btn btn-default btn-checkout">
+        <span>{{ 'cart.general.checkout' | t }}</span>
+      </a>
+    </div><!-- .text-center -->
+  </div><!-- .cart-checkout -->
+{%- else -%}
+  <span class="cart-count text-center">{{ 'cart.general.empty' | t }}</span>
+{%- endif -%}
+{%- else -%}
+  <a href="#" class="side-cart__close ds-block">{% render 'icon-close' %}</a>
+  <strong class="cart-heading">{{ 'cart.general.title' | t }}</strong>
+  {%- if cart.items != empty -%}
+    {%- if settings.enable_fsa and settings.fsa_amount != blank -%}
+      {%- assign p_fsa = all_products[settings.fsa_amount] -%}
+      {%- if p_fsa != blank -%}
+        {%- assign n_fsa = p_fsa.price -%}
+        {%- if cart.total_price < n_fsa -%}
+          {%- assign a_p = cart.total_price | times: 100 | divided_by: n_fsa -%}
+          {%- assign a_m = n_fsa | minus: cart.total_price -%}
+          {%- capture a_m -%}{% render 'format_money' with a_m %}{%- endcapture -%}
+          <div class="vnd-crt-fsa width-100"><div class="vnd-crt-fsa-bar" style="width: {{ a_p }}%"></div></div>
+          <span class="cart-count">{{ 'cart.general.away_from_html' | t: amount: a_m }}</span>
+        {%- else -%}
+          <span class="cart-count">{{ 'cart.general.unlocked_free_shipping' | t }}</span>
+        {%- endif -%}
+      {%- endif -%}
+    {%- endif -%}
+
+    {%- if settings.enable_itc -%}
+      <span class="cart-count"><span class="cart-total">{{ cart.item_count }}</span> {{ 'layout.cart.items_count' | t: count: cart.item_count }} {{ 'cart.general.in_cart' | t }}</span>
+    {%- endif -%}
+
+    <ul class="items-list list-style-none">
+      {%- for line_item in cart.items -%}
+        <li class="cart-item ds-flex space-between position-relative">
+          <a href="{{ line_item.url }}" class="cart-item-image image-loading">
+            <img class="lazyload lazypreload" data-src="{{ line_item | img_url: '100x' }}" alt="{{ line_item.title | escape }}" />
+          </a>
+          <div class="cart-item-details">
+            {%- unless line_item.variant.title contains 'Default' -%}
+              <div class="cart-product__options">
+                {%- for option in line_item.product.options -%}
+                  {%- assign r_option = line_item.variant.options[forloop.index0] | remove: '[image]' -%}
+                  {%- assign r_option = r_option | split: '[svg]' | first -%}
+                  <span>{{ r_option }}</span>{% unless forloop.last %} / {% endunless %}
+                {%- endfor -%}
+              </div>
+            {%- endunless -%}
+
+            <p class="product-name">
+              <a href="{{ line_item.url }}">
+                <span>{{ line_item.product.title }}</span>
+              </a>
+            </p>
+            <p class="product-quantity">
+              {{- line_item.quantity -}} <span style="font-size: 1.2rem;"> x </span><span class="product-price"><span class="current-price money">{% render 'format_money' with line_item.final_price %}</span></span>
+            </p>
+            <div class="qty-control position-relative">
+              <div class="reduce text-center">-</div>
+              <input type="number" name="updates[]" id="cd_ud_{{ line_item.id }}" data-current-value="{{ line_item.quantity }}" value="{{ line_item.quantity }}" min="1" class="quantity text-center" />
+              <div class="increase text-center">+</div>
+            </div><!-- .qty-control -->
+          </div><!-- .cart-item-details -->
+          <a href="{{routes.cart_change_url}}?id={{ line_item.key }}&amp;quantity=0" class="btn-remove-cart" data-id="{{ line_item.variant_id }}" title="{{ 'cart.general.remove' | t }}" data-no-instant>{% render 'icon-close' %}</a>
+        </li>
+      {%- endfor -%}
+    </ul>
+
+    <div class="cart-checkout">
+      <div class="cart-info">
+        {%- unless settings.cart_dd_only_total -%}
+        <div class="cart-summary ds-flex flex-wrap">
+          <span class="label">{{ 'cart.label.original_price' | t }}</span>
+          <span class="product-price ml-auto"><span class="money">{% render 'format_money' with cart.original_total_price %}</span></span>
+        </div>
+        <div class="cart-summary ds-flex flex-wrap">
+          <span class="label">{{ 'cart.label.discounted_price' | t }}</span>
+          <span class="product-price ml-auto"><span class="money">{% render 'format_money' with cart.total_discount %}</span></span>
+        </div>
+        {%- endunless -%}
+        <div class="ds-flex flex-wrap cart-summary__total">
+          <span class="label">{{ 'cart.label.total' | t }}</span>
+          <span class="product-price ml-auto"><span class="current-price money">{% render 'format_money' with cart.total_price %}</span></span>
+        </div>
+      </div><!-- .cart-info -->
+
+      {%- if settings.enable_ctc -%}
+        {%- assign ctc_link = settings.ctc_link | default: '#' -%}
+        <div class="cart-tac position-relative">
+          <p class="tick-rectangle"><span class="ticksign">{% render 'icon-ticksign' %}</span><span class="cart-tac__text">{{ 'cart.general.terms_agreement_html' | t: link: ctc_link }}</span></p>
+        </div>
+      {%- endif -%}
+
+      <div class="ml-auto cart-actions">
+        <a href="/cart" class="btn btn-default" data-no-instant>
+          <span>{{ 'cart.general.view_cart' | t }}</span>
+        </a>
+        <a href="/checkout" class="btn btn-default btn-checkout active">
+          <span>{{ 'cart.general.checkout' | t }}</span>
+        </a>
+      </div><!-- .cart-actions -->
+
+      {%- if settings.show_payment_info -%}
+        {% render 'payment_info', img: settings.payments_img, svgs: settings.payment_svgs %}
+      {%- endif -%}
+    </div><!-- .cart-checkout -->
+  {%- else -%}
+    {%- if settings.enable_fsa and settings.fsa_amount != blank -%}
+      {%- assign p_fsa = all_products[settings.fsa_amount] -%}
+      {%- capture a_m -%}{% render 'format_money' with p_fsa.price %}{%- endcapture -%}
+      <span class="cart-count">{{ 'cart.general.freeshipping_from_html' | t: amount: a_m }}</span>
+    {%- endif -%}
+    {%- if settings.show_payment_info -%}
+      {% render 'payment_info', img: settings.payments_img, svgs: settings.payment_svgs %}
+    {%- endif -%}
+    <span class="cart-count">{{ 'cart.general.empty' | t }}</span>
+    <ul class="items-list list-style-none"></ul>
+    <a class="btn btn-default" href="/collections/all">{{ 'cart.general.continue_shopping' | t }}</a>
+  {%- endif -%}
+{%- endif -%}

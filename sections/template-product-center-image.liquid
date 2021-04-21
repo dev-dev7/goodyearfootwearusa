@@ -1,0 +1,402 @@
+{%- liquid
+assign width = section.settings.width
+assign gap_thumbs = section.settings.gap_thumbs | divided_by: 2 | append: 'px'
+assign thumbs_style = section.settings.thumbs_style
+-%}
+
+<div class="product-layout product-layout__center-image">
+  <div class="{{ width }}">
+    <div class="product-main row space-between">
+      <div class="product-details-area position-relative">
+        {% include 'product_page_details', section: section, move_share_btn: true %}
+        {%- if settings.prd_zoom_pos == 'right' -%}
+          <div class="zoom-container"></div>
+        {%- endif -%}
+      </div>
+
+      <div class="product-img-area thumbs-bottom {{ thumbs_style }}" style="margin-left:-{{ gap_thumbs }};margin-right:-{{ gap_thumbs }}">
+        <div class="items-carousel"
+          style="padding-left:{{ gap_thumbs }};padding-right:{{ gap_thumbs }}">
+          {%- for media in product.media -%}
+            {%- if media.alt contains '[vnd_' -%}{%- continue -%}{%- endif -%}
+            {%- case media.media_type -%}
+            {%- when 'image' -%}
+              <div class="product-img" style="padding-top:{{ 100 | divided_by: media.aspect_ratio }}%" data-media="{{ media.id }}">
+                {%- capture a_attr -%}data-zoom="{{ media | img_url: 'master' }}" itemprop="image"{%- endcapture -%}
+                {%- capture image_alt -%}{{ media.alt | default: product.title }}{%- endcapture -%}
+                {% render 'image', m_img: media, image_alt: image_alt, a_attr: a_attr, add_class: 'product-images', element_type: 'image' %}
+              </div>
+            {%- when 'external_video' -%}
+              <div class="product-img media-container" style="padding-top:{{ 100 | divided_by: media.aspect_ratio }}%" data-media="{{ media.id }}">
+                {{ media | external_video_tag }}
+              </div>
+            {%- when 'video' -%}
+              <div class="product-img media-container" style="padding-top:{{ 100 | divided_by: media.aspect_ratio }}%" data-media="{{ media.id }}">
+                {{ media | video_tag: controls: true }}
+              </div>
+              {%- when 'model' -%}
+              <div class="product-img media-container" style="padding-top: 100%" data-media="{{ media.id }}">
+                {{ media | model_viewer_tag: preload: true, reveal-when-loaded: true, auto-rotate: true, camera-controls: true }}
+              </div>
+            {%- endcase -%}
+          {%- endfor -%}
+        </div><!-- .items-carousel -->
+
+        {%- if product.media.size > 1 -%}
+        <div class="thumbs-wrapper position-relative">
+          <div class="thumbs-viewport position-relative" style="padding-left:{{ gap_thumbs }};padding-right:{{ gap_thumbs }}">
+            <div class="thumbs-container position-relative">
+              {%- for media in product.media -%}
+                {%- if media.alt contains '[vnd_' -%}{%- continue -%}{%- endif -%}
+
+                {%- if media.media_type == 'model' or section.settings.thumbs_style == 'thumbs-circle' -%}
+                  {%- assign padding = 100 -%}
+                {%- else -%}
+                  {%- assign padding = 100 | divided_by: media.aspect_ratio -%}
+                {%- endif -%}
+                <div class="product-thumb">
+                  {%- if media.media_type == 'model'-%}
+                    <div class="product-thumb__link position-relative image-loading" href="#" style="padding-top:{{ padding }}%">
+                      <div class="media-type-badge">{% render 'icon-media-model' %}</div>
+                  {%- else -%}
+                    <div class="product-thumb__link position-relative image-loading" href="#" style="padding-top:{{ padding }}%">
+                    {%- if media.media_type == 'video' -%}
+                      <div class="media-type-badge">{% render 'icon-media-video' %}</div>
+                    {%- endif -%}
+                  {%- endif -%}
+                    <div class="image-bg lazyload" data-bg="{{ media | img_url: '110x', scale: 2 }}"></div>
+                  </div>
+                </div>
+              {%- endfor -%}
+            </div><!-- .thumbs-container -->
+          </div><!-- .thumbs-viewport.position-relative -->
+          {{ thumb_up_down }}
+        </div>
+        {%- endif -%}
+      </div>
+
+      <div class="product-details-summary">
+        {% render 'product_description', description: product.description, truncate: false %}
+        <a href="#" class="btn btn-text nav-to-tab-desc">{{ section.settings.nav_desc_title }}</a>
+        {%- if section.settings.show_share_btns -%}
+          {% render 'product_share' %}
+        {%- endif -%}
+      </div>
+    </div><!-- .row-->
+
+    {%- if section.settings.show_prev_next -%}
+      {% render 'product_prev_next_links' %}
+    {%- endif -%}
+  </div><!-- .container -->
+
+  {%- if section.blocks.size > 0 and section.settings.badge_position == 'bottom-full' -%}
+    {%- if section.settings.badge_style != 'classic' -%}
+      <div class="full-width product-badge__{{ section.settings.badge_style }}">
+    {%- endif -%}
+    <div class="product-badges bottom-full container row">
+      {% include 'product_badge', blocks: section.blocks, style: section.settings.badge_style %}
+    </div>
+    {%- if section.settings.badge_style != 'classic' -%}
+      </div>
+    {%- endif -%}
+  {%- endif -%}
+</div>
+{%- if section.settings.show_question_form -%}
+  {% render 'form_contact_product', name: product.title %}
+{%- endif -%}
+
+{%- capture css -%}
+#shopify-section-{{ section.id }} { margin:{{ section.settings.margin_mobile }}; }
+@media all and (min-width: 768px) {
+  #shopify-section-{{ section.id }} { margin:{{ section.settings.margin_laptop }}; }
+}
+@media all and (min-width: 1400px) {
+  #shopify-section-{{ section.id }} { margin:{{ section.settings.margin }}; }
+}
+{%- endcapture -%}
+<style>{{ css | strip_newlines | remove: '  ' }}</style>
+
+{% schema %}
+{
+  "name": "Main Information",
+  "class": "products-template",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Width, Space"
+    },
+    {
+      "type": "select",
+      "id": "width",
+      "label": "Section Width",
+      "options": [
+        { "value": "container", "label": "Fixed Width" },
+        { "value": "container-1500", "label": "1500px" },
+        { "value": "full-width-container", "label": "Full Width" }
+      ],
+      "default": "container-1500"
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "Section Margin on Desktop",
+      "info": "Set margin for section top-right-bottom-left (e.g. 20px 15px 10px 0).",
+      "default": "73px 0 170px 0"
+    },
+    {
+      "type": "text",
+      "id": "margin_laptop",
+      "label": "Section Margin on Laptop",
+      "default": "45px 0 120px 0"
+    },
+    {
+      "type": "text",
+      "id": "margin_mobile",
+      "label": "Section Margin on Mobile",
+      "default": "36px 0 75px 0"
+    },
+    {
+      "type": "header",
+      "content": "Image thumbnails"
+    },
+    {
+      "type": "select",
+      "id": "thumbs_style",
+      "label": "Thumbnails style",
+      "options": [
+        { "value": "thumbs-rect", "label": "Design1 - Rect" },
+        { "value": "thumbs-circle", "label": "Design2 - Circle" }
+      ],
+      "default": "thumbs-circle"
+    },
+    {
+      "type": "range",
+      "id": "gap_thumbs",
+      "min": 0,
+      "max": 50,
+      "label": "Space between product image and thumbnails",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Form Configuration"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_prev_next",
+      "label": "Show links to prev/next products",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_sku",
+      "label": "Show Product SKU",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "Show vendor",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_product_type",
+      "label": "Show product type",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_buy_now",
+      "label": "Show dynamic checkout button",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_question_form",
+      "label": "Show product question link",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Payment Information"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_payment_info",
+      "label": "Show payment information",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "payment_title",
+      "label": "Title",
+      "default": "Guaranteed Safe Checkout"
+    },
+    {
+      "type": "image_picker",
+      "id": "payments_img",
+      "label": "Payment information image",
+      "info": "Image size 428*32px recommended"
+    },
+    {
+      "type": "textarea",
+      "id": "payment_svgs",
+      "label": "Use SVGs instead",
+      "default": "amazon_payments, american_express, apple_pay, bitcoin, dankort, diners_club, discover, dogecoin, dwolla, forbrugsforeningen, interac, google_pay, jcb, klarna, klarna-pay-later, litecoin, maestro, master, paypal, shopify_pay, sofort, visa",
+      "info": "amazon_payments, american_express, apple_pay, bitcoin, dankort, diners_club, discover, dogecoin, dwolla, forbrugsforeningen, interac, google_pay, jcb, klarna, klarna-pay-later, litecoin, maestro, master, paypal, shopify_pay, sofort, visa"
+    },
+    {
+      "type": "header",
+      "content": "Summary"
+    },
+    {
+      "type": "text",
+      "id": "nav_desc_title",
+      "default": "See Full Description",
+      "label": "Expand button title"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_share_btns",
+      "label": "Show social sharing buttons",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Product Badges"
+    },
+    {
+      "type": "select",
+      "id": "badge_style",
+      "label": "Product badge style",
+      "options": [
+        { "value": "classic", "label": "Classic" },
+        { "value": "advanced", "label": "Advanced" },
+        { "value": "modern", "label": "Modern" }
+      ],
+      "default": "modern"
+    },
+    {
+      "type": "select",
+      "id": "badge_position",
+      "label": "Product badge position",
+      "options": [
+        { "value": "bottom-full", "label": "Full width under product images" },
+        { "value": "side-fixed", "label": "In product information column" }
+      ],
+      "default": "bottom-full"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "icon_text",
+      "name": "Badge Icon and Text",
+      "settings": [
+        {
+          "type": "text",
+          "id": "promo_icon",
+          "label": "Icon Name"
+        },
+        {
+          "type": "range",
+          "id": "icon_width",
+          "min": 20,
+          "max": 70,
+          "step": 1,
+          "unit": "px",
+          "label": "Icon Width",
+          "default": 32
+        },
+        {
+          "type": "textarea",
+          "id": "promo_title",
+          "label": "Title"
+        },
+        {
+          "type": "color",
+          "id": "color_icon",
+          "label": "Icon Color",
+          "default": "#333333"
+        },
+        {
+          "type": "color",
+          "id": "color_text",
+          "label": "Text Color",
+          "default": "#333333"
+        }
+      ]
+    },
+    {
+      "type": "image_text",
+      "name": "Badge Image and Text",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "badge_img",
+          "label": "Badge image",
+          "info": "Image size 50*50px recommended, Image type is png"
+        },
+        {
+          "type": "range",
+          "id": "img_width",
+          "min": 40,
+          "max": 240,
+          "step": 2,
+          "unit": "px",
+          "label": "Image Width",
+          "default": 80
+        },
+        {
+          "type": "textarea",
+          "id": "promo_title",
+          "label": "Title"
+        },
+        {
+          "type": "color",
+          "id": "color_text",
+          "label": "Text Color",
+          "default": "#333333"
+        }
+      ]
+    }
+  ],
+  "default": {
+    "blocks": [
+      {
+        "type": "icon_text",
+        "settings": {
+          "promo_icon": "icon-truck",
+          "icon_width": 35,
+          "promo_title": "We Shipping\nWorldWide"
+        }
+      },
+      {
+        "type": "icon_text",
+        "settings": {
+          "promo_icon": "icon-money-back-1",
+          "icon_width": 40,
+          "promo_title": "100% Money Back\nGuarantee"
+        }
+      },
+      {
+        "type": "icon_text",
+        "settings": {
+          "promo_icon": "icon-lock-wide",
+          "icon_width": 36,
+          "promo_title": "100% Secured\nPayment"
+        }
+      },
+      {
+        "type": "icon_text",
+        "settings": {
+          "promo_icon": "icon-back-smooth-1",
+          "icon_width": 31,
+          "promo_title": "14 Day Return\nPolicy"
+        }
+      }
+    ]
+  }
+}
+{% endschema %}

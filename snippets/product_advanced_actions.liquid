@@ -1,0 +1,53 @@
+{% comment %}
+Renders product actions in advanced style
+  Accepts:
+    - product: <Product>
+      = product_url: <Url> Product url
+      = available: <Boolean> If product is available
+      = variants: <Product Variants> Variants of product
+      = variant: <Variant> Single variant product
+
+  Usage:
+    {% include 'product_advanced_actions', product: product %}
+{% endcomment %}
+
+{%- unless template contains 'search' -%}
+<div class="product-actions ds-flex">
+  <div class="action-cart" title="{{ 'products.product.add_to_cart' | t }}">
+    {%- if product.available -%}
+      {%- if product.has_only_default_variant -%}
+        {%- assign f_v = product.first_available_variant -%}
+        <form method="post" action="/cart/add" enctype="multipart/form-data">
+          <input type="hidden" name="quantity" value="1" />
+          <input name="id" value="{{ f_v.id }}" type="hidden">
+          <button type="submit" class="btn btn-default btn-add-cart">
+            {% include settings.cart_icon %}
+            {%- if f_v.inventory_policy == 'continue' and f_v.inventory_quantity < 1 -%}
+              <span class="add-cart__text">{{ 'products.product.preorder' | t }}</span>
+            {%- else -%}
+              <span class="add-cart__text">{{ 'products.product.add_to_cart' | t }}</span>
+            {%- endif -%}
+            <span class="spinner"></span>
+          </button>
+        </form>
+      {%- else -%}
+        <a href="{{ product.url | within: collection }}" class="btn btn-default">
+          {% include settings.cart_icon %}
+          <span class="add-cart__text">{{ 'products.product.select_options' | t }}</span>
+        </a>
+      {%- endif -%}
+    {%- else -%}
+      <a href="{{ product.url | within: collection }}" class="btn btn-default btn-add-cart">
+        {% include settings.cart_icon %}
+        <span>{{ 'products.product.sold_out' | t }}</span>
+      </a>
+    {%- endif -%}
+  </div><!-- .action-cart -->
+
+  {%- if settings.show_action_quickview -%}
+    <a href="{{ product.url }}?view=quickview" class="btn btn-default action-quickview" title="{{ 'products.product.quickview' | t }}">
+      {% include settings.search_icon %}<span class="add-cart__text">{{ 'products.product.quickview' | t }}</span>
+    </a>
+  {%- endif -%}
+</div><!-- .product-actions -->
+{%- endunless -%}

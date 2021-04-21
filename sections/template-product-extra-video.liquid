@@ -1,0 +1,225 @@
+{% comment %}
+This section is rendered in following product templates
+  - product.liquid
+  - product.grid-images.liquid
+  - product.media-center.liquid
+{% endcomment %}
+{%- liquid
+assign show_section = section.settings.show_section
+assign width = section.settings.width
+assign layout = section.settings.layout
+assign margin = section.settings.margin
+assign cols = section.settings.cols
+assign item_space = section.settings.item_space | divided_by: 2 | plus: 0
+assign fit_margin = section.settings.fit_margin
+
+assign controls = section.settings.controls
+assign mute = section.settings.mute
+assign autoplay = section.settings.autoplay
+assign loop = section.settings.loop
+assign show_unmute = section.settings.show_unmute
+
+assign has_video = false
+for media in product.media
+  if media.alt contains '[vnd_extra]'
+    if media.media_type == 'external_video' or media.media_type == 'video'
+      assign has_video = true
+      break
+    endif
+  endif
+endfor
+-%}
+
+{%- if show_section and has_video -%}
+<div class="{{ width }}">
+  {% render 'product_video', media: product.media, extra: true, cols: cols, controls: controls, mute: mute,
+      autoplay: autoplay, loop: loop, show_unmute: show_unmute %}
+</div>
+
+{%- capture css -%}
+#shopify-section-{{ section.id }} { margin:{{ section.settings.margin_mobile }}; }
+@media all and (min-width: 768px) {
+  #shopify-section-{{ section.id }} { margin:{{ section.settings.margin_laptop }}; }
+}
+@media all and (min-width: 1400px) {
+  #shopify-section-{{ section.id }} { margin:{{ section.settings.margin }}; }
+}
+
+{%- if item_space > 0 -%}
+  #shopify-section-{{ section.id }} .product-videos{
+    {% if fit_margin %}
+      margin:0 -7px
+    {% else %}
+      border-width:7px
+    {% endif %}
+  }
+  #shopify-section-{{ section.id }} .grid-items__{{ cols }}{
+    border:7px solid transparent
+  }
+{%- endif -%}
+
+@media all and (min-width: 768px) {
+  #shopify-section-{{ section.id }} .items-container{
+    {% if fit_margin %}
+      margin:0 -{{ item_space }}px
+    {% else %}
+      border-width:{{ item_space }}px
+    {% endif %}
+  }
+  #shopify-section-{{ section.id }} .grid-items__{{ cols }}{
+    border:{{ item_space }}px solid transparent
+  }
+}
+#shopify-section-{{ section.id }} .btn-video {
+  color:{{ section.settings.c_pause }};
+  left:{{ section.settings.xp_pause }}%;
+  top:{{ section.settings.yp_pause }}%;
+}
+{%- endcapture -%}
+<style>{{ css | strip_newlines | remove: '  ' }}</style>
+
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Extra Video",
+  "tag": "section",
+  "class": "vs-video",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_section",
+      "label": "Show Section",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Section Space"
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "Section Margin on Desktop",
+      "info": "Set margin for section top-right-bottom-left (e.g. 20px 15px 10px 0).",
+      "default": "0 0 90px 0"
+    },
+    {
+      "type": "text",
+      "id": "margin_laptop",
+      "label": "Section Margin on Laptop",
+      "default": "0 0 90px 0"
+    },
+    {
+      "type": "text",
+      "id": "margin_mobile",
+      "label": "Section Margin on Mobile",
+      "default": "0 0 75px 0"
+    },
+    {
+      "type": "header",
+      "content": "Layout & Design"
+    },
+    {
+      "type": "select",
+      "id": "width",
+      "label": "Section Width",
+      "options": [
+        { "value": "container", "label": "Fixed Width" },
+        { "value": "container-1500", "label": "1500px" },
+        { "value": "full-width-container", "label": "Full Width" }
+      ],
+      "default": "full-width-container"
+    },
+    {
+      "type": "range",
+      "id": "cols",
+      "label": "Number of columns",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "default": 1,
+      "info": "Set the number of videos to show in a row."
+    },
+    {
+      "type": "range",
+      "id": "item_space",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "label": "Space between videos",
+      "default": 0
+    },
+    {
+      "type": "checkbox",
+      "id": "fit_margin",
+      "label": "Fit section width to the end",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Video Settings"
+    },
+    {
+      "type": "paragraph",
+      "content": "Below settings will not work with external videos from Youtube or Videmo."
+    },
+    {
+      "type": "checkbox",
+      "id": "controls",
+      "label": "Show video controls",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Enable autoplay of video",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "loop",
+      "label": "Loop video after finish",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "mute",
+      "label": "Mute video by default",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_unmute",
+      "label": "Show play/pause button",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "c_pause",
+      "label": "Button color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "xp_pause",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Button X position",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "yp_pause",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Button Y position",
+      "default": 50
+    }
+  ]
+}
+{% endschema %}

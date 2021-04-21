@@ -1,0 +1,26 @@
+<div role="banner" class="header header-type-6{% if config.header_sticky %} sticky-enable{% endif %}{% if settings.enable_mobile_sticky %} sticky-mobile-enable{% endif %}{% if settings.enable_mb_hd %} hide-on-mobile{% endif %}">
+  <div class="container ds-flex align-center flex-wrap">
+    {% render 'logo' %}
+
+    {%- for block in blocks -%}
+      {%- if block.type contains 'menu_' -%}
+        {%- continue -%}
+      {%- endif -%}
+      {% include 'topbar_item', item: block %}
+    {%- endfor -%}
+
+    <button class="mobile-btn">
+      <span class="mobile-btn__line"></span>
+      <span class="mobile-btn__line"></span>
+      <span class="mobile-btn__line"></span>
+    </button>
+  </div><!-- .container -->
+
+  <div class="full-width-menu">
+    <div class="container">
+      {% include 'header_menu', blocks: blocks, m_n: config.menu, a_c: config.header_menu_center, s_di: config.show_dropdown_icon %}
+    </div>
+  </div><!-- .full-width-menu -->
+</div><!-- .header-type-6 -->
+<style>.header-type-6{padding:2rem 0 0}.header-type-6 .icon-cart__count{font-weight:700}.header-type-6 .full-width-menu{margin-top:2rem}.header-type-6 .topbar-item>a{-ms-flex-direction:column;flex-direction:column;padding:.5rem 1.2rem;font-size:1rem;line-height:1.9}.header-type-6 .topbar-item:nth-of-type(1){margin-left:auto}@media all and (min-width: 768px){.header-type-6 .icon-cart svg{height:1.8rem}}@media all and (min-width: 992px){.header-type-6{padding:2.5rem 0 0}.header-type-6 .search-box-popup .search-input-container{right:3.1rem}.header-type-6 .full-width-menu{margin-top:2.5rem}.header-type-6 .header-menu-item>a{-ms-flex-pack:center;justify-content:center;padding-top:1.6rem;padding-bottom:1.6rem}.header-type-6 .header-menu-item:first-child>a{padding-left:0}.header-type-6 .header-menu-item:last-child>a{padding-right:0}.header-type-6 .icon-cart svg{height:1.9rem}.header-type-6 .topbar-item:nth-of-type(1){margin-right:auto}.header-type-6 .header-menu-list{-ms-flex-pack:justify;justify-content:space-between}.sticky-active .full-width-menu{display:none}}@media all and (min-width: 1200px){.header-type-6>.container{padding-right:0}}@media all and (min-width: 1400px){.header-type-6{padding:4.5rem 0 0}.header-type-6 .full-width-menu{margin-top:4.5rem}.header-type-6 .header-menu-item>a{padding-top:2.6rem;padding-bottom:2.6rem}.header-type-6 .topbar-item>a{padding:.9rem 1.7rem}}@media all and (max-width: 1399px){.header-type-6 .header-menu-item{font-size:1.3rem}}@media (max-width: 991px){.header-type-6{padding-top:2.4rem}.header-type-6.sticky-active .full-width-menu{margin-top:0;border:0}.header-type-6 .mobile-btn{margin-left:1.2rem}.header-type-6 .search-button{padding:0}}
+</style>

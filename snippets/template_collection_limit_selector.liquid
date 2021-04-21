@@ -1,0 +1,36 @@
+{% comment %}
+Renders show options in collections page
+  - design: <String> classic / advanced design of filter elements
+  - limit_num: <Number> default pagination limit
+  - page_sizer_nums: <String> pagination strings
+
+  Usage:
+  {% render 'template_collection_limit_selector', design: filter_design, limit_num: limit_num, page_sizer_nums: page_sizer_nums %}
+{% endcomment %}
+{%- assign show_options = page_sizer_nums | remove: ' ' | split: ',' -%}
+{%- assign limit_num = limit_num | downcase -%}
+{%- if design == 'advanced' -%}
+{%- capture list -%}
+{%- for option in show_options -%}
+  {%- assign class_name = 'dd-pp__item' -%}
+  {%- if option == limit_num -%}
+    {%- assign class_name = 'dd-pp__item active' -%}
+  {%- endif -%}
+  <span data-value="{{ option }}" class="{{ class_name }}">{{ 'collections.general.show_html' | t: num: option }}</span>
+{%- endfor -%}
+{%- endcapture -%}
+<div class="group-wrapper dd-pp__wrp position-relative">
+  <a id="group-by" class="ds-flex align-center collection-group__by dd-pp__atv" title="{{ d_name }}" href="#"><span>{{ 'collections.general.show_html' | t: num: limit_num }}</span>{% render 'icon-dir-down' %}</a>
+  <div class="dd-pp__list">
+    <a href="#" class="dd-pp__close ds-block">{% render 'icon-close' %}</a>
+    {{ list }}
+  </div>
+</div>
+{%- else -%}
+<select id="group-by" class="group-wrapper collection-group__by" name="{{ limit }}">
+  {%- for option in show_options -%}
+    {%- assign option = option | plus: 0 -%}
+    <option value="{{ option }}" {% if option == limit_num %}selected="selected"{% endif %}>{{ 'collections.general.show_html' | t: num: option }}</option>
+  {%- endfor -%}
+</select>
+{%- endif -%}

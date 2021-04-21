@@ -1,0 +1,78 @@
+<div class="container template-customer">
+  <h1 class="page-title">{{ 'customer.register.title' | t }}</h1>
+  <p class="page-description">{{ 'contact.page_description' | t }}</p>
+  <div class="row">
+    <div class="medium-6 col-padding vb-form">
+      {%- assign formId = 'RegisterForm' -%}
+      {% form 'create_customer', id: formId, novalidate: 'novalidate' %}
+        {% render 'form_status', form: form, form_id: formId %}
+
+        <div class="ds-flex align-center">
+          <label for="{{ formId }}-FirstName">{{ 'customer.register.first_name' | t }}</label>
+          <input
+            type="text"
+            name="customer[first_name]"
+            id="{{ formId }}-FirstName"
+            {% if form.first_name %}value="{{ form.first_name }}"{% endif %}
+            autocomplete="given-name"
+            placeholder="{{ 'customer.register.first_name' | t }}"
+          >
+        </div>
+
+        <div class="ds-flex align-center">
+          <label for="{{ formId }}-LastName">{{ 'customer.register.last_name' | t }}</label>
+          <input
+            type="text"
+            name="customer[last_name]"
+            id="{{ formId }}-LastName"
+            {% if form.last_name %}value="{{ form.last_name }}"{% endif %}
+            placeholder="{{ 'customer.register.last_name' | t }}"
+            autocomplete="family-name">
+        </div>
+
+        <div class="ds-flex align-center">
+          <label for="{{ formId }}-email">{{ 'customer.register.email' | t }}</label>
+          <input
+            type="email"
+            name="customer[email]"
+            id="{{ formId }}-email"
+            class="{% if form.errors contains 'email' %} input-error{% endif %}"
+            {% if form.email %} value="{{ form.email }}"{% endif %}
+            autocorrect="off"
+            autocapitalize="off"
+            autocomplete="email"
+            aria-required="true"
+            {%- if form.errors contains 'email' -%}
+              class="input-error"
+              aria-invalid="true"
+              aria-describedby="{{ formId }}-email-error"
+            {%- endif -%}
+            placeholder="{{ 'general.password_page.signup_form_email_placeholder' | t }}*"
+            required="required"
+          >
+        </div>
+
+        <div class="ds-flex align-center">
+          <label for="{{ formId }}-password">{{ 'customer.register.password' | t }}</label>
+          <input
+            type="password"
+            name="customer[password]"
+            id="{{ formId }}-password"
+            class="{% if form.errors contains 'password' %} input-error{% endif %}"
+            aria-required="true"
+            {%- if form.errors contains 'password' -%}
+              class="input-error"
+              aria-invalid="true"
+              aria-describedby="{{ formId }}-password-error"
+            {%- endif -%}
+            placeholder="{{ 'general.password_page.login_form_password_placeholder' | t }}*"
+            required="required"
+          >
+        </div>
+
+        <button class="btn btn-default">{{ 'customer.register.title' | t }}</button>
+
+      {% endform %}
+    </div>
+  </div>
+</div>

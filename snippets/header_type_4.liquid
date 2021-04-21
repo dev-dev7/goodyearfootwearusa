@@ -1,0 +1,39 @@
+<div role="header" class="header header-type-4{% if config.header_sticky %} sticky-enable{% endif %}{% if settings.enable_mobile_sticky %} sticky-mobile-enable{% endif %}{% if settings.enable_mb_hd %} hide-on-mobile{% endif %}">
+  <div class="container ds-flex align-center flex-wrap">
+
+    <div class="logo-container">
+      {% render 'logo' %}
+    </div><!-- .logo-container -->
+
+    <button class="mobile-btn">
+      <span class="mobile-btn__line"></span>
+      <span class="mobile-btn__line"></span>
+      <span class="mobile-btn__line"></span>
+    </button>
+
+    {% include 'header_menu', blocks: blocks, m_n: config.menu, a_c: config.header_menu_center, s_di: config.show_dropdown_icon %}
+
+    {%- assign add_sticky_cart = true -%}
+
+    <div class="links-group ds-flex align-center{% if config.header_menu_center %} ml-0{% endif %}">
+      {%- for block in blocks -%}
+        {%- if block.type contains 'menu_' -%}
+          {%- continue -%}
+        {%- endif -%}
+        {%- if block.type == 'cart' -%}
+          {%- assign add_sticky_cart = false -%}
+        {%- endif -%}
+        {% include 'topbar_item', item: block %}
+      {%- endfor -%}
+    </div>
+
+    {%- if add_sticky_cart -%}
+      <div class="topbar-item sticky-header_cart cart-wrapper">
+        {% include 'cart_dropdown', cart_style: 'only_icon', amount_pos: 'left' %}
+      </div><!-- .topbar-item -->
+    {%- endif -%}
+
+  </div><!-- .container -->
+</div><!-- .header-type-4 -->
+
+<style>.header-type-4{padding:1.6rem 0}.header-type-4 .cart-wrapper .icon-cart svg{margin:0}.header-type-4 .header-search__button{margin:0 5px}@media all and (min-width: 992px){.header-type-4 .header-menu-item>a{padding-top:1.5rem;padding-bottom:1.5rem}.header-type-4 .links-group:not(.ml-0){margin-left:3rem}}@media all and (min-width: 1400px){.header-type-4{padding:3.1rem 0}.header-type-4 .header-menu-item>a{padding-top:1.5rem;padding-bottom:1.5rem}.header-type-4 .links-group:not(.ml-0){margin-left:5rem}}@media (max-width: 480px){.header-type-4 .vpp-atv,.header-type-4 .vnd-ic-link,.header-type-4 .cart-wrapper .icon-cart{padding:1.5rem 1.2rem}}.sticky-active.header-type-4 .search-box-fixed .search-input-container{position:absolute;right:100%;left:auto;opacity:0;visibility:hidden;transition:all .35s}.sticky-active.header-type-4 .search-box-fixed:hover .search-input-container{opacity:1;visibility:visible}.sticky-active .search-form{display:flex;display:-ms-flexbox}</style>

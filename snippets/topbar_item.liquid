@@ -1,0 +1,197 @@
+{% comment %}
+Renders topbar items regarding to their type
+  Accepts:
+    - item: <Block> item to show
+
+  Usage:
+    {% include 'topbar_item', item: block %}
+{% endcomment %}
+{%- liquid
+if item.settings.icon != blank and item.settings.title != blank
+  assign hs = ' has-space'
+else
+  assign hs = ''
+endif
+-%}
+
+{%- case item.type -%}
+{%- when 'login' -%}
+{%- if shop.customer_accounts_enabled -%}
+<div class="topbar-item{{ hs }}" id="block-{{ item.id }}1" {{ item.shopify_attributes }}>
+{%- if customer -%}
+  <a href="/account/logout" class="ds-flex align-center link-logout" data-no-instant>
+    {% if item.settings.icon != blank %}
+      {% render 'icon-return-1' %}
+    {% endif %}
+    <span class="header__icon-text">{{ 'customer.logout.title' | t }}</span>
+  </a>
+</div>
+<div class="topbar-item" id="block-{{ item.id }}2">
+  <a href="/account" class="ds-flex align-center" data-no-instant>
+    {% include 'include_icon', icon_name: item.settings.icon %}
+    <span class="header__icon-text">{{ 'customer.account.title' | t }}</span>
+  </a>
+{%- else -%}
+  {%- if settings.enable_login_popup -%}
+    <a href="#account-popup" class="vpp-atv ds-flex align-center" data-no-instant>
+      {% include 'include_icon', icon_name: item.settings.icon %}
+      <span class="header__icon-text">{{ item.settings.text }}</span>
+    </a>
+  {%- else -%}
+    <a href="/account/login" class="ds-flex align-center" data-no-instant>
+      {% include 'include_icon', icon_name: item.settings.icon %}
+      <span class="header__icon-text">{{ item.settings.text }}</span>
+    </a>
+  {%- endif -%}
+{%- endif -%}
+</div><!-- .topbar-item -->
+{%- endif -%}
+
+
+{%- when 'currency' -%}
+{%- if settings.show_multiple_currencies -%}
+<div class="topbar-item dropdown-items{{ hs }}">
+  {%- assign supported_codes = settings.supported_currencies | split: ' ' -%}
+  {%- assign cart_iso_code = cart.currency.iso_code -%}
+  <a href="#" class="selected-currency ds-flex align-center" data-no-instant>
+    <span class="flag-name ds-flex align-center">
+      {% if settings.show_currency_flag %}
+        <span class="currency-flag currency-flag-{{ cart_iso_code | downcase }}"></span>
+      {% endif %}
+      {{ cart_iso_code }}
+    </span>
+    {% render 'icon-dir-down' %}
+  </a>
+
+  <ul class="dropdown-items__picker currency-picker text-center" name="currencies">
+    {%- if settings.currency_spt_type == 'theme' -%}
+      {%- for code in supported_codes -%}
+        <li class="currency-item{% if code == cart_iso_code %} selected{% endif %}" data-currency="{{ code }}">{% if settings.show_currency_flag %}<span class="currency-flag currency-flag-{{ code | downcase }}"></span>{% endif %}{{ code }}</li>
+      {%- endfor -%}
+    {%- else -%}
+      {%- for code in shop.enabled_currencies -%}
+        <li class="currency-item{% if code.iso_code == cart_iso_code %} selected{% endif %}" data-currency="{{ code.iso_code }}">{% if settings.show_currency_flag %}<span class="currency-flag currency-flag-{{ code.iso_code | downcase }}"></span>{% endif %}{{ code.iso_code }}</li>
+      {%- endfor -%}
+    {%- endif -%}
+  </ul>
+
+  <div class="ds-none">
+    {% form 'currency' %}
+      {{ form | currency_selector }}
+    {% endform %}
+  </div>
+</div><!-- .topbar-item -->
+{%- endif -%}
+
+
+{%- when 'cart' -%}
+<div class="topbar-item cart-wrapper{{ hs }}" id="block-{{ item.id }}">
+  {% include 'cart_dropdown', cart_style: item.settings.header_cart_style, amount_pos: item.settings.amount_pos %}
+</div><!-- .topbar-item -->
+
+
+{%- when 'language' -%}
+<div class="topbar-item dropdown-items language-wrapper">
+  {%- if item.settings.lang_type == 'lang-external' and linklists[item.settings.lang_menu] != blank -%}
+    {%- assign links = linklists[item.settings.lang_menu].links -%}
+    {%- assign current_link = links | where: "current", true | first -%}
+    {%- if current_link == blank -%}
+      {%- assign current_link = links.first -%}
+    {% else %}
+      {{ current_link.last.title }}
+    {%- endif -%}
+    <a href="{{ current_link.url }}" class="ds-flex align-center">{{ current_link.title }}{% render 'icon-dir-down' %}</a>
+
+    <ul class="dropdown-items__picker">
+      {%- for link in links -%}
+        {%- unless link == current_link -%}
+          <li class="dropdown-item">
+            <a href="{{ link.url }}">{{ link.title }}</a>
+          </li>
+        {%- endunless -%}
+      {%- endfor -%}
+    </ul>
+  {%- endif -%}
+</div><!-- .topbar-item -->
+
+
+{%- when 'html' -%}
+<div class="topbar-item"><span class="ds-block">{{ item.settings.title }}</span></div>
+
+
+{%- when 'search_box' -%}
+<div class="topbar-item topbar-item-search hover-bg-none{{ hs }}" id="block-{{ item.id }}">
+  {% render 'search_form', search_style: item.settings.search_style, search_icon: item.settings.search_icon, border: item.settings.search_btn_border, categories: item.settings.categories, cat_type: item.settings.cat_type, btn_title: item.settings.search_title %}
+</div>
+
+
+{%- when 'wishlist' -%}
+<div class="topbar-item {{ item.settings.item_count_pos }}{{ hs }}" id="block-{{ item.id }}" {{ item.shopify_attributes }}>
+  {%- if item.settings.item_count_pos == 'item-count__default' -%}
+    <a href="{{ settings.wishlist_link }}" class="ds-flex align-center">
+      {% include 'include_icon', icon_name: item.settings.icon %}
+      <span class="item-subject">{{ item.settings.title }}(<span class="wishlist-count">0</span><span>)</span></span>
+    </a>
+  {%- else -%}
+    <a href="{{ settings.wishlist_link }}" class="ds-flex align-center">
+      <div class="position-relative">
+        {% include 'include_icon', icon_name: item.settings.icon %}
+        <span class="wishlist-count">0</span>
+      </div>
+      <span class="item-subject">{{ item.settings.title }}</span>
+    </a>
+  {%- endif -%}
+</div><!-- .topbar-item -->
+
+
+{%- when 'compare' -%}
+<div class="topbar-item {{ item.settings.item_count_pos }}{{ hs }}" id="block-{{ item.id }}" {{ item.shopify_attributes }}>
+  {%- if item.settings.item_count_pos == 'item-count__default' -%}
+    <a href="{{ settings.compare_link }}" class="ds-flex align-center">
+      {% include 'include_icon', icon_name: item.settings.icon %}
+      <span class="item-subject">{{ item.settings.title }}(<span class="compare-count">0</span>)</span>
+    </a>
+  {%- else -%}
+    <a href="{{ settings.compare_link }}" class="ds-flex align-center">
+      <div class="ds-flex align-center position-relative">
+        {% include 'include_icon', icon_name: item.settings.icon %}
+        <span class="compare-count">0</span>
+      </div>
+      <span class="item-subject">{{ item.settings.title }}</span>
+    </a>
+  {%- endif -%}
+</div><!-- .topbar-item -->
+
+
+{%- when 'checkout' -%}
+<div class="topbar-item{{ hs }}" id="block-{{ item.id }}" {{ item.shopify_attributes }}>
+  <a href="/checkout" class="ds-flex align-center btn-checkout">
+    {% include 'include_icon', icon_name: item.settings.icon %}{{ item.settings.title }}
+  </a>
+</div><!-- .topbar-item -->
+
+
+{%- when 'dropdown' -%}
+<div class="topbar-item dropdown-items{{ hs }}" id="block-{{ item.id }}" {{ item.shopify_attributes }}>
+  <a href="{{ item.settings.title_link }}" class="ds-flex align-center">{{ item.settings.title }}{% render 'icon-dir-down' %}</a>
+  {%- if item.settings.types != blank -%}
+    {%- assign types = item.settings.types | strip_newlines | strip | replace: ', ', ',' | replace: ' ,', ',' | split: ',' -%}
+    <ul class="dropdown-items__picker text-center" name="brands">
+      {%- for type in types -%}
+        <li class="dropdown-item{% if collection.current_type == type %} is-selected{% endif %}">{{ type | link_to_type }}</li>
+      {%- endfor -%}
+    </ul>
+  {%- endif -%}
+</div><!-- .topbar-item -->
+
+
+{%- else -%}
+{%- if item.settings.title != blank or item.settings.icon != blank -%}
+<div class="topbar-item{{ hs }}" id="block-{{ item.id }}" {{ item.shopify_attributes }}>
+  <a href="{{ item.settings.button_link }}" class="ds-flex align-center">
+    {% include 'include_icon', icon_name: item.settings.icon %}
+    <span class="item-subject">{{ item.settings.title }}</span>
+  </a>
+</div><!-- .topbar-item -->
+{%- endif -%}
+{%- endcase -%}

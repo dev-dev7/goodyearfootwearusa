@@ -1,0 +1,48 @@
+<div class="sub-collection list-collections">
+  <div class="container">
+    <div class="row">
+      <div class="large-{% if settings.collection_sidebar_pos != 'none' %}9 height-100{% else %}12{% endif %} col-padding grid">
+        <div class="row list-collections__round vertical-default">
+          {%- assign list = linklists[settings.collection_sidebar_menu] -%}
+          {%- for link in list.links -%}
+            {%- if link.type == 'collection_link' and link.object.handle == collection.handle -%}
+              {%- for sublink in link.links -%}
+                {%- if sublink.type == 'product_link' -%}
+                  {%- assign child_product = all_products[sublink.object.handle] -%}
+                  <div class="grid-items__4 collection-card__wrapper">
+                    {% include 'product_card_vertical_default', product: child_product %}
+                  </div>
+                {%- elsif sublink.type == 'collection_link' and sublink.object.handle != collection.handle -%}
+                  {%- assign sub_collection = collections[sublink.object.handle] -%}
+                  {% render 'collection_card' with sub_collection %}
+                {%- endif -%}
+              {%- endfor -%}
+            {%- else -%}
+              {%- for sublink in link.links -%}
+                {%- if sublink.type == 'collection_link' and sublink.object.handle == collection.handle -%}
+                  {%- for level2 in sublink.links -%}
+                    {%- if level2.type == 'product_link' -%}
+                      {%- assign child_product = all_products[level2.object.handle] -%}
+                      <div class="grid-items__4 collection-card__wrapper">
+                        {% include 'product_card_vertical_default', product: child_product %}
+                      </div>
+                    {%- elsif level2.type == 'collection_link' and level2.object.handle != collection.handle -%}
+                      {%- assign sub_collection = collections[level2.object.handle] -%}
+                      {% render 'collection_card' with sub_collection %}
+                    {%- endif -%}
+                  {%- endfor -%}
+                {%- endif -%}
+              {%- endfor -%}
+            {%- endif -%}
+          {%- endfor -%}
+        </div><!-- .row -->
+      </div><!-- .large-9 -->
+
+      {%- if settings.collection_sidebar_pos != 'none' -%}
+        <div class="large-3 col-padding height-100 mobile-sidebar {{ settings.collection_sidebar_pos }}">
+          {% render 'collection_sidebar' %}
+        </div><!-- .large-3.mobile-sidebar -->
+      {% endif %}
+    </div><!-- .row -->
+  </div><!-- .container -->
+</div><!-- .sub-collection -->

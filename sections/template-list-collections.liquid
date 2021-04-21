@@ -1,0 +1,110 @@
+{%- liquid
+assign limit_num = section.settings.col_num | times: section.settings.row_num
+assign col_num = section.settings.col_num
+assign card_style = section.settings.card_style
+-%}
+
+<div class="container">
+  <div class="row">
+    <div class="large-{% if settings.collection_sidebar_pos != 'none' %}9 height-100{% else %}12{% endif %} col-padding grid" id="collectionsContent">
+
+      <h1 class="page-title">{{ 'collections.list_collections.title' | t }}</h1>
+
+      <div class="row list-collections__{{ card_style }}">
+        {%- for block in section.blocks -%}
+          {%- assign collection = collections[block.settings.collection] -%}
+          {% render 'collection_card' with collection, col_num: col_num, card_style: card_style %}
+        {%- else -%}
+          {%- for collection in collections limit: limit_num -%}
+            {% render 'collection_card' with collection, col_num: col_num, card_style: card_style %}
+          {%- endfor -%}
+        {%- endfor -%}
+      </div>
+    </div><!-- .large-9 / .large-12 -->
+
+    {%- if settings.collection_sidebar_pos != 'none' -%}
+      <div class="mobile-sidebar large-3 height-100 col-padding {{ settings.collection_sidebar_pos }}">
+        {% render 'collection_sidebar' %}
+      </div><!-- .mobile-sidebar.large-3 -->
+      <div class="mobile-sidebar-toggler">
+        {% render 'icon-dir-left' %}
+      </div><!-- .mobile-sidebar-toggler -->
+    {% endif %}
+  </div><!-- .row -->
+</div><!-- .container -->
+
+{% style %}
+.list-collections {
+  margin: {{ section.settings.margin }}
+}
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "Collections List",
+  "tag": "section",
+  "class": "list-collections",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "You can add collections manually by adding content blocks above. If there is no block, then all collections will be listed."
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "Section margin",
+      "info": "Set margin for section top-right-bottom-left (e.g. 20px 15px 10px 0)",
+      "default": "60px 0 180px 0"
+    },
+    {
+      "type": "select",
+      "id": "card_style",
+      "label": "Item Style",
+      "options": [
+        { "value": "rect", "label": "Rectangle" },
+        { "value": "round", "label": "Round" }
+      ],
+      "default": "rect"
+    },
+    {
+      "type": "select",
+      "id": "col_num",
+      "label": "Number of Collections Per Row",
+      "options": [
+        { "value": "2", "label": "2" },
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4" },
+        { "value": "5", "label": "5" },
+        { "value": "6", "label": "6" }
+      ],
+      "default": "4"
+    },
+    {
+      "type": "select",
+      "id": "row_num",
+      "label": "Number of Rows",
+      "options": [
+        { "value": "2", "label": "2" },
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4" },
+        { "value": "5", "label": "5" },
+        { "value": "6", "label": "6" }
+      ],
+      "default": "3"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection",
+      "name": "Collection",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Select Collection"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,103 @@
+{%- liquid
+assign limit_num = section.settings.col_num | times: section.settings.row_num
+assign col_num = section.settings.col_num
+assign card_style = section.settings.card_style
+-%}
+
+<div style="margin: {{ section.settings.margin }};">
+  <div class="container">
+    {%- if section.settings.title != blank -%}
+      <h1 class="block-title">{{ section.settings.title }}</h1>
+    {%- endif -%}
+
+    <div class="row justify-center list-collections__{{ card_style }}">
+      {%- for block in section.blocks limit: limit_num -%}
+        {%- assign collection = collections[block.settings.collection] -%}
+        {% render 'collection_card' with collection, col_num: col_num, card_style: card_style %}
+      {%- endfor -%}
+    </div><!-- .row -->
+  </div><!-- .container -->
+</div>
+
+{% schema %}
+{
+  "name": "Collections Grid",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "Section margin",
+      "info": "sequence: top-right-bottom-left (ex: 10px 0 10px 0)",
+      "default": "0 0 140px 0"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section title",
+      "default": "Shop by department"
+    },
+    {
+      "type": "select",
+      "id": "card_style",
+      "label": "Item Style",
+      "options": [
+        { "value": "rect", "label": "Rectangle" },
+        { "value": "round", "label": "Round" }
+      ],
+      "default": "round"
+    },
+    {
+      "type": "select",
+      "id": "col_num",
+      "label": "Number of Collections Per Row",
+      "options": [
+        { "value": "2", "label": "2" },
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4" },
+        { "value": "5", "label": "5" },
+        { "value": "6", "label": "6" }
+      ],
+      "default": "4"
+    },
+    {
+      "type": "select",
+      "id": "row_num",
+      "label": "Number of Rows",
+      "options": [
+        { "value": "2", "label": "2" },
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4" },
+        { "value": "5", "label": "5" },
+        { "value": "6", "label": "6" }
+      ],
+      "default": "3"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection",
+      "name": "Collection",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "Collections Grid",
+    "category": "Collections",
+    "blocks": [
+      { "type": "collection" },
+      { "type": "collection" },
+      { "type": "collection" },
+      { "type": "collection" },
+      { "type": "collection" },
+      { "type": "collection" }
+    ]
+  }]
+}
+{% endschema %}

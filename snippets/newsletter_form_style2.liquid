@@ -1,0 +1,52 @@
+{% comment %}
+Renders newsletter form style 2,3
+  Accepts:
+    - section: {Object} content type - section/block
+      = title: {String} newsletter form title
+      = description: {String} Newsletter form description
+      = style: {Number} newsletter form style (values: 2, 3)
+
+  Usage:
+    {% render 'newsletter_form_style2', section: section %}
+    {% render 'newsletter_form_style2', section: block %}
+{% endcomment %}
+
+<style>
+#shopify-section-{{ section.id }} .title{color:{{ section.settings.color_title}}}
+#shopify-section-{{ section.id }} .newsletter-subtitle{color:{{section.settings.color_desc}}}
+#shopify-section-{{ section.id }} .style3 .form-newsletter{background-color:{{section.settings.c_form_bg}}}
+#shopify-section-{{ section.id }} input{background-color:{{section.settings.color_input_bg}};color:{{section.settings.color_input}}}
+#shopify-section-{{ section.id }} .btn-icon svg{fill:{{ section.settings.color_btn_bg}}}
+#shopify-section-{{ section.id }} .btn-icon:hover svg{fill:{{section.settings.color_btn_hover}}}
+{%- if section.settings.style == '3'-%}
+@media all and (min-width: 1400px) {#shopify-section-{{ section.id }} {width:{{ section.settings.section_width }}}}
+#shopify-section-{{ section.id }} .style3 h3{background-color:{{ section.settings.c_title_bg }}}
+{%- endif -%}
+</style>
+
+<div class="newsletter newsletter-form container ds-flex align-center style{{ section.settings.style }}">
+  <div class="form-container ds-flex align-center">
+    <h3 class="title">{{ section.settings.title | newline_to_br }}</h3>
+    {%- if settings.newsletter_service == 'shopify-default' -%}
+      {% form 'customer', class: 'form-newsletter position-relative ds-flex justify-center flex-column', id: form.id %}
+        <p class="newsletter-subtitle">{{ section.settings.description | newline_to_br }}</p>
+        {% render 'form_status', form: form, form_id: formId, success_message: 'general.newsletter_form.confirmation' | t %}
+        {% unless form.posted_successfully? %}
+          <div class="position-relative">
+            <input type="hidden" name="contact[tags]" value="newsletter">
+            <input type="email" name="contact[email]" class="input-strict" value="{% if customer %}{{ customer.email }}{% endif %}" placeholder="{{ 'general.newsletter_form.email_placeholder' | t }}" autocorrect="off" autocapitalize="off" required>
+            <button type="submit" name="commit" class="btn-icon">{% render 'icon-arrow-right' %}</button>
+          </div>
+        {% endunless %}
+      {% endform %}
+    {%- else -%}
+      <form class="form-newsletter position-relative ds-flex justify-center flex-column" action="{{ settings.newsletter_form_action }}" method="post" name="mc-embedded-subscribe-form">
+        <p class="newsletter-subtitle">{{ section.settings.description | newline_to_br }}</p>
+        <div class="position-relative">
+          <input class="input-strict" placeholder="{{ 'general.newsletter_form.email_placeholder' | t }}" type="email" value="{% if customer %}{{ customer.email }}{% endif %}" name="EMAIL" required/>
+          <button type="submit" class="btn-icon">{% render 'icon-arrow-right' %}</button>
+        </div>
+      </form>
+    {%- endif -%}
+  </div><!-- .form-container -->
+</div><!-- .newsletter -->

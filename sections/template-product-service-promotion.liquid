@@ -1,0 +1,203 @@
+{%- if section.settings.show_promo -%}
+<div class="service-promotion{% if section.settings.show_border %} show_border{% endif %}">
+  <div class="container">
+    {%- if section.settings.title != blank -%}
+      <h3 class="block-title">{{ section.settings.title }}</h3>
+    {%- endif -%}
+    <div class="row" style="margin:0 -{{section.settings.item_space}}px">
+      {%- assign count = section.settings.row_size -%}
+      {%- for block in section.blocks -%}
+        <div class="promotion-item__wrapper large-{{ 12 | divided_by: count }} split{% if section.settings.split_border %} split-border{% endif %}" {{ block.shopify_attributes }}>
+          {% include 'promotion', promo_icon: block.settings.promo_icon, promo_title: block.settings.promo_title, promo_text: block.settings.promo_text %}
+        </div>
+      {%- endfor -%}
+    </div><!-- .row -->
+  </div><!-- .container -->
+</div><!-- .service-promotion -->
+{%- capture styles -%}
+#shopify-section-{{ section.id }}{
+  margin:{{ section.settings.margin_mobile }}
+}
+#shopify-section-{{ section.id }} .service-promotion{
+  background-color:{{ section.settings.bg }}
+}
+#shopify-section-{{ section.id }} .promo-container{
+  margin:0 {{ section.settings.item_space }}px;
+  padding:{{ section.settings.item_padding }};
+  background-color:{{ section.settings.item_bg }}
+}
+#shopify-section-{{ section.id }} .promo-icon{
+  color:{{ section.settings.c_icon | default: settings.c_theme }}
+}
+#shopify-section-{{ section.id }} .promo-title{
+  color:{{ section.settings.c_title }}
+}
+#shopify-section-{{ section.id }} .promo-text{
+  color:{{ section.settings.c_text }}
+}
+@media screen and (min-width: 768px) {
+  #shopify-section-{{ section.id }}{
+    margin:{{ section.settings.margin_laptop }}
+  }
+}
+@media screen and (min-width: 992px){
+  #shopify-section-{{ section.id }} .promotion-item__wrapper {
+    margin:{{ section.settings.padding }};
+  }
+}
+@media screen and (min-width: 1400px) {
+  #shopify-section-{{ section.id }}{
+    margin:{{ section.settings.margin }}
+  }
+}
+{%- endcapture -%}
+<style>{{ styles | strip_newlines | remove: '  ' }}</style>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Service Promotion Type 2",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_promo",
+      "label": "Show section",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "bg",
+      "label": "Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Title"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_border",
+      "label": "Show top and bottom border",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "split_border",
+      "label": "Show border between items",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "row_size",
+      "label": "Block count in one row",
+      "options": [
+        {"value": "1", "label": "1"},
+        {"value": "2", "label": "2"},
+        {"value": "3", "label": "3"},
+        {"value": "4", "label": "4"},
+        {"value": "5", "label": "5"},
+        {"value": "6", "label": "6"}
+      ],
+      "default": "4"
+    },
+    {
+      "type": "text",
+      "id": "item_padding",
+      "label": "Item padding",
+      "info": "Set item padding - top-right-bottom-left (e.g. 20px 15px 10px 0)",
+      "default": "22px 22px 22px 22px"
+    },
+    {
+      "type": "range",
+      "id": "item_space",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "label": "Space between items",
+      "default": 15
+    },
+    {
+      "type": "color",
+      "id": "item_bg",
+      "label": "Item background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "c_icon",
+      "label": "Icon color"
+    },
+    {
+      "type": "color",
+      "id": "c_title",
+      "label": "Title color",
+      "default": "#33393e"
+    },
+    {
+      "type": "color",
+      "id": "c_text",
+      "label": "Text color",
+      "default": "#999999"
+    },
+    {
+      "type": "header",
+      "content": "Space settings",
+      "info": "top-right-bottom-left (e.g. 20px 15px 10px 0)"
+    },
+    {
+      "type": "paragraph",
+      "content": "Set space between other sections"
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "Section margin on desktop",
+      "default": "170px 0 0 0"
+    },
+    {
+      "type": "text",
+      "id": "margin_laptop",
+      "label": "Margin on laptop",
+      "default": "90px 0 0 0"
+    },
+    {
+      "type": "text",
+      "id": "margin_mobile",
+      "label": "Margin on mobile",
+      "default": "50px 0 0 0"
+    },
+    {
+      "type": "text",
+      "id": "padding",
+      "label": "Section padding",
+      "default": "35px 0 35px 0"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "icon-text",
+      "name": "Icon and Text",
+      "settings": [
+        {
+          "type": "text",
+          "id": "promo_icon",
+          "label": "Icon Name [Browse icons](https://docs.flexkitux.com/pages/icons-list.html)"
+        },
+        {
+          "type": "textarea",
+          "id": "promo_title",
+          "label": "Title"
+        },
+        {
+          "type": "textarea",
+          "id": "promo_text",
+          "label": "Text"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,184 @@
+<div class="text-icon {{ section.settings.section_width }} container ds-flex align-center flex-wrap">
+  {%- for block in section.blocks -%}
+    <div class="text-icon__block ds-flex align-center content-align-{{ section.settings.section_align }}">
+      {% include 'include_icon', icon_name: block.settings.item_icon %}
+      <div style="color: {{ section.settings.color_text }};">
+        <span class="title">{{ block.settings.item_title }}</span>
+        <span class="sub-text">{{ block.settings.item_text }}</span>
+      </div>
+    </div><!-- .text-icon__block -->
+  {%- endfor -%}
+</div><!-- .text-icon -->
+<style>
+#shopify-section-{{ section.id }}{
+  margin:{{ section.settings.section_margin }};
+  background-color:{{ section.settings.color_section_bg | default: settings.c_theme }}
+}
+#shopify-section-{{ section.id }} svg{
+  width:{{ section.settings.size_icon }}px;
+  fill:{{ section.settings.color_icon }}
+}
+#shopify-section-{{ section.id }} .text-icon__block:after{
+  border-color:{{ section.settings.color_icon_seperator }}
+}
+#shopify-section-{{ section.id }} .text-icon__block{
+  font-size:{{ section.settings.size_font }}px
+}
+@media all and (max-width: 767px) {
+  #shopify-section-{{ section.id }} .text-icon__block{
+    padding:7px 0
+  }
+}
+@media all and (min-width: 768px) {
+  #shopify-section-{{ section.id }} .text-icon__block{
+    padding:{{ section.settings.padding }}
+  }
+}
+</style>
+{% schema %}
+{
+  "name": "Text With Icon",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Settings"
+    },
+    {
+      "type": "color",
+      "id": "color_section_bg",
+      "label": "Section background color"
+    },
+    {
+      "type": "text",
+      "id": "section_margin",
+      "label": "Section margin",
+      "info": "sequence: top-right-bottom-left (ex: 10px 0 10px 0)"
+    },
+    {
+      "type": "text",
+      "id": "padding",
+      "label": "Section padding",
+      "default": "7px 0 7px 0",
+      "info": "sequence: top-right-bottom-left (ex: 7px 0 7px 0)"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Section Width",
+      "options": [
+        { "value": "container", "label": "Container" },
+        { "value": "full-width-container", "label": "Fullwidth" }
+      ],
+      "default": "full-width-container"
+    },
+    {
+      "type": "select",
+      "id": "section_align",
+      "label": "Align Content",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "Text Configuration"
+    },
+    {
+      "type": "color",
+      "id": "color_icon",
+      "label": "Icon Color",
+      "default": "#f2f7e9"
+    },
+    {
+      "type": "color",
+      "id": "color_text",
+      "label": "Text color",
+      "default": "#f2f7e9"
+    },
+    {
+      "type": "color",
+      "id": "color_icon_seperator",
+      "label": "Right Border Color",
+      "default": "#95be4f"
+    },
+    {
+      "type": "range",
+      "id": "size_icon",
+      "min": 10,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "label": "Icon Size",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "size_font",
+      "min": 10,
+      "max": 15,
+      "step": 1,
+      "unit": "px",
+      "label": "Font Size",
+      "default": 12
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item-block",
+      "name": "Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "item_icon",
+          "label": "Icon",
+          "default": "icon-headset1"
+        },
+        {
+          "type": "text",
+          "id": "item_title",
+          "label": "Title",
+          "default": "Title"
+        },
+        {
+          "type": "text",
+          "id": "item_text",
+          "label": "Text",
+          "default": "Content"
+        }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "Text With Icon",
+    "category": "Text Section",
+    "blocks": [
+      {
+        "type": "item-block",
+        "settings": {
+          "item_icon": "icon-truck-filled",
+          "item_title": "FREE DELIVERY",
+          "item_text": "on orders over $100"
+        }
+      },
+      {
+        "type": "item-block",
+        "settings": {
+          "item_icon": "icon-gift",
+          "item_title": "CHOOSE A FREE GIFT",
+          "item_text": "with every purchase"
+        }
+      },
+      {
+        "type": "item-block",
+        "settings": {
+          "item_icon": "icon-lock",
+          "item_title": "100% SECURE SHOPPING",
+          "item_text": "mauris ac pulvinar"
+        }
+      }
+    ]
+  }]
+}
+{% endschema %}

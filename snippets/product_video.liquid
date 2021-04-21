@@ -1,0 +1,65 @@
+{% comment %}
+Renders only product videos from product media
+  Accepts:
+    - media: <Media> product media
+    - extra: <Boolean> Shows in product video when true, Shows in a separate section when false
+    - cols: <Number> Number of grid columns
+    - controls: <Boolean> Show/hide video controls
+    - mute: <Boolean> Mute/Unmute video
+    - autoplay: <Boolean> Autoplays video when this field is true
+    - loop: <Boolean> Loops video after finished
+    - show_unmute: <Boolean> Show/hide custom play/pause button
+
+  Usage:
+    {% render 'product_video', media: product.media, extra: false, cols: cols,
+        controls: controls, mute: mute, autoplay: autoplay, loop: loop, show_unmute: show_unmute %}
+{% endcomment %}
+{%- liquid
+assign has_video = false
+if cols == blank
+  assign cols = 2
+endif
+if autoplay
+  assign play_status = 'playing'
+else
+  assign play_status = 'paused'
+endif
+-%}
+
+<div class="product-videos">
+  <div class="row" style="margin: 0;">
+    {%- for media in product.media -%}
+      {%- if extra -%}
+        {%- unless media.alt contains '[vnd_' -%}
+          {%- continue -%}
+        {%- endunless -%}
+      {%- elsif media.alt contains '[vnd_' -%}
+        {%- continue -%}
+      {%- endif -%}
+
+      {%- case media.media_type -%}
+        {%- when 'external_video' -%}
+          {%- assign has_video = true -%}
+          <div class="grid-items__{{ cols }} col-padding">
+            <div class="product-img video-wrap {{ play_status }}" style="padding-top:{{ 100 | divided_by: media.aspect_ratio }}%" data-media="{{ media.id }}">
+              {{ media | external_video_tag: image_size: '1920x' }}
+            </div>
+          </div><!-- .grid-items__2 -->
+        {%- when 'video' -%}
+          {%- assign has_video = true -%}
+          <div class="grid-items__{{ cols }} col-padding">
+            <div class="product-img video-wrap {{ play_status }}" style="padding-top:{{ 100 | divided_by: media.aspect_ratio }}%" data-media="{{ media.id }}">
+              {{ media | video_tag: controls: controls, mute: mute, autoplay: autoplay, loop: loop, image_size: '1920x' }}
+              {%- if show_unmute -%}
+                <button class="btn-video play-video">{% render 'icon-play-2'%}</button>
+                <button class="btn-video pause-video">{% render 'icon-pause'%}</button>
+              {%- endif -%}
+            </div>
+          </div><!-- .grid-items__2 -->
+      {%- endcase -%}
+    {%- endfor -%}
+    {%- if has_video == false and extra == false-%}
+      <p class="product-description">{{ 'products.product.no_video' | t }}</p>
+    {%- endif -%}
+  </div><!-- .row -->
+</div><!-- .product-videos -->

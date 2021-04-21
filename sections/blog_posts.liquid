@@ -1,0 +1,285 @@
+<div class="container">
+  {% render 'latest_news' with section %}
+</div>
+
+{%- assign c_nav_h_bg_alpha = section.settings.c_nav_h_bg | color_extract: 'alpha' -%}
+{% style %}
+#shopify-section-{{ section.id }}{margin:{{ section.settings.margin_mobile }}}
+#shopify-section-{{ section.id }} .flickity-prev-next-button{border-color:{{ section.settings.nav_border }};background-color:{{ section.settings.nav_bg }};color:{{ section.settings.nav_color }};}
+{%- if c_nav_h_bg_alpha !=0 -%}
+#shopify-section-{{ section.id }} .flickity-prev-next-button:hover{border-color:{{ section.settings.c_nav_h_bg }} !important;background-color:{{ section.settings.c_nav_h_bg }} !important;}
+{%- endif -%}
+@media screen and (min-width: 768px){
+  #shopify-section-{{ section.id }}{margin:{{ section.settings.margin_laptop }}}
+}
+@media screen and (min-width: 1400px){
+  #shopify-section-{{ section.id }}{margin:{{ section.settings.margin }}}
+}
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "Blogs carousel",
+  "tag": "section",
+  "class": "vs-initialize-slider vs-blogs-carousel",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section title",
+      "default": "Latest News"
+    },
+    {
+      "type": "textarea",
+      "id": "desc",
+      "label": "Section description"
+    },
+    {
+      "type": "blog",
+      "id": "latest_blog",
+      "label": "Select Blog"
+    },
+    {
+      "type": "header",
+      "content": "Carousel settings"
+    },
+    {
+      "type": "text",
+      "id": "auto_speed",
+      "label": "Autoplay Speed",
+      "info": "5 means rotate every 5 seconds. 0 to disable auto rotate.",
+      "default": "5"
+    },
+    {
+      "type": "range",
+      "id": "cols",
+      "label": "Number of articles to show at once",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "checkbox",
+      "id": "show_dots",
+      "label": "Show pagination Dots",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_nav",
+      "label": "Show navigation",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "nav_style",
+      "label": "Navigator position",
+      "options": [
+        { "value": "nav-top__right", "label": "Top right" },
+        { "value": "nav-top__center", "label": "Top center" },
+        { "value": "nav-middle", "label": "Middle center" }
+      ],
+      "default": "nav-top__right"
+    },
+    {
+      "type": "color",
+      "id": "nav_border",
+      "label": "Navigator border color",
+      "default": "#333"
+    },
+    {
+      "type": "color",
+      "id": "nav_bg",
+      "label": "Navigator background color",
+      "default": "rgba(0,0,0,0)"
+    },
+    {
+      "type": "color",
+      "id": "nav_color",
+      "label": "Navigator icon color",
+      "default": "#333"
+    },
+    {
+      "type": "color",
+      "id": "c_nav_h_bg",
+      "label": "Navigator hover background color",
+      "default": "rgba(0,0,0,0)"
+    },
+    {
+      "type": "checkbox",
+      "id": "nav_box_shadow",
+      "label": "Add box-shadow to navigators",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Style settings"
+    },
+    {
+      "type": "select",
+      "id": "image_style",
+      "label": "Image size",
+      "options": [
+        { "value": "default", "label": "Set height relative to image" },
+        { "value": "fixed-height", "label": "Fixed height - 265px" },
+        { "value": "fixed-height-355", "label": "Fixed height - 355px" }
+      ],
+      "default": "fixed-height"
+    },
+    {
+      "type": "select",
+      "id": "ln_style",
+      "label": "Content layout",
+      "options": [
+        { "value": "default", "label": "Position text under image" },
+        { "value": "text-on-right", "label": "Position text on the right" },
+        { "value": "text-override", "label": "Position text override image" }
+      ],
+      "default": "default"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_excerpt",
+      "label": "Show blog excerpt",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_date",
+      "label": "Show post date",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_comment",
+      "label": "Show comment numbers",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "pos_date_comment",
+      "label": "Date and comment position",
+      "options": [
+        { "value": "relative", "label": "Before image" },
+        { "value": "absolute", "label": "Overwrite image" },
+        { "value": "before-title", "label": "Before title" }
+      ],
+      "default": "relative"
+    },
+    {
+      "type": "select",
+      "id": "btn_style",
+      "label": "Button Style",
+      "options": [
+        {"value": "btn-default", "label": "Default button"},
+        {"value": "btn-transparent", "label": "Transparent button"},
+        {"value": "btn-secondary", "label": "Secondary button"},
+        {"value": "btn-third", "label": "Third button"},
+        {"value": "btn-text", "label": "Text button"}
+      ],
+      "default": "btn-default"
+    },
+    {
+      "type": "header",
+      "content": "Typography Settings"
+    },
+    {
+      "type": "range",
+      "id": "size_title",
+      "label": "Title font size",
+      "min": 10,
+      "max": 30,
+      "step": 1,
+      "default": 20,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "size_excerpt",
+      "label": "Excerpt font size",
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "default": 15,
+      "unit": "px"
+    },
+    {
+      "type": "color",
+      "id": "color_title",
+      "label": "Article title color",
+      "default": "#3d3d3d"
+    },
+    {
+      "type": "color",
+      "id": "color_excerpt",
+      "label": "Article excerpt color",
+      "default": "#797979"
+    },
+    {
+      "type": "color",
+      "id": "c_time",
+      "label": "Article time color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "bg_time",
+      "label": "Article time background",
+      "default": "#90a900"
+    },
+    {
+      "type": "color",
+      "id": "bd_time",
+      "label": "Article time border",
+      "default": "#90a900"
+    },
+    {
+      "type": "color",
+      "id": "c_cmt",
+      "label": "Comment color",
+      "default": "#3f3f3f"
+    },
+    {
+      "type": "color",
+      "id": "bg_cmt",
+      "label": "Comment background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "bd_cmt",
+      "label": "Comment border color",
+      "default": "#ebebeb"
+    },
+    {
+      "type": "header",
+      "content": "Space settings",
+      "info": "Set space between other sections"
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "Section margin",
+      "info": "Set margin for section top-right-bottom-left (e.g. 20px 15px 10px 0)",
+      "default": "0 0 150px 0"
+    },
+    {
+      "type": "text",
+      "id": "margin_laptop",
+      "label": "Section Margin",
+      "default": "80px 0 80px 0"
+    },
+    {
+      "type": "text",
+      "id": "margin_mobile",
+      "label": "Section Margin",
+      "default": "50px 0 50px 0"
+    }
+  ],
+  "presets": [{
+    "name": "Blogs carousel",
+    "category": "Blog Post"
+  }]
+}
+{% endschema %}

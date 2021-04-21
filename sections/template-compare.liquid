@@ -1,0 +1,139 @@
+{%- if page.content != blank and section.settings.pos_page_content == 'top' -%}
+  <div class="container position-relative">
+    <p class="page-description">{{ page.content }}</p>
+  </div>
+{%- endif -%}
+
+<div class="compare-wrapper container">
+  <p class="page-description page-list__empty">{{ 'customer.compare.empty' | t }}</p>
+
+  <div class="compare-grid">
+    <div class="compare-row ds-flex compare-item__1">
+      <div class="tb-heading">
+        <span class="ds-block">{{ 'general.search.predictive.products' | t }}</span>
+      </div>
+    </div>
+
+    {%- if section.settings.show_desc -%}
+      {%- if section.settings.desc_truncate -%}
+        {%- assign add_class = "product-description__truncated-4" -%}
+      {%- endif -%}
+      <div class="compare-row ds-flex compare-item__2 {{ add_class }}">
+        <div class="tb-heading">
+          <span>{{ 'products.product.description' | t }}</span>
+        </div>
+      </div>
+    {%- endif -%}
+
+    {%- if settings.enable_product_availability and section.settings.show_available -%}
+    <div class="compare-row ds-flex compare-item__3">
+      <div class="tb-heading">
+        <span>{{ 'products.product.availability' | t }}</span>
+      </div>
+    </div>
+    {% endif %}
+
+    {%- if settings.review_app != 'none' and section.settings.show_reviews -%}
+      <div class="compare-row ds-flex compare-item__4">
+        <div class="tb-heading">
+          <span>{{ 'products.product.reviews' | t }}</span>
+        </div>
+      </div>
+    {%- endif -%}
+
+
+    {%- if section.settings.show_product_type -%}
+      <div class="compare-row ds-flex compare-item__5">
+        <div class="tb-heading">
+          <span>{{ 'products.product.type' | t }}</span>
+        </div>
+      </div>
+    {%- endif -%}
+
+    {% if section.settings.show_vendor %}
+      <div class="compare-row ds-flex compare-item__6">
+        <div class="tb-heading">
+          <span>{{ 'products.product.vendor' | t }}</span>
+        </div>
+      </div>
+    {%- endif -%}
+  </div>
+  <a href="/collections/all" class="btn btn-default browse-more">{{ 'cart.general.continue_shopping' | t }}</a>
+  <!-- Loader -->
+  <div class="result-loading">{% include settings.anm_loading_products %}</div>
+</div>
+
+{%- if page.content != blank and section.settings.pos_page_content == 'bottom' -%}
+  <div class="container position-relative">
+    <p class="page-description">{{ page.content }}</p>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Compare list",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Grid Layout Configuration"
+    },
+    {
+      "type": "select",
+      "id": "pos_page_content",
+      "label": "Page content position",
+      "options": [
+        { "value": "bottom", "label": "After grid" },
+        { "value": "top", "label": "After page title" }
+      ],
+      "default": "top"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_continue",
+      "label": "Show continue shopping button",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Product Configuration"
+    },
+    {
+      "type": "select",
+      "id": "height",
+      "label": "Image size",
+      "options": [
+        { "value": "relative", "label": "Relative to original size" },
+        { "value": "square", "label": "Square: aspect ratio 1:1" },
+        { "value": "rect", "label": "Rectangle: aspect ratio 10:13" }
+      ],
+      "default": "rect"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_desc",
+      "label": "Show description",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "desc_truncate",
+      "label": "Truncate description?",
+      "default": true,
+      "info": "Truncate full description into 30 words"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_reviews",
+      "label": "Show reviews",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_available",
+      "label": "Show availability",
+      "default": true
+    }
+  ]
+}
+{% endschema %}

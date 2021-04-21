@@ -1,0 +1,19 @@
+{%- layout none -%}
+<a href="{{ product.url | within: collection }}">
+<div class="product-img">
+  {%- if product.featured_image != blank -%}
+    <div class="position-relative image-loading" style="padding-top: {{ 100 | divided_by: product.featured_image.aspect_ratio }}%">
+      <img class="image-bg lazyload" data-src="{{ product.featured_image.src | img_url: '300x' }}" />
+    </div>
+  {%- else -%}
+    <div class="position-relative" style="padding-top:130%;">
+      {% capture pp_index %}{% cycle 1,2,3,4,5,6 %}{% endcapture %}
+      {{ 'product-' | append: pp_index | placeholder_svg_tag: 'placeholder' }}
+    </div>
+  {%- endif -%}
+</div><!-- .product-img -->
+<div class="product-detail">
+  <h3 class="product-name">{{ product.title }}</h3>
+  {% render 'product_price', price: product.price, compare_at_price: product.compare_at_price %}
+</div><!-- .product-detail -->
+</a>

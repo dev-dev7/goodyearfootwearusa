@@ -1,0 +1,42 @@
+{%- layout none -%}
+<div class="vnd-pp-content vnd-size-chart ds-flex flex-wrap position-relative">
+  {%- if page.content != blank -%}
+    <div class="medium-6">
+      <div class="items-carousel"
+        data-auto="5"
+        data-dots="false"
+        data-nav="{{ true }}"
+        data-wraparound="true"
+        data-cellalign="center">
+        {{ page.content }}
+      </div>
+    </div>
+  {%- endif -%}
+
+  {%- assign tabs_num = 0 -%}
+  {%- for tab in page.metafields.tab_size_guide -%}
+    {%- assign tabs_num = tabs_num | plus: 1 -%}
+    {%- capture tab_navs -%}{{ tab_navs }}<div class="tabs-nav__item{% if forloop.first %} active{% endif %}"><a href="#tabs-content-{{ forloop.index }}">{{ tab | first }}</a></div>{%- endcapture -%}
+    {%- capture tab_contents -%}{{ tab_contents }}<div class="tabs-content__item{% if forloop.first %} active{% endif %}" id="tabs-content-{{ forloop.index }}">{{ tab | last }}</div>{%- endcapture -%}
+  {%- endfor -%}
+
+  {%- if tabs_num > 0 -%}
+    <div class="tabs medium-6">
+      <div class="tabs-nav">
+        {{ tab_navs }}
+      </div>
+
+      <div class="tabs-content">
+        {{ tab_contents }}
+      </div>
+    </div>
+  {%- endif -%}
+</div>
+{%- capture css -%}
+.vnd-size-chart{padding:3rem 2rem 2.5rem;background-color:#fff;overflow:auto}.vnd-size-chart .medium-6{flex:1 1 50%;max-width:100%}.vnd-size-chart .flickity-slider>*,.vnd-size-chart ol,.vnd-size-chart ul{padding-left:1.5em;font-size:1.4rem;letter-spacing:.02em}.vnd-size-chart .flickity-slider>*{width:100%;text-align:center}.vnd-size-chart ol li,.vnd-size-chart ul li{margin-bottom:2rem;line-height:1.5}.vnd-size-chart .tabs{border:0}.vnd-size-chart .tabs-nav{width:100%;margin:0;text-align:center}.vnd-size-chart .tabs-nav .tabs-nav__item{display:inline-block;margin:0 3px;border:0;overflow:auto}.vnd-size-chart .tabs-nav__item a{padding:11px 20px;font-size:14px;letter-spacing:.1em;border:0;transition:all .35s}.vnd-size-chart .tabs-nav__item a:hover,.vnd-size-chart .tabs-nav__item.active a{background-color:#444645;color:#fff}.vnd-size-chart .tabs-content{padding:3.8rem 3.5rem}.vnd-size-chart blockquote{font-size:1.8rem;font-weight:700;color:#444;letter-spacing:.02em;margin-bottom:2rem}.vnd-size-chart table{width:100%;border:1px solid #ececec;border-collapse:separate;border-spacing:0}.vnd-size-chart .table{margin-bottom:3rem}.vnd-size-chart .table:last-of-type{margin-bottom:0}.vnd-size-chart table tr{height:48px}.vnd-size-chart thead tr:first-child{color:#3f3f3f;font-size:14px;letter-spacing:.15em;text-transform:uppercase}
+.vnd-size-chart thead tr:last-child {border-color:{{ settings.c_theme }};background-color:{{ settings.c_theme }};font-family:Arial, sans-serif;color:#ffffff}
+.vnd-size-chart thead tr:last-child th{font-size:13px;font-weight:400;letter-spacing:.074em;text-transform:uppercase}.vnd-size-chart td,.vnd-size-chart th{border-bottom:1px solid #ececec}.vnd-size-chart td:first-child,.vnd-size-chart th:first-child{padding:0 3rem}.vnd-size-chart td{color:#555;font-family:Arial,sans-serif;font-size:1.3rem;letter-spacing:.022em}.vnd-size-chart td:first-child{color:#464646}.vnd-size-chart tbody tr:last-child td{border-bottom:0}@media all and (min-width:1300px){.vnd-size-chart{max-width:130rem;margin:0 auto;padding:5rem 3rem 4rem}}@media all and (min-width:480px){.vnd-size-chart .tabs-nav .tabs-nav__item{margin:0 15px}}@media all and (min-width:768px) and (max-width:991px){.vnd-size-chart .tabs-content{padding:2.3rem 1.5rem}}@media all and (max-width:991px){.vnd-size-chart td:first-child,.vnd-size-chart th:first-child{padding:0 1.5rem}}@media all and (max-width:767px){.vnd-size-chart .tabs-content{padding:2.3rem 0}}
+.vnd-size-chart .flickity-prev-next-button{opacity: 0}.vnd-size-chart .items-carousel:hover .flickity-prev-next-button{opacity: .75}.vnd-size-chart .items-carousel .flickity-prev-next-button:hover{opacity: 1}
+.tabs-nav__item a {display:block;padding:16px 35px}.tabs-content__item.active{display:block}
+{%- endcapture -%}
+<style>{{ css | strip_newlines | remove: '  ' }}</style>

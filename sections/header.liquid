@@ -1,0 +1,1886 @@
+{%- liquid
+case section.settings.header_type
+  when "1"
+    include 'header_type_1', blocks: section.blocks, config: section.settings
+  when "2"
+    include 'header_type_2', blocks: section.blocks, config: section.settings
+  when "3"
+    include 'header_type_3', blocks: section.blocks, config: section.settings
+  when "4"
+    include 'header_type_4', blocks: section.blocks, config: section.settings
+  when "5"
+    include 'header_type_5', blocks: section.blocks, config: section.settings
+  else
+    include 'header_type_6', blocks: section.blocks, config: section.settings
+endcase
+
+assign styles = ''
+-%}
+
+<div class="mobile-menu-tabs vnd-mobile-menu mobile-menu__slide-left">
+{%- if settings.show_clt_mb_menu -%}
+  <ul class="tabs-nav ds-flex list-style-none">
+    <li class="tabs-nav__item active"><a href="#vnd-mb-tab1">{{ linklists[section.settings.menu].title }}</a></li>
+    <li class="tabs-nav__item"><a href="#vnd-mb-tab2">{{ settings.collection_sidebar_menu_title }}</a></li>
+  </ul>
+  <div class="tabs-content__item active" id="vnd-mb-tab1">
+{%- endif -%}
+{%- include 'header_menu', m_n: section.settings.menu, mobile_menu: true -%}
+{%- if settings.show_clt_mb_menu -%}
+  </div>
+  <div class="tabs-content__item" id="vnd-mb-tab2">
+    {% render 'header_menu', m_n: settings.collection_sidebar_menu, mobile_menu: true -%}
+  </div>
+{%- endif -%}
+</div>
+
+{%- capture styles -%}
+#shopify-section-header .header{
+  background-color:{{ section.settings.c_bg }};
+  color:{{ section.settings.c_text }}
+}
+#shopify-section-header .logo-image{
+  max-width:{{ settings.logo_max_width }}px
+}
+#shopify-section-header .header-menu-item>a{
+  color:{{ section.settings.c_menu }}
+}
+#shopify-section-header .vnd-mobile-menu,
+#shopify-section-header .full-width-menu{
+  background-color:{{ section.settings.c_menu_bg }}
+}
+@media (min-width: 1600px){
+  {%- if section.settings.padding != blank -%}
+    #shopify-section-header .header{padding:{{ section.settings.padding }};}
+  {%- endif -%}
+  .header-menu-item>a{
+    padding-right:{{ section.settings.space_menu_item | divided_by: 2 }}px;
+    padding-left:{{ section.settings.space_menu_item | divided_by: 2 }}px;
+  }
+}
+{% render 'style_topbar_items', blocks: section.blocks, init: true %}
+{%- endcapture -%}
+<style>{{ styles | strip_newlines | remove: '  ' }}</style>
+
+{% schema %}
+{
+  "name": "Header",
+  "tag": "header",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Header Configuration"
+    },
+    {
+      "type": "select",
+      "id": "header_type",
+      "label": "Style",
+      "options": [
+        { "value": "1", "label": "Header Type 1" },
+        { "value": "2", "label": "Header Type 2" },
+        { "value": "3", "label": "Header Type 3" },
+        { "value": "4", "label": "Header Type 4" },
+        { "value": "5", "label": "Header Type 5" },
+        { "value": "6", "label": "Header Type 6" }
+      ],
+      "default": "1"
+    },
+    {
+      "type": "text",
+      "id": "padding",
+      "label": "Padding",
+      "info": "sequence: top-right-bottom-left (ex: 10px 0 10px 0)"
+    },
+    {
+      "type": "color",
+      "id": "c_bg",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "c_text",
+      "label": "Text color",
+      "default": "#3f3f3f"
+    },
+    {
+      "type": "header",
+      "content": "Logo"
+    },
+    {
+      "type": "paragraph",
+      "content": "This settings is moved to Theme Settings from version 1.3.0. Please move this settings if you are upgrading to version > 1.3.0"
+    },
+    {
+      "type": "paragraph",
+      "content": "You can find the settings from Theme Settings -> Logo, Favicon"
+    },
+    {
+      "type": "header",
+      "content": "Main Menu"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "default": "main-menu"
+    },
+    {
+      "type": "checkbox",
+      "id": "header_menu_center",
+      "label": "Align menu center",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "header_sticky",
+      "label": "Sticky Header",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_dropdown_icon",
+      "label": "Show Dropdown Icon",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "space_menu_item",
+      "min": 40,
+      "max": 90,
+      "step": 2,
+      "unit": "px",
+      "label": "Space between menu items",
+      "default": 56
+    },
+    {
+      "type": "select",
+      "id": "menu_anm",
+      "label": "Menu items appearance",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "slide-left", "label": "Slide in from left" }
+      ],
+      "default": "slide-left"
+    },
+    {
+      "type": "color",
+      "id": "c_menu_bg",
+      "label": "Menu background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "c_menu",
+      "label": "Menu item color",
+      "default": "#333333"
+    },
+    {
+      "type": "header",
+      "content": "Promotion on Header",
+      "info": "Only works on header type 2 and 5"
+    },
+    {
+      "type": "text",
+      "id": "promo_icon1",
+      "label": "Icon Name"
+    },
+    {
+      "type": "text",
+      "id": "promo_title1",
+      "label": "Title"
+    },
+    {
+      "type": "textarea",
+      "id": "promo_text1",
+      "label": "Text"
+    },
+    {
+      "type": "text",
+      "id": "promo_icon2",
+      "label": "Icon Name"
+    },
+    {
+      "type": "text",
+      "id": "promo_title2",
+      "label": "Title"
+    },
+    {
+      "type": "textarea",
+      "id": "promo_text2",
+      "label": "Text"
+    }
+  ],
+  "blocks": [
+    {
+      "type":"search_box",
+      "name":"Search Box",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "select",
+          "id": "search_style",
+          "label": "Style",
+          "options": [
+            { "value": "search-box-fixed", "label": "Show box" },
+            { "value": "search-box-popup", "label": "Popup box" },
+            { "value": "search-line-popup", "label": "Popup Line" },
+            { "value": "search-box-category", "label": "With category selection" }
+          ],
+          "default": "search-box-popup"
+        },
+        {
+          "type": "text",
+          "id": "search_icon",
+          "label": "Icon",
+          "default": "icon-search",
+          "info": "[Browse icons](https://docs.flexkitux.com/pages/icons-list.html)"
+        },
+        {
+          "type": "range",
+          "id": "size_icon",
+          "min": 12,
+          "max": 24,
+          "step": 1,
+          "unit": "px",
+          "label": "Icons size",
+          "default": 14
+        },
+        {
+          "type": "select",
+          "id": "search_btn_border",
+          "label": "Search box border",
+          "options": [
+            { "value": "0", "label": "Hide" },
+            { "value": "1", "label": "1px" },
+            { "value": "2", "label": "2px" }
+          ],
+          "default": "2"
+        },
+        {
+          "type": "paragraph",
+          "content": "Search Button Colors"
+        },
+        {
+          "type": "color",
+          "id": "color_search",
+          "label": "Search button color",
+          "default": "#555555"
+        },
+        {
+          "type": "color",
+          "id": "color_search_h",
+          "label": "Search button color on hover",
+          "default": "#555555"
+        },
+        {
+          "type": "paragraph",
+          "content": "Search Input Box Colors"
+        },
+        {
+          "type": "color",
+          "id": "color_search_ib",
+          "label": "Search input box border color",
+          "default": "#555555"
+        },
+        {
+          "type": "color",
+          "id": "color_search_input",
+          "label": "Search input box text color",
+          "default": "#555555"
+        },
+        {
+          "type": "color",
+          "id": "color_bg",
+          "label": "Search form background color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "header",
+          "content": "Search Categories",
+          "info": "This settings only works when the search box style is selected as With category selection"
+        },
+        {
+          "type": "textarea",
+          "id": "categories",
+          "label": "Categories",
+          "default": "Pretium, Veneatis, Suspendisse, Feugiat, Faucibus",
+          "info": "Separate words with comma(,)"
+        },
+        {
+          "type": "radio",
+          "id": "cat_type",
+          "label": "Category type",
+          "options": [
+            { "value": "product_type", "label": "Product type" },
+            { "value": "tag", "label": "Product tag" },
+            { "value": "vendor", "label": "Vendor" }
+          ],
+          "default": "product_type"
+        }
+      ]
+    },
+    {
+      "type":"wishlist",
+      "name":"Wishlist",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "icon",
+          "label": "Icon",
+          "default": "icon-heart"
+        },
+        {
+          "type": "range",
+          "id": "size_icon",
+          "min": 12,
+          "max": 24,
+          "step": 1,
+          "unit": "px",
+          "label": "Icons size",
+          "default": 14
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Wishlist button title",
+          "default": "Wishlist"
+        },
+        {
+          "type": "select",
+          "id": "item_count_pos",
+          "label": "Count position",
+          "options": [
+            { "value": "item-count__default", "label": "Default position" },
+            { "value": "item-count__left", "label": "Left" },
+            { "value": "item-count__right", "label": "Right" }
+          ],
+          "default": "item-count__left"
+        }
+      ]
+    },
+    {
+      "type":"compare",
+      "name":"Comparison List",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "icon",
+          "label": "Icon",
+          "default": "icon-repeat-circle"
+        },
+        {
+          "type": "range",
+          "id": "size_icon",
+          "min": 12,
+          "max": 24,
+          "step": 1,
+          "unit": "px",
+          "label": "Icons size",
+          "default": 14
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Button title",
+          "default": "Compare"
+        },
+        {
+          "type": "select",
+          "id": "item_count_pos",
+          "label": "Count position",
+          "options": [
+            { "value": "item-count__default", "label": "Default position" },
+            { "value": "item-count__left", "label": "Left" },
+            { "value": "item-count__right", "label": "Right" }
+          ],
+          "default": "item-count__left"
+        }
+      ]
+    },
+    {
+      "type": "cart",
+      "name": "Cart Dropdown",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "range",
+          "id": "size_icon",
+          "min": 12,
+          "max": 24,
+          "step": 1,
+          "unit": "px",
+          "label": "Icons size",
+          "default": 14
+        },
+        {
+          "type": "select",
+          "id": "header_cart_style",
+          "label": "Cart style",
+          "options": [
+            { "value": "show_amount", "label": "Show cart amount beside the icon" },
+            { "value": "show_abs_amount", "label": "Show cart amount on the icon" },
+            { "value": "show_abs_text", "label": "Show cart amount on the icon and text" },
+            { "value": "only_icon", "label": "Show only cart icon" }
+          ],
+          "default": "show_amount"
+        },
+        {
+          "type": "color",
+          "id": "cart_bg",
+          "label": "Cart background color",
+          "default": "rgba(0,0,0,0)"
+        },
+        {
+          "type": "color",
+          "id": "cart_color",
+          "label": "Cart text color",
+          "default": "#757575"
+        },
+        {
+          "type": "color",
+          "id": "cart_icon",
+          "label": "Cart icon color",
+          "default": "#b8b8b8"
+        },
+        {
+          "type": "paragraph",
+          "content": "Below settings only work when cart style is 'Show cart amount on the icon icon' or 'Show only cart icon'"
+        },
+        {
+          "type": "select",
+          "id": "amount_pos",
+          "label": "Cart amount position",
+          "options": [
+            { "value": "left", "label": "Left" },
+            { "value": "right", "label": "Right" }
+          ],
+          "default": "right"
+        },
+        {
+          "type": "color",
+          "id": "c_amount_bg",
+          "label": "Cart amount background",
+          "default": "#fee71b"
+        },
+        {
+          "type": "color",
+          "id": "c_amount_text",
+          "label": "Cart amount text color",
+          "default": "#363f46"
+        }
+      ]
+    },
+    {
+      "type": "login",
+      "name": "Customer Login Link",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Please allow customer accounts to show this link. [Learn More](https://help.shopify.com/en/manual/checkout-settings/customer-accounts)"
+        },
+        {
+          "type": "text",
+          "id": "icon",
+          "label": "Icon [Icons list](https://docs.flexkitux.com/pages/icons-list.html)"
+        },
+        {
+          "type": "range",
+          "id": "size_icon",
+          "min": 12,
+          "max": 24,
+          "step": 1,
+          "unit": "px",
+          "label": "Icons size",
+          "default": 14
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "text",
+          "default": "Login"
+        }
+      ]
+    },
+    {
+      "type": "menu_style",
+      "name":"Mega Menu Style1",
+      "settings": [
+        {
+          "type": "radio",
+          "id": "type",
+          "label": "Menu style",
+          "options": [
+            { "value": "dropdown-mega1", "label": "Mega menu style 1" }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "content": "See demo and documentation [here](https://docs.flexkitux.com/pages/general-header.html#mega-menu-1)"
+        },
+        {
+          "type": "text",
+          "id": "menu_label",
+          "label": "Navigation label",
+          "info": "Input name of the navigation item you are going to style"
+        },
+        {
+          "type": "select",
+          "id": "width",
+          "label": "Width",
+          "options": [
+            { "value": "full-width", "label": "Full Width, contents in container" },
+            { "value": "container", "label": "Container" },
+            { "value": "boxed", "label": "Boxed" }
+          ],
+          "default": "container"
+        },
+        {
+          "type": "header",
+          "content": "Top Images"
+        },
+        {
+          "type": "image_picker",
+          "id": "top_img1",
+          "label": "Top Image 1",
+          "info": "210*80px recommended"
+        },
+        {
+          "type": "url",
+          "id": "top_il1",
+          "label": "Top Image 1 link"
+        },
+        {
+          "type": "image_picker",
+          "id": "top_img2",
+          "label": "Top Image 2",
+          "info": "210*80px recommended"
+        },
+        {
+          "type": "url",
+          "id": "top_il2",
+          "label": "Top Image 2 link"
+        },
+        {
+          "type": "image_picker",
+          "id": "top_img3",
+          "label": "Top Image 3",
+          "info": "210*80px recommended"
+        },
+        {
+          "type": "url",
+          "id": "top_il3",
+          "label": "Top Image 3 link"
+        },
+        {
+          "type": "image_picker",
+          "id": "top_img4",
+          "label": "Top Image 4",
+          "info": "210*80px recommended"
+        },
+        {
+          "type": "url",
+          "id": "top_il4",
+          "label": "Top Image 4 link"
+        },
+        {
+          "type": "image_picker",
+          "id": "top_img5",
+          "label": "Top Image 5",
+          "info": "210*80px recommended"
+        },
+        {
+          "type": "url",
+          "id": "top_il5",
+          "label": "Top Image 5 link"
+        },
+        {
+          "type": "image_picker",
+          "id": "top_img6",
+          "label": "Top Image 6",
+          "info": "210*80px recommended"
+        },
+        {
+          "type": "url",
+          "id": "top_il6",
+          "label": "Top Image 6 link"
+        },
+        {
+          "type": "header",
+          "content": "Bottom Images"
+        },
+        {
+          "type": "image_picker",
+          "id": "bottom_img1",
+          "label": "Bottom Image 1",
+          "info": "370*170px recommended"
+        },
+        {
+          "type": "url",
+          "id": "btt_il1",
+          "label": "Bottom image 1 link"
+        },
+        {
+          "type": "image_picker",
+          "id": "bottom_img2",
+          "label": "Bottom Image 2",
+          "info": "370*170px recommended"
+        },
+        {
+          "type": "url",
+          "id": "btt_il2",
+          "label": "Bottom image 2 link"
+        },
+        {
+          "type": "image_picker",
+          "id": "bottom_img3",
+          "label": "Bottom Image 3",
+          "info": "370*170px recommended"
+        },
+        {
+          "type": "url",
+          "id": "btt_il3",
+          "label": "Bottom image 3 link"
+        },
+        {
+          "type": "image_picker",
+          "id": "bottom_img4",
+          "label": "Bottom Image 4",
+          "info": "370*170px recommended"
+        },
+        {
+          "type": "url",
+          "id": "btt_il4",
+          "label": "Bottom image 4 link"
+        }
+      ]
+    },
+    {
+      "type": "menu_style2",
+      "name":"Mega Menu Style2",
+      "settings": [
+        {
+          "type": "radio",
+          "id": "type",
+          "label": "Menu style",
+          "options": [
+            { "value": "dropdown-mega2", "label": "Mega menu style 2" }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "content": "See demo and documentation [here](https://docs.flexkitux.com/pages/general-header.html#mega-menu-2)"
+        },
+        {
+          "type": "text",
+          "id": "menu_label",
+          "label": "Navigation label",
+          "info": "Input name of the navigation item you are going to style"
+        },
+        {
+          "type": "select",
+          "id": "width",
+          "label": "Width",
+          "options": [
+            { "value": "full-width", "label": "Full Width, contents in container" },
+            { "value": "container", "label": "Container" },
+            { "value": "boxed", "label": "Boxed" }
+          ],
+          "default": "container"
+        },
+        {
+          "type": "header",
+          "content": "Images"
+        },
+        {
+          "type": "select",
+          "id": "img_sz",
+          "label": "Image size",
+          "options": [
+            { "value": "origin", "label": "Use original size" },
+            { "value": "design1", "label": "1 : 1" },
+            { "value": "design2", "label": "1 : 1.3" }
+          ],
+          "default": "design1"
+        },
+        {
+          "type": "image_picker",
+          "id": "img1",
+          "label": "Image 1",
+          "info": "270*350px recommended"
+        },
+        {
+          "type": "url",
+          "id": "il1",
+          "label": "Link to"
+        },
+        {
+          "type": "text",
+          "id": "st1",
+          "label": "Sub title",
+          "default": "SAVE OVER $20.00 ON"
+        },
+        {
+          "type": "text",
+          "id": "tt1",
+          "label": "Title",
+          "default": "Jeans & Denim"
+        },
+        {
+          "type": "image_picker",
+          "id": "img2",
+          "label": "Image 2",
+          "info": "270*350px recommended"
+        },
+        {
+          "type": "url",
+          "id": "il2",
+          "label": "Link to"
+        },
+        {
+          "type": "text",
+          "id": "st2",
+          "label": "Sub title",
+          "default": "HOT TRENDS TO TRY"
+        },
+        {
+          "type": "text",
+          "id": "tt2",
+          "label": "Title",
+          "default": "Accessories"
+        },
+        {
+          "type": "image_picker",
+          "id": "img3",
+          "label": "Image 3",
+          "info": "270*350px recommended"
+        },
+        {
+          "type": "url",
+          "id": "il3",
+          "label": "Link to"
+        },
+        {
+          "type": "text",
+          "id": "st3",
+          "label": "Sub title",
+          "default": "STARTING AT $40.00"
+        },
+        {
+          "type": "text",
+          "id": "tt3",
+          "label": "Title",
+          "default": "Outerwear"
+        },
+        {
+          "type": "image_picker",
+          "id": "img4",
+          "label": "Image 4",
+          "info": "270*350px recommended"
+        },
+        {
+          "type": "url",
+          "id": "il4",
+          "label": "Link to"
+        },
+        {
+          "type": "text",
+          "id": "st4",
+          "label": "Sub title"
+        },
+        {
+          "type": "text",
+          "id": "tt4",
+          "label": "Title"
+        },
+        {
+          "type": "image_picker",
+          "id": "img5",
+          "label": "Top Image 5",
+          "info": "270*350px recommended"
+        },
+        {
+          "type": "url",
+          "id": "il5",
+          "label": "Link to"
+        },
+        {
+          "type": "text",
+          "id": "st5",
+          "label": "Sub title"
+        },
+        {
+          "type": "text",
+          "id": "tt5",
+          "label": "Title"
+        }
+      ]
+    },
+    {
+      "type": "menu_style3",
+      "name":"Mega Menu Style3",
+      "settings": [
+        {
+          "type": "radio",
+          "id": "type",
+          "label": "Menu style",
+          "options": [
+            { "value": "dropdown-mega3", "label": "Mega menu style 3" }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "content": "See demo and documentation [here](https://docs.flexkitux.com/pages/general-header.html#mega-menu-3)"
+        },
+        {
+          "type": "text",
+          "id": "menu_label",
+          "label": "Navigation label",
+          "info": "Input name of the navigation item you are going to style"
+        },
+        {
+          "type": "select",
+          "id": "width",
+          "label": "Width",
+          "options": [
+            { "value": "full-width", "label": "Full Width, contents in container" },
+            { "value": "container", "label": "Container" },
+            { "value": "boxed", "label": "Boxed" }
+          ],
+          "default": "full-width"
+        },
+        {
+          "type": "select",
+          "id": "img_sz",
+          "label": "Image size",
+          "options": [
+            { "value": "origin", "label": "Use original image size" },
+            { "value": "design", "label": "Use design dimensions" }
+          ],
+          "default": "design"
+        },
+        {
+          "type": "header",
+          "content": "Child menus"
+        },
+        {
+          "type": "link_list",
+          "id": "child_menu1",
+          "label": "Child menu 1"
+        },
+        {
+          "type": "link_list",
+          "id": "child_menu2",
+          "label": "Child menu 2"
+        },
+        {
+          "type": "link_list",
+          "id": "child_menu3",
+          "label": "Child menu 3"
+        },
+        {
+          "type": "link_list",
+          "id": "child_menu4",
+          "label": "Child menu 4"
+        },
+        {
+          "type": "header",
+          "content": "Typography configuration"
+        },
+        {
+          "type": "select",
+          "id": "font_header",
+          "label": "Menu list header font",
+          "options": [
+            { "value": "font-heading", "label": "Heading font" },
+            { "value": "font-body", "label": "Body font" },
+            { "value": "font-menu", "label": "Menu font" },
+            { "value": "font-extra", "label": "Extra font" },
+            { "value": "font-button", "label": "Button font" },
+            { "value": "font-arial", "label": "Arial" }
+          ],
+          "default": "font-menu"
+        },
+        {
+          "type": "select",
+          "id": "font_item",
+          "label": "Menu list item font",
+          "options": [
+            { "value": "font-heading", "label": "Heading font" },
+            { "value": "font-body", "label": "Body font" },
+            { "value": "font-menu", "label": "Menu font" },
+            { "value": "font-extra", "label": "Extra font" },
+            { "value": "font-button", "label": "Button font" },
+            { "value": "font-arial", "label": "Arial" }
+          ],
+          "default": "font-arial"
+        },
+        {
+          "type": "header",
+          "content": "Image and text 1"
+        },
+        {
+          "type": "image_picker",
+          "id": "img1",
+          "label": "Background image",
+          "info": "570*240px recommended"
+        },
+        {
+          "type": "select",
+          "id": "content_pos1",
+          "label": "Content Horizontal Position",
+          "options": [
+            {"value": "left", "label": "Left"},
+            {"value": "center", "label": "Center"},
+            {"value": "right", "label": "Right"}
+          ],
+          "default": "left"
+        },
+        {
+          "type": "select",
+          "id": "content_vpos1",
+          "label": "Content Vertical Position",
+          "options": [
+            {"value": "v-top", "label": "Top"},
+            {"value": "v-center", "label": "Middle"},
+            {"value": "v-bottom", "label": "Bottom"}
+          ],
+          "default": "v-center"
+        },
+        {
+          "type": "select",
+          "id": "content_align1",
+          "label": "Text align",
+          "options": [
+            {"value": "text-left", "label": "Left"},
+            {"value": "text-center", "label": "Center"},
+            {"value": "text-right", "label": "Right"}
+          ],
+          "default": "text-left"
+        },
+        {
+          "type": "select",
+          "id": "content_style1",
+          "label": "Content style",
+          "options": [
+            {"value": "orange-style", "label": "Orange style"},
+            {"value": "citrus-style", "label": "Citrus style 1"},
+            {"value": "citrus-style2", "label": "Citrus style 2"},
+            {"value": "citrus-style3", "label": "Citrus style 3"},
+            {"value": "green-style", "label": "Green style 1"},
+            {"value": "green-style2", "label": "Green style 2"},
+            {"value": "parallax-style1", "label": "Parallax style 1"},
+            {"value": "parallax-style2", "label": "Parallax style 2"},
+            {"value": "beige-style1", "label": "Beige style 1"},
+            {"value": "beige-style2", "label": "Beige style 2"},
+            {"value": "beige-style3", "label": "Beige style 3"},
+            {"value": "custom_html", "label": "Custom HTML"}
+          ],
+          "default": "citrus-style2"
+        },
+        {
+          "type": "textarea",
+          "id": "top_title1",
+          "label": "Top text",
+          "default": "<em><span>$50</span>voucher<\/em>"
+        },
+        {
+          "type": "textarea",
+          "id": "main_title1",
+          "label": "Main Title",
+          "default": "For your next\npurchase."
+        },
+        {
+          "type": "textarea",
+          "id": "sub_title1",
+          "label": "Sub Title"
+        },
+        {
+          "type": "color",
+          "id": "color_top_title1",
+          "label": "Top text color",
+          "default": "#333333"
+        },
+        {
+          "type": "color",
+          "id": "color_main_title1",
+          "label": "Main Title Color",
+          "default": "#282525"
+        },
+        {
+          "type": "color",
+          "id": "sub_color1",
+          "label": "Sub Title Color",
+          "default": "#444"
+        },
+        {
+          "type": "paragraph",
+          "content": "Special Characters"
+        },
+        {
+          "type": "paragraph",
+          "content": "Text wrapped with <em></em> or <strong></strong> are styled by the following settings"
+        },
+        {
+          "type": "color",
+          "id": "em_color1",
+          "label": "Emphasized text color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "em_bg_color1",
+          "label": "Emphasized text background color",
+          "default": "#a8bf00"
+        },
+        {
+          "type": "color",
+          "id": "strong_color1",
+          "label": "Strong text color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "strong_bg_color1",
+          "label": "Strong text background color",
+          "default": "#2c7800"
+        },
+        {
+          "type": "paragraph",
+          "content": "Button"
+        },
+        {
+          "type": "text",
+          "id": "btn_title1",
+          "label": "Button Title",
+          "default": "Get Voucher"
+        },
+        {
+          "type": "text",
+          "id": "btn_title_icon1",
+          "label": "Icon after text [Browse icons](https://docs.flexkitux.com/pages/icons-list.html)",
+          "default": "icon-dir-double-right"
+        },
+        {
+          "type": "url",
+          "id": "btn_link1",
+          "label": "Link To"
+        },
+        {
+          "type": "select",
+          "id": "btn_style1",
+          "label": "Button Style",
+          "options": [
+            {"value": "btn-default", "label": "Default button"},
+            {"value": "btn-transparent", "label": "Transparent button"},
+            {"value": "btn-secondary", "label": "Secondary button"},
+            {"value": "btn-third", "label": "Third button"},
+            {"value": "btn-text", "label": "Text button"}
+          ],
+          "default": "btn-text"
+        },
+        {
+          "type": "header",
+          "content": "Image and text 2"
+        },
+        {
+          "type": "image_picker",
+          "id": "img2",
+          "label": "Background image",
+          "info": "570*240px recommended"
+        },
+        {
+          "type": "select",
+          "id": "content_pos2",
+          "label": "Content Horizontal Position",
+          "options": [
+            {"value": "left", "label": "Left"},
+            {"value": "center", "label": "Center"},
+            {"value": "right", "label": "Right"}
+          ],
+          "default": "left"
+        },
+        {
+          "type": "select",
+          "id": "content_vpos2",
+          "label": "Content Vertical Position",
+          "options": [
+            {"value": "v-top", "label": "Top"},
+            {"value": "v-center", "label": "Middle"},
+            {"value": "v-bottom", "label": "Bottom"}
+          ],
+          "default": "v-center"
+        },
+        {
+          "type": "select",
+          "id": "content_align2",
+          "label": "Text align",
+          "options": [
+            {"value": "text-left", "label": "Left"},
+            {"value": "text-center", "label": "Center"},
+            {"value": "text-right", "label": "Right"}
+          ],
+          "default": "text-left"
+        },
+        {
+          "type": "select",
+          "id": "content_style2",
+          "label": "Content style",
+          "options": [
+            {"value": "orange-style", "label": "Orange style"},
+            {"value": "citrus-style", "label": "Citrus style 1"},
+            {"value": "citrus-style2", "label": "Citrus style 2"},
+            {"value": "citrus-style3", "label": "Citrus style 3"},
+            {"value": "green-style", "label": "Green style 1"},
+            {"value": "green-style2", "label": "Green style 2"},
+            {"value": "parallax-style1", "label": "Parallax style 1"},
+            {"value": "parallax-style2", "label": "Parallax style 2"},
+            {"value": "beige-style1", "label": "Beige style 1"},
+            {"value": "beige-style2", "label": "Beige style 2"},
+            {"value": "beige-style3", "label": "Beige style 3"},
+            {"value": "custom_html", "label": "Custom HTML"}
+          ],
+          "default": "citrus-style2"
+        },
+        {
+          "type": "textarea",
+          "id": "top_title2",
+          "label": "Top text",
+          "default": "<em>self care tools<\/em>"
+        },
+        {
+          "type": "textarea",
+          "id": "main_title2",
+          "label": "Main Title",
+          "default": "Get an instant\nwake-up call."
+        },
+        {
+          "type": "textarea",
+          "id": "sub_title2",
+          "label": "Sub Title"
+        },
+        {
+          "type": "color",
+          "id": "color_top_title2",
+          "label": "Top text color",
+          "default": "#333333"
+        },
+        {
+          "type": "color",
+          "id": "color_main_title2",
+          "label": "Main Title Color",
+          "default": "#282525"
+        },
+        {
+          "type": "color",
+          "id": "sub_color2",
+          "label": "Sub Title Color",
+          "default": "#444"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_content_bg2",
+          "label": "Add background to content",
+          "default": false
+        },
+        {
+          "type": "color",
+          "id": "c_textbg2",
+          "label": "Text background color",
+          "default": "rgba(255, 255, 255, 0.8)"
+        },
+        {
+          "type": "paragraph",
+          "content": "Special Characters"
+        },
+        {
+          "type": "paragraph",
+          "content": "Text wrapped with <em></em> or <strong></strong> are styled by the following settings"
+        },
+        {
+          "type": "color",
+          "id": "em_color2",
+          "label": "Emphasized text color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "em_bg_color2",
+          "label": "Emphasized text background color",
+          "default": "#2c7800"
+        },
+        {
+          "type": "color",
+          "id": "strong_color2",
+          "label": "Strong text color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "strong_bg_color2",
+          "label": "Strong text background color",
+          "default": "#a8bf00"
+        },
+        {
+          "type": "paragraph",
+          "content": "Button"
+        },
+        {
+          "type": "text",
+          "id": "btn_title2",
+          "label": "Button Title",
+          "default": "Shop Accessories"
+        },
+        {
+          "type": "text",
+          "id": "btn_title_icon2",
+          "label": "Icon after text [Browse icons](https://docs.flexkitux.com/pages/icons-list.html)",
+          "default": "icon-dir-double-right"
+        },
+        {
+          "type": "url",
+          "id": "btn_link2",
+          "label": "Link To"
+        },
+        {
+          "type": "select",
+          "id": "btn_style2",
+          "label": "Button Style",
+          "options": [
+            {"value": "btn-default", "label": "Default button"},
+            {"value": "btn-transparent", "label": "Transparent button"},
+            {"value": "btn-secondary", "label": "Secondary button"},
+            {"value": "btn-third", "label": "Third button"},
+            {"value": "btn-text", "label": "Text button"}
+          ],
+          "default": "btn-text"
+        }
+      ]
+    },
+    {
+      "type": "menu_style4",
+      "name":"Mega Menu Style4",
+      "settings": [
+        {
+          "type": "radio",
+          "id": "type",
+          "label": "Menu style",
+          "options": [
+            { "value": "dropdown-mega4", "label": "Mega menu style 4" }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "content": "See demo and documentation [here](https://docs.flexkitux.com/pages/general-header.html#mega-menu-4)"
+        },
+        {
+          "type": "text",
+          "id": "menu_label",
+          "label": "Navigation label",
+          "info": "Input name of the navigation item you are going to style"
+        },
+        {
+          "type": "select",
+          "id": "width",
+          "label": "Width",
+          "options": [
+            { "value": "full-width", "label": "Full Width, contents in container" },
+            { "value": "container", "label": "Container" },
+            { "value": "boxed", "label": "Boxed" }
+          ],
+          "default": "full-width"
+        },
+        {
+          "type": "header",
+          "content": "Typography configuration"
+        },
+        {
+          "type": "select",
+          "id": "font_header",
+          "label": "Menu list header font",
+          "options": [
+            { "value": "font-heading", "label": "Heading font" },
+            { "value": "font-body", "label": "Body font" },
+            { "value": "font-menu", "label": "Menu font" },
+            { "value": "font-extra", "label": "Extra font" },
+            { "value": "font-button", "label": "Button font" },
+            { "value": "font-arial", "label": "Arial" }
+          ],
+          "default": "font-menu"
+        },
+        {
+          "type": "select",
+          "id": "font_item",
+          "label": "Menu list item font",
+          "options": [
+            { "value": "font-heading", "label": "Heading font" },
+            { "value": "font-body", "label": "Body font" },
+            { "value": "font-menu", "label": "Menu font" },
+            { "value": "font-extra", "label": "Extra font" },
+            { "value": "font-button", "label": "Button font" },
+            { "value": "font-arial", "label": "Arial" }
+          ],
+          "default": "font-arial"
+        },
+        {
+          "type": "header",
+          "content": "Social links"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_social_links",
+          "label": "Show social links",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "social_title",
+          "label": "Title of social icons",
+          "default": "Follow us"
+        },
+        {
+          "type": "header",
+          "content": "Social icons color"
+        },
+        {
+          "type": "color",
+          "id": "color_icon",
+          "label": "Icon color",
+          "default": "#fff",
+          "info": "Color of the icons"
+        },
+        {
+          "type": "color",
+          "id": "color_icon_bd",
+          "label": "Icon border color",
+          "default": "rgba(0,0,0,0)",
+          "info": "Border color of the icons"
+        },
+        {
+          "type": "color",
+          "id": "color_icon_bg",
+          "label": "Icon background",
+          "info": "Background color of the icons",
+          "default": "#478107"
+        },
+        {
+          "type": "select",
+          "id": "img_sz",
+          "label": "Image size",
+          "options": [
+            { "value": "origin", "label": "Use original image size" },
+            { "value": "design", "label": "Use design dimensions" }
+          ],
+          "default": "design"
+        },
+        {
+          "type": "header",
+          "content": "Image and text 1"
+        },
+        {
+          "type": "image_picker",
+          "id": "img1",
+          "label": "Item image",
+          "info": "370*220px recommended"
+        },
+        {
+          "type": "select",
+          "id": "content_style1",
+          "label": "Content style",
+          "options": [
+            {"value": "text-green1", "label": "Green 1"},
+            {"value": "text-green2", "label": "Green 2"},
+            {"value": "text-green3", "label": "Green 3"},
+            {"value": "text-orange", "label": "Orange"},
+            {"value": "text-citrus1", "label": "Citrus 1"},
+            {"value": "text-citrus2", "label": "Citrus 2"},
+            {"value": "text-yellow1", "label": "Yellow 1"},
+            {"value": "text-yellow2", "label": "Yellow 2"},
+            {"value": "text-blue1", "label": "Blue 1"},
+            {"value": "text-blue2", "label": "Blue 2"},
+            {"value": "text-beige1", "label": "Beige 1"},
+            {"value": "text-beige2", "label": "Beige 2"},
+            {"value": "text-beige3", "label": "Beige 3"},
+            {"value": "text-pharmacy", "label": "Pharmacy"}
+          ],
+          "default": "text-pharmacy"
+        },
+        {
+          "type": "textarea",
+          "id": "top_title1",
+          "label": "Top text"
+        },
+        {
+          "type": "textarea",
+          "id": "main_title1",
+          "label": "Main Title",
+          "default": "1/2 price"
+        },
+        {
+          "type": "textarea",
+          "id": "sub_title1",
+          "label": "Sub Title",
+          "default": "On any second items"
+        },
+        {
+          "type": "color",
+          "id": "color_top_title1",
+          "label": "Top text color",
+          "default": "#454545"
+        },
+        {
+          "type": "color",
+          "id": "color_main_title1",
+          "label": "Main Title Color",
+          "default": "#313132"
+        },
+        {
+          "type": "color",
+          "id": "sub_color1",
+          "label": "Sub Title Color",
+          "default": "#454545"
+        },
+        {
+          "type": "paragraph",
+          "content": "Button"
+        },
+        {
+          "type": "text",
+          "id": "btn_title1",
+          "label": "Button Title",
+          "default": "View all Deals"
+        },
+        {
+          "type": "text",
+          "id": "btn_title_icon1",
+          "label": "Icon after text [Browse icons](https://docs.flexkitux.com/pages/icons-list.html)",
+          "default": "icon-dir-double-right"
+        },
+        {
+          "type": "url",
+          "id": "btn_link1",
+          "label": "Link To"
+        },
+        {
+          "type": "select",
+          "id": "btn_style1",
+          "label": "Button Style",
+          "options": [
+            {"value": "btn-default", "label": "Default button"},
+            {"value": "btn-transparent", "label": "Transparent button"},
+            {"value": "btn-secondary", "label": "Secondary button"},
+            {"value": "btn-third", "label": "Third button"},
+            {"value": "btn-text", "label": "Text button"}
+          ],
+          "default": "btn-text"
+        },
+        {
+          "type": "paragraph",
+          "content": "Add a label"
+        },
+        {
+          "type": "paragraph",
+          "content": "The following text will be shown on the right middle of element"
+        },
+        {
+          "type": "text",
+          "id": "label1",
+          "label": "Label"
+        },
+        {
+          "type": "color",
+          "id": "label_c1",
+          "label": "Label color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "label_bg1",
+          "label": "Label background",
+          "default": "#478107"
+        },
+        {
+          "type": "header",
+          "content": "Image and text 2"
+        },
+        {
+          "type": "image_picker",
+          "id": "img2",
+          "label": "Item image",
+          "info": "370*220px recommended"
+        },
+        {
+          "type": "select",
+          "id": "content_style2",
+          "label": "Content style",
+          "options": [
+            {"value": "text-green1", "label": "Green 1"},
+            {"value": "text-green2", "label": "Green 2"},
+            {"value": "text-green3", "label": "Green 3"},
+            {"value": "text-orange", "label": "Orange"},
+            {"value": "text-citrus1", "label": "Citrus 1"},
+            {"value": "text-citrus2", "label": "Citrus 2"},
+            {"value": "text-yellow1", "label": "Yellow 1"},
+            {"value": "text-yellow2", "label": "Yellow 2"},
+            {"value": "text-blue1", "label": "Blue 1"},
+            {"value": "text-blue2", "label": "Blue 2"},
+            {"value": "text-beige1", "label": "Beige 1"},
+            {"value": "text-beige2", "label": "Beige 2"},
+            {"value": "text-beige3", "label": "Beige 3"},
+            {"value": "text-pharmacy", "label": "Pharmacy"}
+          ],
+          "default": "text-pharmacy"
+        },
+        {
+          "type": "textarea",
+          "id": "top_title2",
+          "label": "Top text"
+        },
+        {
+          "type": "textarea",
+          "id": "main_title2",
+          "label": "Main Title",
+          "default": "From $10.00"
+        },
+        {
+          "type": "textarea",
+          "id": "sub_title2",
+          "label": "Sub Title",
+          "default": "Hair & body items"
+        },
+        {
+          "type": "color",
+          "id": "color_top_title2",
+          "label": "Top text color",
+          "default": "#454545"
+        },
+        {
+          "type": "color",
+          "id": "color_main_title2",
+          "label": "Main Title Color",
+          "default": "#313132"
+        },
+        {
+          "type": "color",
+          "id": "sub_color2",
+          "label": "Sub Title Color",
+          "default": "#454545"
+        },
+        {
+          "type": "paragraph",
+          "content": "Button"
+        },
+        {
+          "type": "text",
+          "id": "btn_title2",
+          "label": "Button Title",
+          "default": "View all Deals"
+        },
+        {
+          "type": "text",
+          "id": "btn_title_icon2",
+          "label": "Icon after text [Browse icons](https://docs.flexkitux.com/pages/icons-list.html)",
+          "default": "icon-dir-double-right"
+        },
+        {
+          "type": "url",
+          "id": "btn_link2",
+          "label": "Link To"
+        },
+        {
+          "type": "select",
+          "id": "btn_style2",
+          "label": "Button Style",
+          "options": [
+            {"value": "btn-default", "label": "Default button"},
+            {"value": "btn-transparent", "label": "Transparent button"},
+            {"value": "btn-secondary", "label": "Secondary button"},
+            {"value": "btn-third", "label": "Third button"},
+            {"value": "btn-text", "label": "Text button"}
+          ],
+          "default": "btn-text"
+        },
+        {
+          "type": "paragraph",
+          "content": "Add a label"
+        },
+        {
+          "type": "paragraph",
+          "content": "The following text will be shown on the right middle of element"
+        },
+        {
+          "type": "text",
+          "id": "label2",
+          "label": "Label",
+          "default": "now trending"
+        },
+        {
+          "type": "color",
+          "id": "label_c2",
+          "label": "Label color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "label_bg2",
+          "label": "Label background",
+          "default": "#478107"
+        },
+        {
+          "type": "header",
+          "content": "Image and text 3"
+        },
+        {
+          "type": "image_picker",
+          "id": "img3",
+          "label": "Item image",
+          "info": "370*220px recommended"
+        },
+        {
+          "type": "select",
+          "id": "content_style3",
+          "label": "Content style",
+          "options": [
+            {"value": "text-green1", "label": "Green 1"},
+            {"value": "text-green2", "label": "Green 2"},
+            {"value": "text-green3", "label": "Green 3"},
+            {"value": "text-orange", "label": "Orange"},
+            {"value": "text-citrus1", "label": "Citrus 1"},
+            {"value": "text-citrus2", "label": "Citrus 2"},
+            {"value": "text-yellow1", "label": "Yellow 1"},
+            {"value": "text-yellow2", "label": "Yellow 2"},
+            {"value": "text-blue1", "label": "Blue 1"},
+            {"value": "text-blue2", "label": "Blue 2"},
+            {"value": "text-beige1", "label": "Beige 1"},
+            {"value": "text-beige2", "label": "Beige 2"},
+            {"value": "text-beige3", "label": "Beige 3"},
+            {"value": "text-pharmacy", "label": "Pharmacy"}
+          ],
+          "default": "text-pharmacy"
+        },
+        {
+          "type": "textarea",
+          "id": "top_title3",
+          "label": "Top text"
+        },
+        {
+          "type": "textarea",
+          "id": "main_title3",
+          "label": "Main Title",
+          "default": "Save 25%"
+        },
+        {
+          "type": "textarea",
+          "id": "sub_title3",
+          "label": "Sub Title",
+          "default": "On selected skincare"
+        },
+        {
+          "type": "color",
+          "id": "color_top_title3",
+          "label": "Top text color",
+          "default": "#454545"
+        },
+        {
+          "type": "color",
+          "id": "color_main_title3",
+          "label": "Main Title Color",
+          "default": "#313132"
+        },
+        {
+          "type": "color",
+          "id": "sub_color3",
+          "label": "Sub Title Color",
+          "default": "#454545"
+        },
+        {
+          "type": "paragraph",
+          "content": "Button"
+        },
+        {
+          "type": "text",
+          "id": "btn_title3",
+          "label": "Button Title",
+          "default": "Shop Now"
+        },
+        {
+          "type": "text",
+          "id": "btn_title_icon3",
+          "label": "Icon after text [Browse icons](https://docs.flexkitux.com/pages/icons-list.html)",
+          "default": "icon-dir-double-right"
+        },
+        {
+          "type": "url",
+          "id": "btn_link3",
+          "label": "Link To"
+        },
+        {
+          "type": "select",
+          "id": "btn_style3",
+          "label": "Button Style",
+          "options": [
+            {"value": "btn-default", "label": "Default button"},
+            {"value": "btn-transparent", "label": "Transparent button"},
+            {"value": "btn-secondary", "label": "Secondary button"},
+            {"value": "btn-third", "label": "Third button"},
+            {"value": "btn-text", "label": "Text button"}
+          ],
+          "default": "btn-text"
+        },
+        {
+          "type": "paragraph",
+          "content": "Add a label"
+        },
+        {
+          "type": "paragraph",
+          "content": "The following text will be shown on the right middle of element"
+        },
+        {
+          "type": "text",
+          "id": "label3",
+          "label": "Label"
+        },
+        {
+          "type": "color",
+          "id": "label_c3",
+          "label": "Label color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "label_bg3",
+          "label": "Label background",
+          "default": "#478107"
+        }
+      ]
+    },
+    {
+      "type": "menu_classic",
+      "name":"Classic dropdown menu",
+      "settings": [
+        {
+          "type": "radio",
+          "id": "type",
+          "label": "Menu style",
+          "options": [
+            { "value": "dropdown-classic", "label": "Classic dropdown" }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "menu_label",
+          "label": "Navigation label",
+          "info": "Input name of the navigation item you are going to style"
+        },
+        {
+          "type": "select",
+          "id": "style",
+          "label": "Style",
+          "options": [
+            { "value": "border-none", "label": "No borders" },
+            { "value": "border-between", "label": "Borders between menu items" }
+          ],
+          "default": "border-none"
+        },
+        {
+          "type": "select",
+          "id": "font_item",
+          "label": "Font",
+          "options": [
+            { "value": "font-heading", "label": "Heading font" },
+            { "value": "font-body", "label": "Body font" },
+            { "value": "font-menu", "label": "Menu font" },
+            { "value": "font-extra", "label": "Extra font" },
+            { "value": "font-button", "label": "Button font" },
+            { "value": "font-arial", "label": "Arial" }
+          ],
+          "default": "font-arial"
+        }
+      ]
+    },
+    {
+      "type": "menu_tooltip",
+      "name":"Menu Icon Tooltip",
+      "settings": [
+        {
+          "type": "text",
+          "id": "menu_label",
+          "label": "Navigation label",
+          "info": "Input name of the navigation item you are going to style"
+        },
+        {
+          "type": "text",
+          "id": "tooltip_label",
+          "label": "Tooltip Label",
+          "info": "Input label of the tooltip"
+        },
+        {
+          "type": "color",
+          "id": "bg_tooltip",
+          "label": "Background color",
+          "default": "#feae17"
+        },
+        {
+          "type": "color",
+          "id": "c_tooltip",
+          "label": "Text color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "select",
+          "id": "text_transform",
+          "label": "Style",
+          "options": [
+            { "value": "capitalize", "label": "Capitalize" },
+            { "value": "lowercase", "label": "Lowercase" },
+            { "value": "uppercase", "label": "Uppercase" }
+          ],
+          "default": "lowercase"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "Organization",
+  "name": "{{ shop.name }}",
+  {% if settings.logo %}
+    {% assign image_size = settings.logo.width | append:'x' %}
+    "logo": "https:{{ settings.logo | img_url: image_size }}",
+  {% endif %}
+  "sameAs": [
+    "{{ settings.social_twitter_link }}",
+    "{{ settings.social_facebook_link }}",
+    "{{ settings.social_pinterest_link }}",
+    "{{ settings.social_instagram_link }}",
+    "{{ settings.social_tumblr_link }}",
+    "{{ settings.social_snapchat_link }}",
+    "{{ settings.social_youtube_link }}",
+    "{{ settings.social_vimeo_link }}"
+  ],
+  "url": "{{ shop.url }}{{ page.url }}"
+}
+</script>
+
+{% if template.name == 'index' %}
+  <script type="application/ld+json">
+    {
+      "@context": "http://schema.org",
+      "@type": "WebSite",
+      "name": "{{ shop.name }}",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "{{ shop.url }}/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      },
+      "url": "{{ shop.url }}{{ page.url }}"
+    }
+  </script>
+{% endif %}

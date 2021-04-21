@@ -1,0 +1,268 @@
+{%- if section.settings.show -%}
+<div style="margin: {{ section.settings.margin }};background-color:{{section.settings.color_back}}">
+  <div class="store-info row position-relative">
+    <div class="store-info__left medium-6">
+      {%- for block in section.blocks -%}
+        {%- if block.settings.pos == 'left' -%}
+          {% render 'store_info_block', block: block %}
+        {%- endif -%}
+      {%- endfor -%}
+    </div><!-- .store-info__left -->
+
+    <div class="store-info__right position-relative medium-6">
+      {%- for block in section.blocks -%}
+        {%- if block.settings.pos != 'left' -%}
+          {% render 'store_info_block', block: block %}
+        {%- endif -%}
+      {%- endfor -%}
+    </div><!-- .store-info__right -->
+  </div>
+</div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Store Info",
+  "tag": "section",
+  "class": "vs-store-info",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "show",
+      "label": "Show this section",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "Section Margin",
+      "info": "Set margin for section top-right-bottom-left (e.g. 20px 15px 10px 0)"
+    },
+    {
+      "type": "range",
+      "id": "blocks_gap",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Space between blocks",
+      "default": 10
+    },
+    {
+      "type": "color",
+      "id": "color_back",
+      "label": "Background Color",
+      "default": "#ffffff"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "title_desc",
+      "name": "Title and description",
+      "settings": [
+        {
+          "type": "select",
+          "id": "pos",
+          "label": "Position",
+          "options": [
+            {"value": "left", "label": "Left"},
+            {"value": "right", "label": "Right"}
+          ],
+          "default": "right"
+        },
+        {
+          "type": "textarea",
+          "id": "title",
+          "label": "Heading",
+          "default": "We provide solution for\nyour business"
+        },
+        {
+          "type": "color",
+          "id": "color_title",
+          "label": "Title color",
+          "default": "#27282a"
+        },
+        {
+          "type": "textarea",
+          "id": "desc",
+          "label": "Description",
+          "default": "Suspendisse finibus orci id sapien auctor, vel tristique ex dictum. Maecenas arcu eros, bibendum sit amet massa ut pellentesque pharetra massa. Proin nisl magna, ultricies vitae auctor id, tempus in augue. Donec volutpat, ex in feugiat vehicula.\n\nLeo nisi ornare eros, iaculis tempor tortor urna eget sem. Ut a diam eu est egestas iaculis eu non mauris. Praesent sit amet ipsum at mauris consequat molestie. Donec a sollicitudin tellus. Donec justo enim, vehicula a aliquam viverra, fringilla fringilla ante.\n\nQuisque tincidunt purus odio, nec pellentesque ligula vehicula at. Proin sagittis purus sit amet felis lobortis scelerisque. Maecenas vitae accumsan ex. Praesent ut consectetur neque. Praesent tempor, augue ac tempus finibus, enim felis venenatis urna..."
+        },
+        {
+          "type": "color",
+          "id": "color_desc",
+          "label": "Description color",
+          "default": "#4a4a4a"
+        },
+        {
+          "type": "text",
+          "id": "btn1_title",
+          "label": "Button Title",
+          "default": "READ MORE"
+        },
+        {
+          "type": "url",
+          "id": "btn1_link",
+          "label": "Link To"
+        },
+        {
+          "type": "select",
+          "id": "btn1_style",
+          "label": "Button Style",
+          "options": [
+            {"value": "btn-default", "label": "Default button"},
+            {"value": "btn-transparent", "label": "Transparent button"},
+            {"value": "btn-secondary", "label": "Secondary button"},
+            {"value": "btn-third", "label": "Third button"},
+            {"value": "btn-text", "label": "Text button"}
+          ],
+          "default": "btn-default"
+        },
+        {
+          "type": "header",
+          "content": "Second Button"
+        },
+        {
+          "type": "text",
+          "id": "btn2_title",
+          "label": "Button Title"
+        },
+        {
+          "type": "url",
+          "id": "btn2_link",
+          "label": "Link To"
+        },
+        {
+          "type": "select",
+          "id": "btn2_style",
+          "label": "Button Style",
+          "options": [
+            {"value": "btn-default", "label": "Default button"},
+            {"value": "btn-transparent", "label": "Transparent button"},
+            {"value": "btn-secondary", "label": "Secondary button"},
+            {"value": "btn-third", "label": "Third button"},
+            {"value": "btn-text", "label": "Text button"}
+          ],
+          "default": "btn-secondary"
+        }
+      ]
+    },
+    {
+      "type": "image",
+      "name": "Image and Text",
+      "settings": [
+        {
+          "type": "select",
+          "id": "pos",
+          "label": "Position",
+          "options": [
+            {"value": "left", "label": "Left"},
+            {"value": "right", "label": "Right"}
+          ],
+          "default": "left"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "Recommended image size: 945*870px for full-image, 560*560px for boxed-image"
+        },
+        {
+          "type": "select",
+          "id": "width",
+          "label": "Image size",
+          "options": [
+            {"value": "full", "label": "Full square"},
+            {"value": "boxed", "label": "Fixed squre"}
+          ],
+          "default": "full"
+        },
+        {
+          "type": "select",
+          "id": "text_pos",
+          "label": "Text position",
+          "options": [
+            {"value": "above", "label": "Above image"},
+            {"value": "inside", "label": "Inside image"}
+          ],
+          "default": "above"
+        },
+        {
+          "type": "textarea",
+          "id": "title",
+          "label": "Title",
+          "default": "<sup class='quote-symbol'>\“</sup>Class aptent taciti sociosqu ad litora per\nhimenas. Sed nisl ex, condimentum ante quis\nCurabitur ac aliquet in suscipit."
+        },
+        {
+          "type": "color",
+          "id": "color_title",
+          "label": "Title color",
+          "default": "#27272d"
+        },
+        {
+          "type": "textarea",
+          "id": "desc",
+          "label": "Description"
+        },
+        {
+          "type": "color",
+          "id": "color_desc",
+          "label": "Description color",
+          "default": "#333333"
+        }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "Store Info",
+    "category": "Image",
+    "blocks": [
+      {
+        "type": "image",
+        "settings": {
+          "pos": "left",
+          "width": "full",
+          "title": "<sup class=\"quote-symbol\">“<\/sup>Class aptent taciti sociosqu ad litora per himenas. Sed nisl ex, condimentum ante quis Curabitur ac aliquet in suscipit.",
+          "color_title": "#27272d",
+          "desc": "",
+          "color_desc": "#27272d"
+        }
+      },
+      {
+        "type": "image",
+        "settings": {
+          "pos": "left",
+          "width": "boxed",
+          "title": "",
+          "desc": "Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Sed nisl ex, condimentum tristique ante quis, pellentesque  vehicula lacus. Curabitur ac aliquet est, in suscipit...",
+          "color_desc": "#333333"
+        }
+      },
+      {
+        "type": "title_desc",
+        "settings": {
+          "pos": "right",
+          "title": "We provide solution for\nyour business",
+          "color_title": "#27282a",
+          "desc": "Suspendisse finibus orci id sapien auctor, vel tristique ex dictum. Maecenas arcu eros, bibendum sit amet massa ut pellentesque pharetra massa. Proin nisl magna, ultricies vitae auctor id, tempus in augue. Donec volutpat, ex in feugiat vehicula.\n\nLeo nisi ornare eros, iaculis tempor tortor urna eget sem. Ut a diam eu est egestas iaculis eu non mauris. Praesent sit amet ipsum at mauris consequat molestie. Donec a sollicitudin tellus. Donec justo enim, vehicula a aliquam viverra, fringilla fringilla ante.\n\nQuisque tincidunt purus odio, nec pellentesque ligula vehicula at. Proin sagittis purus sit amet felis lobortis scelerisque. Maecenas vitae accumsan ex. Praesent ut consectetur neque. Praesent tempor, augue ac tempus finibus, enim felis venenatis urna...",
+          "color_desc": "#4a4a4a",
+          "btn1_title": "READ MORE",
+          "btn1_style": "btn-default"
+        }
+      },
+      {
+        "type": "image",
+        "settings": {
+          "pos": "right",
+          "width": "full",
+          "title": ""
+        }
+      }
+    ]
+  }]
+}
+{% endschema %}

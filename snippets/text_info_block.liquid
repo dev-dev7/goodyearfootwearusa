@@ -1,0 +1,42 @@
+{% comment %}
+Renders text info in a grid style
+  Accepts:
+    - block: <Block> Section block to show
+
+  Usage:
+    {% include 'text_info_block', block: block %}
+{% endcomment %}
+
+<div class="text-info__block">
+{%- case block.type -%}
+  {%- when "text" -%}
+    {%- if block.settings.title != blank -%}
+      <h2 class="font-normal" style="color:{{ block.settings.color_title }}">{{ block.settings.title | newline_to_br }}</h2>
+    {%- endif -%}
+    {%- if block.settings.desc != blank -%}
+      <p class="description" style="color:{{ block.settings.color_desc }}">{{ block.settings.desc | newline_to_br }}</p>
+    {%- endif -%}
+    {%- if block.settings.btn1_title != blank -%}
+      <a href="{{ block.settings.btn1_link | default: '#' }}" class="btn {{ block.settings.btn1_style }}">{{ block.settings.btn1_title }}</a>
+    {%- endif -%}
+
+    {%- if block.settings.btn2_title != blank -%}
+      <a href="{{ block.settings.btn2_link | default: '#' }}" class="btn {{ block.settings.btn2_style }} btn-second">{{ block.settings.btn2_title }}</a>
+    {%- endif -%}
+  {%- else -%}
+    <div>
+      {%- if block.settings.title != blank -%}
+        <h2 class="font-normal" style="color:{{ block.settings.color_title }}">{{ block.settings.title | newline_to_br }}</h2>
+      {%- endif -%}
+      {%- for index in (1..5) -%}
+        {% capture icon_index %}promo_icon{{ index }}{% endcapture %}
+        {% capture title_index %}promo_title{{ index }}{% endcapture %}
+        {% capture text_index %}promo_text{{ index }}{% endcapture %}
+        {% assign promo_icon = block.settings[icon_index] %}
+        {% assign promo_title = block.settings[title_index] %}
+        {% assign promo_text = block.settings[text_index] %}
+        {% include 'promotion', promo_icon: promo_icon, promo_title: promo_title, promo_text: promo_text %}
+      {%- endfor -%}
+    </div>
+{%- endcase -%}
+</div>

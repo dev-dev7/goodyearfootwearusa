@@ -1,0 +1,38 @@
+{%- if settings.font_origin == 'google' -%}
+  {%- assign fh = settings.gf_heading -%}
+  {%- assign fbd = settings.gf_body | default: fh -%}
+  {%- assign fbt = settings.gf_button | default: fbd -%}
+  {%- assign fm = settings.gf_menu | default: fh -%}
+  {%- assign fe = settings.gf_extra | default: fh -%}
+  {%- capture fonts -%}
+    {%- if fh != 'Arial' -%}{{ fh | strip | replace: ' ', '+'}}:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i{%- endif -%}
+    {%- if fbd != fh and fbd != 'Arial' -%}|{{fbd | strip | replace: ' ', '+'}}:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i{% endif -%}
+    {%- if fbt != fh and fbt != fbd and fbt != 'Arial' -%}|{{ fbt | strip | replace: ' ', '+'}}:300,300i,400,400i,500,500i,600,600i,700,700i{% endif -%}
+    {%- if fm != fh and fm != fbd and fm != fbt and fm != 'Arial' -%}|{{ fm | strip | replace: ' ', '+'}}:300,300i,400,400i,500,500i,600,600i,700,700i{% endif -%}
+    {%- if fe != fm and fe != fh and fe != fbd and fe != fbt and fe != 'Arial' and fe != blank -%}|{{ fe | strip | replace: ' ', '+'}}:300,300i,400,400i,500,500i,600,600i,700,700i{% endif -%}
+  {%- endcapture %}
+  <link rel="dns-prefetch" href="//fonts.googleapis.com" crossorigin>
+  <link rel="dns-prefetch" href="//ajax.googleapis.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family={{ fonts }}&display=swap">
+{%- else -%}
+  <link rel="dns-prefetch" href="//fonts.shopifycdn.com" crossorigin>
+{%- endif -%}
+
+{{ 'style.scss.css' | asset_url | stylesheet_tag }}
+<link rel="stylesheet" href="{{ 'non-critical.scss.css' | asset_url }}" media="print" onload="this.media='all'">
+
+{%- unless template contains 'index' -%}
+  {%- if template contains 'product' -%}
+    {{ 'product.scss.css' | asset_url | stylesheet_tag }}
+    <link rel="stylesheet" href="{{ 'non-critical-product.scss.css' | asset_url }}" media="print" onload="this.media='all'">
+  {%- else -%}{{ 'collection.scss.css' | asset_url | stylesheet_tag }}{%- endif -%}
+  {%- if template contains 'collection' -%}
+    <link rel="stylesheet" href="{{ 'non-critical-collection.scss.css' | asset_url }}" media="print" onload="this.media='all'">
+  {%- endif -%}
+  {%- unless template contains 'product' or template contains 'collection' or template contains 'search' -%}{{ 'pages.scss.css' | asset_url | stylesheet_tag }}{%- endunless -%}
+{%- endunless -%}
+
+{%- if settings.switch_rtl -%}{{ 'rtl-style.css' | asset_url | stylesheet_tag }}{%- endif -%}
+{%- if settings.custom_style != blank -%}<style>{{ settings.custom_style }}</style>{%- endif -%}
+{%- if settings.show_currency_flag -%}<link rel="stylesheet" href="{{ 'currency-flags.css' | asset_url }}" media="print" onload="this.media='all'">{%- endif -%}

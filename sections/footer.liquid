@@ -1,0 +1,749 @@
+{%- liquid
+assign font_header = section.settings.font_header
+assign fw_header = section.settings.fw_header
+assign font_body = section.settings.font_body
+assign fw_body = section.settings.fw_body
+-%}
+<footer class="{{ section.settings.footer_style }}">
+  <div class="footer-main">
+    <div class="container ds-flex flex-wrap">
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when 'logo' -%}
+          <div class="footer-item position-relative" {{ block.shopify_attributes }}>
+            <a href="/" class="footer-logo">
+              {%- if block.settings.logo != blank -%}
+                <img class="lazyload" data-src="{{ block.settings.logo | img_url: '250x' }}" />
+              {%- else -%}
+                {{ shop.name }}
+              {%- endif -%}
+            </a>
+          </div>
+
+          {%- when 'menu' -%}
+          <div class="footer-item position-relative" {{ block.shopify_attributes }}>
+            {%- assign footer_linklist = block.settings.link_list -%}
+            {%- if linklists[footer_linklist].links.size > 0 -%}
+              <h3 class="footer-menu__title {{ font_header }} {{ fw_header }}">{{ linklists[footer_linklist].title }}</h3>
+              <ul class="list-style-none footer-links">
+                {% for link in linklists[footer_linklist].links %}
+                  <li><a class="footer-menu__link {{ font_body }} {{ fw_body }}" href="{{ link.url }}">{{ link.title }}</a></li>
+                {% endfor %}
+              </ul>
+            {%- else -%}
+              <h3 class="footer-menu__title {{ font_header }} {{ fw_header }}">Footer Menu</h3>
+              <ul class="list-style-none footer-links">
+                {% for i in (1..6) %}
+                  <li><a class="footer-menu__link {{ font_body }} {{ fw_body }}" href="#">Footer menu {{ i }}</a></li>
+                {% endfor %}
+              </ul>
+            {%- endif -%}
+          </div>
+
+          {%- when 'form' -%}
+          <div class="footer-item footer-form footer-contact-form position-relative" {{ block.shopify_attributes }}>
+            <div class="form-container {{ font_body }} {{ fw_body }}">
+              <h3 class="footer-menu__title {{ font_header }} {{ fw_header }}">{{ block.settings.form_title }}</h3>
+              {%- if block.settings.map_img != blank -%}
+                <div class="position-relative store-location" style="padding-top: 22.22%">
+                  {% render 'image', m_img: block.settings.map_img, image_alt: 'Store location' %}
+                </div>
+              {%- endif -%}
+              {% form 'contact',id: form.id %}
+                <input type="email" placeholder="{{ block.settings.email_text }}" name="contact[email]" required />
+                <textarea placeholder="{{ block.settings.review_text }}" name="contact[body]" required></textarea>
+                <button class="btn {{ block.settings.btn_style }}">{{ block.settings.submit_text }}{% include 'include_icon', icon_name: block.settings.submit_text_icon %}</button>
+              {% endform %}
+            </div>
+          </div>
+
+          {%- when 'newsletter' -%}
+          <div class="footer-item footer-form footer-newsletter position-relative" {{ block.shopify_attributes }}>
+            <div class="form-container {{ font_body }} {{ fw_body }}">
+              <h3 class="footer-menu__title {{ font_header }} {{ fw_header }}">{{ block.settings.form_title }}</h3>
+
+              {%- if settings.newsletter_service == 'shopify-default' -%}
+                {% form 'customer', class: 'ds-flex flex-wrap position-relative', id: form.id %}
+                  {% render 'form_status', form: form, form_id: formId, success_message: 'general.newsletter_form.confirmation' | t %}
+                  {% unless form.posted_successfully? %}
+                    <input type="hidden" name="contact[tags]" value="newsletter">
+                    <input type="email" name="contact[email]" value="{% if customer %}{{ customer.email }}{% endif %}" placeholder="{{ block.settings.email_text }}" autocorrect="off" autocapitalize="off">
+                    <button type="submit" name="commit" class="btn-icon">{% render 'icon-dir-right' %}</button>
+                  {% endunless %}
+                {% endform %}
+              {%- else -%}
+                <form class="ds-flex flex-wrap position-relative" action="{{ settings.newsletter_form_action }}" method="post" target="_blank" name="mc-embedded-subscribe-form">
+                  <input type="email" placeholder="{{ block.settings.email_text }}" name="EMAIL" required/>
+                  <button type="submit" class="btn-icon">{% render 'icon-dir-right' %}</button>
+                </form>
+              {%- endif -%}
+
+              <p class="description">{{ block.settings.description | newline_to_br }}</p>
+            </div>
+          </div>
+
+          {%- when 'contact_details' -%}
+          <div class="footer-item position-relative" {{ block.shopify_attributes }}>
+            <h3 class="footer-menu__title {{ font_header }} {{ fw_header }}">{{ block.settings.title }}</h3>
+
+            {%- if block.settings.phone_1 != blank or block.settings.phone_2 != blank -%}
+              <div class="ds-flex align-stretch footer-contact__details">
+                {%- if block.settings.show_icon -%}
+                  <div class="icon-wrapper" style="color:{{ block.settings.color_icon }}">
+                    {% render 'icon-phone' %}
+                  </div>
+                {%- endif -%}
+                <div class="footer-text {{ block.settings.font_body }} {{ block.settings.fw_body }}" style="color:{{ block.settings.color_text }}">
+                  <span class="ds-block">{{ block.settings.phone_1 }}</span>
+                  <span class="ds-block">{{ block.settings.phone_2 }}</span>
+                </div>
+              </div>
+            {%- endif -%}
+
+            {%- if block.settings.email_1 != blank or block.settings.email_2 != blank -%}
+              <div class="ds-flex align-stretch footer-contact__details">
+                {%- if block.settings.show_icon -%}
+                  <div class="icon-wrapper" style="color:{{ block.settings.color_icon }}">
+                    {% render 'icon-email' %}
+                  </div>
+                {%- endif -%}
+                <div class="footer-text {{ block.settings.font_body }} {{ block.settings.fw_body }}" style="color:{{ block.settings.color_text }}">
+                  <span class="ds-block">{{ block.settings.email_1 }}</span>
+                  <span class="ds-block">{{ block.settings.email_2 }}</span>
+                </div>
+              </div>
+            {%- endif -%}
+
+            {%- if block.settings.skype_1 != blank or block.settings.skype_2 != blank -%}
+              <div class="ds-flex align-stretch footer-contact__details">
+                {%- if block.settings.show_icon -%}
+                  <div class="icon-wrapper" style="color:{{ block.settings.color_icon }}">
+                    {% render 'icon-skype' %}
+                  </div>
+                {%- endif -%}
+                <div class="footer-text {{ block.settings.font_body }} {{ block.settings.fw_body }}" style="color:{{ block.settings.color_text }}">
+                  <span class="ds-block">{{ block.settings.skype_1 }}</span>
+                  <span class="ds-block">{{ block.settings.skype_2 }}</span>
+                </div>
+              </div>
+            {%- endif -%}
+
+            {%- if block.settings.note != blank -%}
+              <div class="ds-flex align-stretch add-note">
+                <p class="footer-text {{ block.settings.font_body }} {{ fw_body }}" style="color: {{ block.settings.color_note }}">{{ block.settings.note | newline_to_br }}</p>
+              </div>
+            {%- endif -%}
+          </div>
+
+          {%- when 'footer_social_icons' -%}
+          <div class="footer-item position-relative block-{{ block.id }}" {{ block.shopify_attributes }}>
+            <h3 class="footer-menu__title {{ font_header }} {{ fw_header }}">{{ block.settings.title }}</h3>
+            {% include 'footer_social_icons' %}
+            <style>.block-{{ block.id }} .social-link{border-color:{{block.settings.color_icon_bd}};background-color:{{block.settings.color_icon_bg}};color:{{block.settings.color_icon}}}</style>
+          </div>
+
+          {%- when 'instagram' -%}
+          <div class="footer-item position-relative vs-instagram" {{ block.shopify_attributes }}>
+            <h3 class="footer-menu__title {{ font_header }} {{ fw_header }}">{{ block.settings.title }}</h3>
+            <div class="instagram-images ds-flex row"
+              data-hashtag="{{ block.settings.hashtag }}"
+              data-grid="{{ block.settings.grid_count }}"
+              data-count="{{ block.settings.limit }}"></div>
+          </div>
+        {%- endcase -%}
+      {%- endfor -%}
+    </div><!-- .container -->
+  </div><!-- .footer-main -->
+
+  {%- assign bottoms = section.blocks | where: "type", "footer_bottom" -%}
+  {% for block in bottoms %}
+    {% include 'footer_bottom' with block %}
+  {% endfor %}
+
+</footer><!-- footer -->
+
+{%- if section.settings.use_custom_padding -%}
+{% style %}
+  .footer-main {
+    padding: {{ section.settings.padding_mobile }};
+  }
+  @media screen and (min-width: 768px) {
+    .footer-main {
+      padding: {{ section.settings.padding_laptop }};
+    }
+  }
+  @media screen and (min-width: 1600px) {
+    .footer-main {
+      padding: {{ section.settings.padding }};
+    }
+  }
+{%- endstyle -%}
+{%- endif -%}
+{% schema %}
+{
+  "name": "Footer",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Footer Style"
+    },
+    {
+      "type": "select",
+      "id": "footer_style",
+      "label": "Footer link style",
+      "options": [
+        {"value": "footer-style1", "label": "Style 1"},
+        {"value": "footer-style2", "label": "Style 2"},
+        {"value": "footer-style3", "label": "Style 3"},
+        {"value": "footer-style4", "label": "Style 4"},
+        {"value": "footer-style5", "label": "Style 5"},
+        {"value": "footer-style6", "label": "Style 6"},
+        {"value": "footer-style7", "label": "Style 7"}
+      ],
+      "default": "footer-style1"
+    },
+    {
+      "type": "header",
+      "content": "Space settings",
+      "info": "Set padding for section top-right-bottom-left (e.g. 20px 15px 10px 0)"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_custom_padding",
+      "label": "Use custom padding",
+      "default": false,
+      "info": "If this setting is disabled, pre-defined theme setting is applied."
+    },
+    {
+      "type": "text",
+      "id": "padding",
+      "label": "Padding on desktops",
+      "default": "50px 0 50px 0"
+    },
+    {
+      "type": "text",
+      "id": "padding_laptop",
+      "label": "Padding on laptops",
+      "default": "24px 0 24px 0"
+    },
+    {
+      "type": "text",
+      "id": "padding_mobile",
+      "label": "Padding on mobile",
+      "default": "7px 0 24px 0"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "paragraph",
+      "content": "Heading text"
+    },
+    {
+      "type": "select",
+      "id": "font_header",
+      "label": "Header font",
+      "options": [
+        { "value": "ff-setting-none", "label": "Prefer to use design" },
+        { "value": "font-heading", "label": "Heading font" },
+        { "value": "font-body", "label": "Body font" },
+        { "value": "font-menu", "label": "Menu font" },
+        { "value": "font-extra", "label": "Extra font" },
+        { "value": "font-button", "label": "Button font" },
+        { "value": "font-arial", "label": "Arial" }
+      ],
+      "default": "ff-setting-none"
+    },
+    {
+      "type": "select",
+      "id": "fw_header",
+      "label": "Header font weight",
+      "options": [
+        { "value": "fw-setting-none", "label": "Prefer to use design" },
+        { "value": "font-300", "label": "300" },
+        { "value": "font-400", "label": "400" },
+        { "value": "font-500", "label": "500" },
+        { "value": "font-600", "label": "600" },
+        { "value": "font-700", "label": "700" },
+        { "value": "font-900", "label": "900" }
+      ],
+      "default": "fw-setting-none"
+    },
+    {
+      "type": "select",
+      "id": "font_body",
+      "label": "Body font",
+      "options": [
+        { "value": "ff-setting-none", "label": "Prefer to use design" },
+        { "value": "font-heading", "label": "Heading font" },
+        { "value": "font-body", "label": "Body font" },
+        { "value": "font-menu", "label": "Menu font" },
+        { "value": "font-extra", "label": "Extra font" },
+        { "value": "font-button", "label": "Button font" },
+        { "value": "font-arial", "label": "Arial" }
+      ],
+      "default": "ff-setting-none"
+    },
+    {
+      "type": "select",
+      "id": "fw_body",
+      "label": "Body font weight",
+      "options": [
+        { "value": "fw-setting-none", "label": "Prefer to use design" },
+        { "value": "font-300", "label": "300" },
+        { "value": "font-400", "label": "400" },
+        { "value": "font-500", "label": "500" },
+        { "value": "font-600", "label": "600" },
+        { "value": "font-700", "label": "700" },
+        { "value": "font-900", "label": "900" }
+      ],
+      "default": "fw-setting-none"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "logo",
+      "name": "Logo",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "logo",
+          "label": "Logo image"
+        }
+      ]
+    },
+    {
+      "type": "menu",
+      "name": "Menu",
+      "settings": [
+        {
+          "type": "link_list",
+          "id": "link_list",
+          "label": "Menu",
+          "default": "footer",
+          "info": "This menu won't show dropdown items"
+        }
+      ]
+    },
+    {
+      "type": "form",
+      "name": "Contact Form",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "map_img",
+          "label": "Location image",
+          "info": "270px*60px recommended"
+        },
+        {
+          "type": "text",
+          "id": "form_title",
+          "label": "Title",
+          "default": "QUICK CONTACT"
+        },
+        {
+          "type": "text",
+          "id": "email_text",
+          "label": "Email Placeholder",
+          "default": "Enter your e-mail*"
+        },
+        {
+          "type": "text",
+          "id": "review_text",
+          "label": "Review Placeholder",
+          "default": "Write your review*"
+        },
+        {
+          "type": "text",
+          "id": "submit_text",
+          "label": "Button Text",
+          "default": "Send"
+        },
+        {
+          "type": "text",
+          "id": "submit_text_icon",
+          "label": "Icon after text"
+        },
+        {
+          "type": "select",
+          "id": "btn_style",
+          "label": "Button style",
+          "options": [
+            {"value": "btn-default", "label": "Default button"},
+            {"value": "btn-text", "label": "Text link"}
+          ],
+          "default": "btn-default"
+        }
+      ]
+    },
+    {
+      "type": "contact_details",
+      "name": "Contact Details",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Contact Details"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_icon",
+          "label": "Show Icons",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "phone_1",
+          "label": "Phone Number 1",
+          "default": "0203 - 980 - 14 - 79"
+        },
+        {
+          "type": "text",
+          "id": "phone_2",
+          "label": "Phone Number 2",
+          "default": "0203 - 478 - 12 - 96"
+        },
+        {
+          "type": "text",
+          "id": "email_1",
+          "label": "First Email",
+          "default": "vene@gmail.com"
+        },
+        {
+          "type": "text",
+          "id": "email_2",
+          "label": "Second Email",
+          "default": "venedor@mail.com"
+        },
+        {
+          "type": "text",
+          "id": "skype_1",
+          "label": "Skype contact 1",
+          "default": "ven_shop_contact"
+        },
+        {
+          "type": "text",
+          "id": "skype_2",
+          "label": "Skype contact 2",
+          "default": "venedor_support"
+        },
+        {
+          "type": "textarea",
+          "id": "note",
+          "label": "Additional note"
+        },
+        {
+          "type": "color",
+          "id": "color_icon",
+          "label": "Icon color",
+          "default": "#d4dde5"
+        },
+        {
+          "type": "color",
+          "id": "color_text",
+          "label": "Text color",
+          "default": "#d4dde5"
+        },
+        {
+          "type": "color",
+          "id": "color_note",
+          "label": "Note color",
+          "default": "#333333"
+        },
+        {
+          "type": "header",
+          "content": "Typography"
+        },
+        {
+          "type": "select",
+          "id": "font_body",
+          "label": "Body font",
+          "options": [
+            { "value": "ff-setting-none", "label": "Prefer to use design" },
+            { "value": "font-heading", "label": "Heading font" },
+            { "value": "font-body", "label": "Body font" },
+            { "value": "font-menu", "label": "Menu font" },
+            { "value": "font-extra", "label": "Extra font" },
+            { "value": "font-button", "label": "Button font" },
+            { "value": "font-arial", "label": "Arial" }
+          ],
+          "default": "ff-setting-none"
+        },
+        {
+          "type": "select",
+          "id": "fw_body",
+          "label": "Body font weight",
+          "options": [
+            { "value": "fw-setting-none", "label": "Prefer to use design" },
+            { "value": "font-300", "label": "300" },
+            { "value": "font-400", "label": "400" },
+            { "value": "font-500", "label": "500" },
+            { "value": "font-600", "label": "600" },
+            { "value": "font-700", "label": "700" },
+            { "value": "font-900", "label": "900" }
+          ],
+          "default": "fw-setting-none"
+        }
+      ]
+    },
+    {
+      "type": "footer_social_icons",
+      "name": "Social",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Follow us"
+        },
+        {
+          "type": "header",
+          "content": "Social icons color"
+        },
+        {
+          "type": "color",
+          "id": "color_icon",
+          "label": "Icon color",
+          "default": "#fff",
+          "info": "Color of the icons"
+        },
+        {
+          "type": "color",
+          "id": "color_icon_bd",
+          "label": "Icon border color",
+          "default": "rgba(0,0,0,0)",
+          "info": "Border color of the icons"
+        },
+        {
+          "type": "color",
+          "id": "color_icon_bg",
+          "label": "Icon background",
+          "info": "Background color of the icons",
+          "default": "#2d79fd"
+        }
+      ]
+    },
+    {
+      "type": "instagram",
+      "name": "Instagram Images",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Instagram"
+        },
+        {
+          "type": "text",
+          "id": "hashtag",
+          "label": "Instagram hashtag",
+          "default": "#venedor_electronics"
+        },
+        {
+          "type": "range",
+          "id": "limit",
+          "min": 1,
+          "max": 20,
+          "step": 1,
+          "label": "Number of images to show",
+          "default": 6
+        },
+        {
+          "type": "range",
+          "id": "grid_count",
+          "min": 1,
+          "max": 8,
+          "step": 1,
+          "label": "Number of images in a row",
+          "default": 3
+        }
+      ]
+    },
+    {
+      "type": "newsletter",
+      "name": "Newsletter Form",
+      "settings": [
+        {
+          "type": "text",
+          "id": "form_title",
+          "label": "Title",
+          "default": "Stay up to date"
+        },
+        {
+          "type": "text",
+          "id": "email_text",
+          "label": "Email Placeholder",
+          "default": "your@email.com*"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "Venedor club members receive\n a <ins><i>15% discount<\/i><\/ins> redeemable against all orders. New friends get free shipping on your first order!"
+        }
+      ]
+    },
+    {
+      "type": "footer_bottom",
+      "name": "Footer bottom",
+      "settings": [
+        {
+          "type": "radio",
+          "id": "style",
+          "label": "Bottom Style",
+          "options": [
+            { "value": "center", "label": "Center" },
+            { "value": "space-between", "label": "Space Between" }
+          ],
+          "default": "space-between"
+        },
+        {
+          "type": "radio",
+          "id": "type",
+          "label": "Content Type",
+          "options": [
+            { "value": "social_icons", "label": "Copyright with Social Icons" },
+            { "value": "store_payment", "label": "Payment Providers" },
+            { "value": "custom_image", "label": "Custom Images" },
+            { "value": "none", "label": "Hide" }
+          ],
+          "default": "social_icons"
+        },
+        {
+          "type": "textarea",
+          "id": "block_title",
+          "label": "Title"
+        },
+        {
+          "type": "textarea",
+          "id": "copyright",
+          "label": "Text",
+          "default": "&copy; Venedor Shopify Theme. Powered by Shopify."
+        },
+        {
+          "type": "header",
+          "content": "Typography"
+        },
+        {
+          "type": "select",
+          "id": "font_header",
+          "label": "Header font",
+          "options": [
+            { "value": "ff-setting-none", "label": "Prefer to use design" },
+            { "value": "font-heading", "label": "Heading font" },
+            { "value": "font-body", "label": "Body font" },
+            { "value": "font-menu", "label": "Menu font" },
+            { "value": "font-extra", "label": "Extra font" },
+            { "value": "font-button", "label": "Button font" },
+            { "value": "font-arial", "label": "Arial" }
+          ],
+          "default": "ff-setting-none"
+        },
+        {
+          "type": "select",
+          "id": "fw_header",
+          "label": "Header font weight",
+          "options": [
+            { "value": "fw-setting-none", "label": "Prefer to use design" },
+            { "value": "font-300", "label": "300" },
+            { "value": "font-400", "label": "400" },
+            { "value": "font-500", "label": "500" },
+            { "value": "font-600", "label": "600" },
+            { "value": "font-700", "label": "700" },
+            { "value": "font-900", "label": "900" }
+          ],
+          "default": "fw-setting-none"
+        },
+        {
+          "type": "select",
+          "id": "font_body",
+          "label": "Body font",
+          "options": [
+            { "value": "ff-setting-none", "label": "Prefer to use design" },
+            { "value": "font-heading", "label": "Heading font" },
+            { "value": "font-body", "label": "Body font" },
+            { "value": "font-menu", "label": "Menu font" },
+            { "value": "font-extra", "label": "Extra font" },
+            { "value": "font-button", "label": "Button font" },
+            { "value": "font-arial", "label": "Arial" }
+          ],
+          "default": "ff-setting-none"
+        },
+        {
+          "type": "select",
+          "id": "fw_body",
+          "label": "Body font weight",
+          "options": [
+            { "value": "fw-setting-none", "label": "Prefer to use design" },
+            { "value": "font-300", "label": "300" },
+            { "value": "font-400", "label": "400" },
+            { "value": "font-500", "label": "500" },
+            { "value": "font-600", "label": "600" },
+            { "value": "font-700", "label": "700" },
+            { "value": "font-900", "label": "900" }
+          ],
+          "default": "fw-setting-none"
+        },
+        {
+          "type": "header",
+          "content": "Social icons color"
+        },
+        {
+          "type": "color",
+          "id": "color_icon",
+          "label": "Icon color",
+          "default": "#999999",
+          "info": "Color of the icons"
+        },
+        {
+          "type": "color",
+          "id": "color_icon_bd",
+          "label": "Icon border color",
+          "default": "rgba(0,0,0,0)",
+          "info": "Border color of the icons"
+        },
+        {
+          "type": "color",
+          "id": "color_icon_bg",
+          "label": "Background color of the icons",
+          "default": "rgba(255,255,255,0.1)"
+        },
+        {
+          "type": "image_picker",
+          "id": "m_img",
+          "label": "Custom image on bottom content",
+          "info": "310x28px recommended"
+        },
+        {
+          "type": "checkbox",
+          "id": "use_custom_padding",
+          "label": "Use custom padding",
+          "default": false,
+          "info": "If this setting is disabled, pre-defined theme setting is applied."
+        },
+        {
+          "type": "text",
+          "id": "padding",
+          "label": "Padding on desktops",
+          "default": "50px 0 50px 0"
+        },
+        {
+          "type": "text",
+          "id": "padding_laptop",
+          "label": "Padding on laptops",
+          "default": "24px 0 24px 0"
+        },
+        {
+          "type": "text",
+          "id": "padding_mobile",
+          "label": "Padding on mobile",
+          "default": "7px 0 24px 0"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

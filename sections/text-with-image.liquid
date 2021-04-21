@@ -1,0 +1,239 @@
+{%- assign gap = section.settings.item_margin | divided_by: 2 -%}
+<div class="image-layout1 {{ section.settings.layout }}">
+  {%- if section.settings.title != blank -%}
+    <h2 class="block-title">{{ section.settings.title }}</h2>
+  {%- endif -%}
+  {%- if section.settings.description != blank -%}
+    <p class="block-description">{{ section.settings.description }}</p>
+  {%- endif -%}
+
+  {%- if section.blocks.size > 0 -%}
+    <div class="ds-flex flex-wrap" style="margin: 0 -{{ gap }}px;">
+      {%- for block in section.blocks -%}
+        {% assign back_img = block.settings.back_img | img_url: 'master' %}
+
+        <div class="image-block-item" style="padding: 0 {{ gap }}px;" {{ block.shopify_attributes }}>
+          <div class="position-relative">
+            {%- if block.settings.back_img != blank -%}
+              <div class="position-relative image-loading" style="padding-top: {{ 100 | divided_by: block.settings.back_img.aspect_ratio }}%">
+                <div class="image-bg lazyload" data-bg="{{ back_img }}"></div>
+              </div>
+            {%- else -%}
+              <div class="position-relative" style="padding-top: 58.1%">
+                {{ 'image' | placeholder_svg_tag: 'placeholder' }}
+              </div>
+            {%- endif -%}
+
+            <div class="emphasis-border" style="border-width: {{ section.settings.item_border }}px">
+              <div class="text-content {{ block.settings.content_vp }} {{ block.settings.content_style }} font-10">
+                <div class="{{ block.settings.content_hp }}">
+                  {%- if block.settings.sub_title != blank -%}
+                    <h3 style="color: {{ block.settings.sub_color }};">{{ block.settings.sub_title }}</h3>
+                  {%- endif -%}
+
+                  {%- if block.settings.main_title != blank -%}
+                    <h2 style="color: {{ block.settings.color_title }};">{{ block.settings.main_title | newline_to_br }}</h2>
+                  {%- endif -%}
+
+                  {%- if block.settings.button_title != blank -%}
+                    <a href="{{ block.settings.item_link | default: '#' }}" class="btn {{ block.settings.btn_style }}">{{ block.settings.button_title }}</a>
+                  {%- endif -%}
+                </div>
+
+                {%- if block.settings.item_link != blank and block.settings.button_title == blank -%}
+                  <a href="{{ block.settings.item_link }}" class="link-entire"></a>
+                {%- endif -%}
+              </div><!-- .text-content -->
+            </div><!-- .emphasis-border -->
+
+          </div><!-- .position-relative -->
+        </div><!-- .image-block-item -->
+      {%- endfor -%}
+    </div><!-- .ds-flex.flex-wrap -->
+  {%- endif -%}
+</div><!-- .image-layout1 -->
+{%- capture styles -%}
+#shopify-section-{{ section.id }}{
+  margin: {{ section.settings.margin }};
+  padding:{{ section.settings.padding }}
+}
+{%- endcapture -%}
+<style>{{ styles | strip_newlines | remove: '  ' }}</style>
+{% schema %}
+{
+  "name": "Text with image 1",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Settings"
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "Section margin",
+      "info": "Set margin for section top-right-bottom-left (e.g. 20px 15px 10px 0)",
+      "default": "0 0 100px 0"
+    },
+    {
+      "type": "text",
+      "id": "padding",
+      "label": "Section padding",
+      "info": "Set padding for section top-right-bottom-left (e.g. 20px 15px 10px 0)",
+      "default": "0 0 0 0"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Title"
+    },
+    {
+      "type": "text",
+      "id": "description",
+      "label": "Section Description"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        { "value": "container", "label": "Default" },
+        { "value": "full-width-container", "label": "Full Width" }
+      ],
+      "default": "container"
+    },
+    {
+      "type": "range",
+      "id": "item_margin",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding between blocks",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "item_border",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "unit": "px",
+      "label": "Border width when mouse hover",
+      "default": 3
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Text Block",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "back_img",
+          "label": "Background Image"
+        },
+        {
+          "type": "select",
+          "id": "content_hp",
+          "label": "Content position",
+          "options": [
+            {"value": "left", "label": "Left"},
+            {"value": "center", "label": "Center"},
+            {"value": "right", "label": "Right"}
+          ],
+          "default": "left"
+        },
+        {
+          "type": "select",
+          "id": "content_vp",
+          "label": "Content position",
+          "options": [
+            {"value": "v-top", "label": "Top"},
+            {"value": "v-center", "label": "Center"},
+            {"value": "v-bottom", "label": "Bottom"}
+          ],
+          "default": "v-center"
+        },
+        {
+          "type": "select",
+          "id": "content_style",
+          "label": "Content style",
+          "options": [
+            {"value": "text-green1", "label": "Green 1"},
+            {"value": "text-green2", "label": "Green 2"},
+            {"value": "text-green3", "label": "Green 3"},
+            {"value": "text-orange", "label": "Orange"},
+            {"value": "text-citrus1", "label": "Citrus 1"},
+            {"value": "text-citrus2", "label": "Citrus 2"},
+            {"value": "text-yellow1", "label": "Yellow 1"},
+            {"value": "text-yellow2", "label": "Yellow 2"},
+            {"value": "text-blue1", "label": "Blue 1"},
+            {"value": "text-blue2", "label": "Blue 2"},
+            {"value": "text-beige1", "label": "Beige 1"},
+            {"value": "text-beige2", "label": "Beige 2"},
+            {"value": "text-beige3", "label": "Beige 3"}
+          ],
+          "default": "text-green1"
+        },
+        {
+          "type": "text",
+          "id": "sub_title",
+          "label": "Sub Title",
+          "default": "SEE THE GREAT"
+        },
+        {
+          "type": "color",
+          "id": "sub_color",
+          "label": "Sub Title Color",
+          "default": "#444645"
+        },
+        {
+          "type": "textarea",
+          "id": "main_title",
+          "label": "Main Title",
+          "default": "TIMELESS\nDESIGN"
+        },
+        {
+          "type": "color",
+          "id": "color_title",
+          "label": "Title Color",
+          "default": "#3e3e3e"
+        },
+        {
+          "type": "text",
+          "id": "button_title",
+          "label": "Button Title"
+        },
+        {
+          "type": "url",
+          "id": "item_link",
+          "label": "Link To"
+        },
+        {
+          "type": "select",
+          "id": "btn_style",
+          "label": "Button Style",
+          "options": [
+            {"value": "btn-default", "label": "Default button"},
+            {"value": "btn-transparent", "label": "Transparent button"},
+            {"value": "btn-secondary", "label": "Secondary button"},
+            {"value": "btn-third", "label": "Third button"},
+            {"value": "btn-text", "label": "Text button"}
+          ],
+          "default": "btn-default"
+        }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "Text with image 1",
+    "category": "Text Section",
+    "blocks": [
+      { "type": "image" },
+      { "type": "image" },
+      { "type": "image" }
+    ]
+  }]
+}
+{% endschema %}

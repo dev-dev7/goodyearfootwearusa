@@ -1,0 +1,770 @@
+{% comment %}
+Renders slideshow section in collection pages
+{% endcomment %}
+{%- liquid
+assign slide_layout = section.settings.slide_layout
+assign layout_h = section.settings.layout_h
+-%}
+
+{%- if section.blocks.size > 0 -%}
+<div class="{{ slide_layout }}{% if layout_h == 'full-height' %} full-height{% endif %}">
+  <div class="flickity-carousel {{ section.settings.slide_transition }} {{ section.settings.nav_style }}"
+      data-auto="{{ section.settings.auto_speed }}"
+      data-dots="{{ section.settings.show_paging }}"
+      data-nav="{{ section.settings.show_nav }}"
+      data-wraparound="{{ section.settings.wrap_around }}">
+    {%- for block in section.blocks -%}
+      {%- if block.settings.show_all == false and block.settings.collection != collection.handle -%}
+        {%- unless block.settings.show_in_all_page and collection.handle == 'all' -%}
+          {%- continue -%}
+        {%- endunless -%}
+      {%- endif -%}
+
+      {%- if block.type == 'image' -%}
+        {%- assign content_type = '' -%}
+        {%- if block.settings.slide_img != blank -%}
+          <div class="slide-item slide-{{ block.id }}{% if section.settings.has_minheight %} has-minheight{% endif %}"
+            {% if layout_h == 'fixed-height' %}style="padding-top:{{ 100 | divided_by: block.settings.slide_img.aspect_ratio }}%"{% endif %} {{ block.shopify_attributes }}>
+            {% render 'image', m_img: block.settings.slide_img, add_class: "slide-image__desk" %}
+            {%- if block.settings.slide_mb_img != blank -%}
+              {% render 'image', m_img: block.settings.slide_mb_img, add_class: "slide-image__mobile" %}
+            {%- endif -%}
+        {%- else -%}
+          <div class="slide-item slide-{{ block.id }}{% if section.settings.has_minheight %} has-minheight{% endif %}"
+            {% if layout_h == 'fixed-height' %}style="padding-top: 40.1%"{% endif %} {{ block.shopify_attributes }}>
+            <div class="image-bg">
+              {% capture current %}{% cycle 1, 2 %}{% endcapture %}
+              {{ 'lifestyle-' | append: current | placeholder_svg_tag: 'placeholder' }}
+            </div><!-- image-bg -->
+        {%- endif -%}
+
+      {%- else -%}
+        {%- assign content_type = ' video-content' -%}
+        <div class="slide-item {{ block.type }} slide-{{ block.id }}{% if section.settings.has_minheight %} has-minheight{% endif %}" {{ block.shopify_attributes }}>
+          <div class="position-relative video-container">
+            {%- render 'video' with block -%}
+          </div>
+
+      {%- endif -%}
+
+        {%- comment -%} Show Slideshow Content {%- endcomment -%}
+        {% include 'slideshow_content', id: block.id, s_c: block.settings, lh: layout_h, content_type: content_type %}
+      </div><!-- .slide-item -->
+    {%- endfor -%}
+  </div><!-- .flickity-carousel -->
+</div><!-- .vs-homepage-slideshow -->
+{%- capture css -%}
+#shopify-section-{{ section.id }} { margin:{{ section.settings.margin_mobile }}; }
+@media all and (min-width: 768px) {
+  #shopify-section-{{ section.id }} { margin:{{ section.settings.margin_laptop }}; }
+}
+@media all and (min-width: 1400px) {
+  #shopify-section-{{ section.id }} { margin:{{ section.settings.margin }}; }
+}
+#shopify-section-{{ section.id }} .flickity-page-dots .dot { color: {{ section.settings.dots_color }} }
+#shopify-section-{{ section.id }} .flickity-page-dots .dot:hover,
+#shopify-section-{{ section.id }} .flickity-page-dots .is-selected { color: {{ section.settings.color_dots_h | default: settings.c_theme }} }
+#shopify-section-{{ section.id }} .flickity-prev-next-button { border-color: {{ section.settings.nav_color }};color: {{ section.settings.nav_color }} }
+{% if layout_h == 'custom-height' %}
+#shopify-section-{{ section.id }} .slide-item {height: {{ section.settings.ch_desk | remove: 'px' | strip}}px;}
+@media screen and (max-width: 1199px) { #shopify-section-{{ section.id }} .slide-item {height: {{ section.settings.ch_tablet | remove: 'px' | strip}}px;}}
+@media screen and (max-width: 767px) { #shopify-section-{{ section.id }} .slide-item {height: {{ section.settings.ch_mobile | remove: 'px' | strip}}px;}}
+{% endif %}
+{%- endcapture -%}
+<style>{{ css | strip_newlines | remove: '  ' }}</style>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Slideshow",
+  "tag": "section",
+  "class": "vs-homepage-slideshow",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Settings"
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "Section Margin on Desktop",
+      "info": "Set margin for section top-right-bottom-left (e.g. 20px 15px 10px 0).",
+      "default": "0 0 0 0"
+    },
+    {
+      "type": "text",
+      "id": "margin_laptop",
+      "label": "Section Margin on Laptop",
+      "default": "0 0 0 0"
+    },
+    {
+      "type": "text",
+      "id": "margin_mobile",
+      "label": "Section Margin on Mobile",
+      "default": "0 0 0 0"
+    },
+    {
+      "type": "select",
+      "id": "slide_layout",
+      "label": "Slide Layout",
+      "options": [
+        { "value": "container", "label": "Fixed Width" },
+        { "value": "full-width-container", "label": "Full Width" }
+      ],
+      "default": "full-width-container"
+    },
+    {
+      "type": "header",
+      "content": "Background Image Configuration"
+    },
+    {
+      "type": "select",
+      "id": "layout_h",
+      "label": "Slide Height",
+      "options": [
+        { "value": "fixed-height", "label": "Relative to image ratio" },
+        { "value": "relative-content", "label": "Relative to text content" },
+        { "value": "custom-height", "label": "Custom Height" },
+        { "value": "full-height", "label": "Full Height" }
+      ],
+      "default": "fixed-height"
+    },
+    {
+      "type": "text",
+      "id": "ch_desk",
+      "label": "Custom Height on Desktop",
+      "info": "Set custom height of the section. Unit is pixel.",
+      "default": "750"
+    },
+    {
+      "type": "text",
+      "id": "ch_tablet",
+      "label": "Custom Height on Tablet",
+      "info": "Device width < 1200px"
+    },
+    {
+      "type": "text",
+      "id": "ch_mobile",
+      "label": "Custom Height on Mobile",
+      "info": "Device width < 768px"
+    },
+    {
+      "type": "checkbox",
+      "id": "has_minheight",
+      "label": "Set minimum height 320px on mobiles",
+      "info": "Background images and videos can be cropped when this option is enabled",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Slideshow Settings"
+    },
+    {
+      "type": "select",
+      "id": "slide_transition",
+      "label": "Transition Effect",
+      "options": [
+        { "value": "slide", "label": "Slide" },
+        { "value": "fade", "label": "Fade" }
+      ],
+      "default": "slide"
+    },
+    {
+      "type": "text",
+      "id": "auto_speed",
+      "label": "Autoplay",
+      "info": "5 means rotate every 5 seconds. '0' to disable auto rotate.",
+      "default": "5"
+    },
+    {
+      "type": "checkbox",
+      "id": "wrap_around",
+      "label": "Infinite rotate",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_paging",
+      "label": "Show pagination dots",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "dots_color",
+      "label": "Dots color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "color_dots_h",
+      "label": "Dots hover color"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_nav",
+      "label": "Show Navigation",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "nav_style",
+      "label": "Navigator style",
+      "options": [
+        { "value": "slideshow-nav__big", "label": "Big" },
+        { "value": "slideshow-nav__small", "label": "Small" }
+      ],
+      "default": "slideshow-nav__big"
+    },
+    {
+      "type": "color",
+      "id": "nav_color",
+      "label": "Navigation Color",
+      "default": "#ffffff"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Image slide",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection to show",
+          "info": "Select a collection to show this slide"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_all",
+          "label": "Show this slide in all collections",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "show_in_all_page",
+          "label": "Show this slide in all products page",
+          "default": false
+        },
+        {
+          "type": "image_picker",
+          "id": "slide_img",
+          "label": "Slide Image",
+          "info": "Image size 1920*770px recommended"
+        },
+        {
+          "type": "image_picker",
+          "id": "slide_mb_img",
+          "label": "Image on mobile device",
+          "info": "Device size < 768px"
+        },
+        {
+          "type": "header",
+          "content": "Text Content Configuration"
+        },
+        {
+          "type": "select",
+          "id": "content_style",
+          "label": "Content style",
+          "options": [
+            {"value": "orange-style", "label": "Orange style"},
+            {"value": "citrus-style", "label": "Citrus style 1"},
+            {"value": "citrus-style2", "label": "Citrus style 2"},
+            {"value": "citrus-style3", "label": "Citrus style 3"},
+            {"value": "green-style", "label": "Green style 1"},
+            {"value": "green-style2", "label": "Green style 2"},
+            {"value": "parallax-style1", "label": "Parallax style 1"},
+            {"value": "parallax-style2", "label": "Parallax style 2"},
+            {"value": "beige-style1", "label": "Beige style 1"},
+            {"value": "beige-style2", "label": "Beige style 2"},
+            {"value": "beige-style3", "label": "Beige style 3"},
+            {"value": "custom_html", "label": "Custom HTML"}
+          ],
+          "default": "parallax-style2"
+        },
+        {
+          "type": "select",
+          "id": "mobile_layout",
+          "label": "Text style on mobile",
+          "options": [
+            { "value": "default", "label": "Show text in colored box" },
+            { "value": "adjust", "label": "Keep layout and adjust font size" }
+          ],
+          "default": "default"
+        },
+        {
+          "type": "select",
+          "id": "content_pos",
+          "label": "Content horizontal position",
+          "options": [
+            {"value": "left", "label": "Left"},
+            {"value": "left-center", "label": "Left Center"},
+            {"value": "center", "label": "Center"},
+            {"value": "right-center", "label": "Right Center"},
+            {"value": "right", "label": "Right"}
+          ],
+          "default": "left"
+        },
+        {
+          "type": "select",
+          "id": "content_vpos",
+          "label": "Content vertical position",
+          "options": [
+            {"value": "top", "label": "Top"},
+            {"value": "middle", "label": "Middle"},
+            {"value": "bottom", "label": "Bottom"}
+          ],
+          "default": "middle"
+        },
+        {
+          "type": "select",
+          "id": "content_align",
+          "label": "Text align",
+          "options": [
+            {"value": "text-left", "label": "Left"},
+            {"value": "text-center", "label": "Center"},
+            {"value": "text-right", "label": "Right"}
+          ],
+          "default": "text-left"
+        },
+        {
+          "type": "select",
+          "id": "content_effect",
+          "label": "Content effect",
+          "options": [
+            {"value": "none", "label": "None"},
+            {"value": "from-left", "label": "From left"},
+            {"value": "from-right", "label": "From right"},
+            {"value": "from-top", "label": "From top"},
+            {"value": "from-bottom", "label": "From bottom"},
+            {"value": "flip-vertical", "label": "Vertical Flip"},
+            {"value": "flip-horizontal", "label": "Horizontal Flip"}
+          ],
+          "default": "from-right"
+        },
+        {
+          "type": "textarea",
+          "id": "top_title",
+          "label": "Top text"
+        },
+        {
+          "type": "textarea",
+          "id": "main_title",
+          "label": "Main Title",
+          "default": "THE NEXT BIG THING"
+        },
+        {
+          "type": "textarea",
+          "id": "sub_title",
+          "label": "Sub Title",
+          "default": "Take, view and share photos with the 17MP\ncamera and stunning 6\" display"
+        },
+        {
+          "type": "color",
+          "id": "color_top_title",
+          "label": "Top text color",
+          "default": "#333333"
+        },
+        {
+          "type": "color",
+          "id": "color_main_title",
+          "label": "Title Color",
+          "default": "#3f3f3f"
+        },
+        {
+          "type": "color",
+          "id": "sub_color",
+          "label": "Sub Title Color",
+          "default": "#444"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_content_bg",
+          "label": "Add background to content",
+          "default": false
+        },
+        {
+          "type": "color",
+          "id": "c_textbg",
+          "label": "Text background color",
+          "default": "rgba(255, 255, 255, 0.8)"
+        },
+        {
+          "type": "paragraph",
+          "content": "Special Characters"
+        },
+        {
+          "type": "paragraph",
+          "content": "Text wrapped with <em></em> or <strong></strong> are styled by the following settings"
+        },
+        {
+          "type": "color",
+          "id": "em_color",
+          "label": "Emphasized text color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "em_bg_color",
+          "label": "Emphasized text background color",
+          "default": "#a8bf00"
+        },
+        {
+          "type": "color",
+          "id": "strong_color",
+          "label": "Strong text color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "strong_bg_color",
+          "label": "Strong text background color",
+          "default": "#2c7800"
+        },
+        {
+          "type": "header",
+          "content": "First Button"
+        },
+        {
+          "type": "text",
+          "id": "btn1_title",
+          "label": "Button Title",
+          "default": "TAKE A LOOK"
+        },
+        {
+          "type": "url",
+          "id": "btn1_link",
+          "label": "Link To"
+        },
+        {
+          "type": "select",
+          "id": "btn1_style",
+          "label": "Button Style",
+          "options": [
+            {"value": "btn-default", "label": "Default button"},
+            {"value": "btn-transparent", "label": "Transparent button"},
+            {"value": "btn-secondary", "label": "Secondary button"},
+            {"value": "btn-third", "label": "Third button"},
+            {"value": "btn-text", "label": "Text button"}
+          ],
+          "default": "btn-default"
+        },
+        {
+          "type": "header",
+          "content": "Second Button"
+        },
+        {
+          "type": "text",
+          "id": "btn2_title",
+          "label": "Button Title"
+        },
+        {
+          "type": "url",
+          "id": "btn2_link",
+          "label": "Link To"
+        },
+        {
+          "type": "select",
+          "id": "btn2_style",
+          "label": "Button Style",
+          "options": [
+            {"value": "btn-default", "label": "Default button"},
+            {"value": "btn-transparent", "label": "Transparent button"},
+            {"value": "btn-secondary", "label": "Secondary button"},
+            {"value": "btn-third", "label": "Third button"},
+            {"value": "btn-text", "label": "Text button"}
+          ],
+          "default": "btn-secondary"
+        },
+        {
+          "type": "html",
+          "id": "html_content",
+          "label": "Custom HTML",
+          "info": "Write your own html/css for slideshow content"
+        }
+      ]
+    },
+    {
+      "type": "video",
+      "name": "Full Video slide",
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "show_all",
+          "label": "Show this slide in all collections",
+          "default": true
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection to show",
+          "info": "Select a collection to show this slide"
+        },
+        {
+          "id": "slide_video",
+          "type": "text",
+          "label": "Background Video",
+          "info": "We recommend to upload video to store and then use it here"
+        },
+        {
+          "type": "text",
+          "id": "video_ratio",
+          "label": "Video Ratio: height/width (%)",
+          "default": "56.25"
+        },
+        {
+          "type": "image_picker",
+          "id": "slide_img",
+          "label": "Poster Image"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_controls",
+          "label": "Show video controls",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "autoplay",
+          "label": "Enable autoplay of video",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "playsinline",
+          "label": "Play video inline on mobile devices",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "wholeplay",
+          "label": "Play whole video",
+          "info": "Pause slider until video ends",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "loop",
+          "label": "Loop video after finish",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "show_unmute",
+          "label": "Show play/pause button",
+          "default": true
+        },
+        {
+          "type": "color",
+          "id": "c_pause",
+          "label": "Button color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "range",
+          "id": "xp_pause",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "Button X position",
+          "default": 86
+        },
+        {
+          "type": "range",
+          "id": "yp_pause",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "Button Y position",
+          "default": 90
+        },
+        {
+          "type": "select",
+          "id": "content_style",
+          "label": "Content style",
+          "options": [
+            {"value": "orange-style", "label": "Orange style"},
+            {"value": "citrus-style", "label": "Citrus style 1"},
+            {"value": "citrus-style2", "label": "Citrus style 2"},
+            {"value": "citrus-style3", "label": "Citrus style 3"},
+            {"value": "green-style", "label": "Green style 1"},
+            {"value": "green-style2", "label": "Green style 2"},
+            {"value": "parallax-style1", "label": "Parallax style 1"},
+            {"value": "parallax-style2", "label": "Parallax style 2"},
+            {"value": "beige-style1", "label": "Beige Style1"},
+            {"value": "beige-style2", "label": "Beige Style2"},
+            {"value": "custom_html", "label": "Custom HTML"}
+          ],
+          "default": "parallax-style2"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_content_bg",
+          "label": "Add background to content",
+          "default": false
+        },
+        {
+          "type": "select",
+          "id": "mobile_layout",
+          "label": "Text style on mobile",
+          "options": [
+            { "value": "default", "label": "Show text in colored box" },
+            { "value": "adjust", "label": "Keep layout and adjust font size" }
+          ],
+          "default": "default"
+        },
+        {
+          "type": "color",
+          "id": "c_textbg",
+          "label": "Text background color",
+          "default": "rgba(255, 255, 255, 0.8)"
+        },
+        {
+          "type": "select",
+          "id": "content_pos",
+          "label": "Content horizontal position",
+          "options": [
+            {"value": "left", "label": "Left"},
+            {"value": "left-center", "label": "Left Center"},
+            {"value": "center", "label": "Center"},
+            {"value": "right-center", "label": "Right Center"},
+            {"value": "right", "label": "Right"}
+          ],
+          "default": "left"
+        },
+        {
+          "type": "select",
+          "id": "content_vpos",
+          "label": "Content vertical position",
+          "options": [
+            {"value": "top", "label": "Top"},
+            {"value": "middle", "label": "Middle"},
+            {"value": "bottom", "label": "Bottom"}
+          ],
+          "default": "middle"
+        },
+        {
+          "type": "select",
+          "id": "content_align",
+          "label": "Text align",
+          "options": [
+            {"value": "text-left", "label": "Left"},
+            {"value": "text-center", "label": "Center"},
+            {"value": "text-right", "label": "Right"}
+          ],
+          "default": "text-left"
+        },
+        {
+          "type": "select",
+          "id": "content_effect",
+          "label": "Content effect",
+          "options": [
+            {"value": "none", "label": "None"},
+            {"value": "from-left", "label": "From left"},
+            {"value": "from-right", "label": "From right"},
+            {"value": "from-top", "label": "From top"},
+            {"value": "from-bottom", "label": "From bottom"},
+            {"value": "flip-vertical", "label": "Vertical Flip"},
+            {"value": "flip-horizontal", "label": "Horizontal Flip"}
+          ],
+          "default": "from-right"
+        },
+        {
+          "type": "textarea",
+          "id": "top_title",
+          "label": "Top text"
+        },
+        {
+          "type": "color",
+          "id": "color_top_title",
+          "label": "Top title color",
+          "default": "#333333"
+        },
+        {
+          "type": "textarea",
+          "id": "main_title",
+          "label": "Main Title"
+        },
+        {
+          "type": "color",
+          "id": "color_main_title",
+          "label": "Title Color",
+          "default": "#3f3f3f"
+        },
+        {
+          "type": "textarea",
+          "id": "sub_title",
+          "label": "Sub Title"
+        },
+        {
+          "type": "color",
+          "id": "sub_color",
+          "label": "Sub Title Color",
+          "default": "#444"
+        },
+        {
+          "type": "header",
+          "content": "First Button"
+        },
+        {
+          "type": "text",
+          "id": "btn1_title",
+          "label": "Button Title"
+        },
+        {
+          "type": "url",
+          "id": "btn1_link",
+          "label": "Link To"
+        },
+        {
+          "type": "select",
+          "id": "btn1_style",
+          "label": "Button Style",
+          "options": [
+            {"value": "btn-default", "label": "Default button"},
+            {"value": "btn-transparent", "label": "Transparent button"},
+            {"value": "btn-secondary", "label": "Secondary button"},
+            {"value": "btn-third", "label": "Third button"},
+            {"value": "btn-text", "label": "Text button"}
+          ],
+          "default": "btn-default"
+        },
+        {
+          "type": "header",
+          "content": "Second Button"
+        },
+        {
+          "type": "text",
+          "id": "btn2_title",
+          "label": "Button Title"
+        },
+        {
+          "type": "url",
+          "id": "btn2_link",
+          "label": "Link To"
+        },
+        {
+          "type": "select",
+          "id": "btn2_style",
+          "label": "Button Style",
+          "options": [
+            {"value": "btn-default", "label": "Default button"},
+            {"value": "btn-transparent", "label": "Transparent button"},
+            {"value": "btn-secondary", "label": "Secondary button"},
+            {"value": "btn-third", "label": "Third button"},
+            {"value": "btn-text", "label": "Text button"}
+          ],
+          "default": "btn-secondary"
+        },
+        {
+          "type": "html",
+          "id": "html_content",
+          "label": "Custom HTML",
+          "info": "Write your own html/css for slideshow content"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

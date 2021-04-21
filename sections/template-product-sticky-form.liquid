@@ -1,0 +1,154 @@
+{% comment %}
+Renders product sticky form block in product detail pages
+  Accepts:
+    - section: <Section> Parent section in which this snippet is rendered
+      = show_prev_next: <Boolean> show prev/next product buttons in same collection
+
+  Usage:
+    {% render 'product_form_sticky', section: section %}
+{% endcomment %}
+{%- liquid
+assign css = ''
+assign current_variant = product.selected_or_first_available_variant
+-%}
+
+<div itemprop="offers" itemscope itemtype="http://schema.org/Offer" class="product-form-sticky">
+  <meta itemprop="priceCurrency" content="{{ shop.currency }}" />
+  <meta itemprop="url" content="{{ product.url }}" />
+  <meta itemprop="itemCondition" itemtype="http://schema.org/OfferItemCondition" content="http://schema.org/NewCondition"/>
+  <meta itemprop="seller" content="{{ shop.name | escape }}" />
+
+  {% render 'product_price', price: product.price, compare_at_price: product.compare_at_price %}
+
+  {%- if section.blocks.size > 0 -%}
+    <div class="product-info-tips">
+      {%- for block in section.blocks -%}
+        {% capture css %}{{ css }}
+          .info-tips-{{ block.id }} svg {
+            width: {{ block.settings.icon_width }}px;
+            color: {{ block.settings.color_icon }};
+          }
+          .info-tips-{{ block.id }} span { color: {{ block.settings.color_text }}; }
+        {% endcapture %}
+
+        <div class="info-tips__container ds-flex align-center info-tips-{{ block.id }}">
+          {% include 'include_icon', icon_name: block.settings.icon %}
+          <span>{{ block.settings.info }}</span>
+        </div>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+
+  {% render 'product_form', show_buy_now: section.settings.show_buy_now, product: product %}
+
+  {%- if product.metafields.vndbasic['dealtime'] != blank -%}
+    {% render 'product_deal' with product.metafields.vndbasic['dealtime'] %}
+  {% endif %}
+</div>
+
+{%- capture styles -%}
+@media all and (min-width: 992px) {
+  #shopify-section-{{ section.id }} { margin:{{ section.settings.margin_laptop }}; }
+}
+@media all and (min-width: 1400px) {
+  #shopify-section-{{ section.id }} { margin:{{ section.settings.margin }}; }
+}
+{{ css }}
+{%- endcapture -%}
+<style>{{ styles | strip_newlines | remove: '  ' }}</style>
+
+{% schema %}
+{
+  "name": "Sticky Form",
+  "class": "products-template",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Width, Space"
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "Section Margin on Desktop",
+      "info": "Set margin for section top-right-bottom-left (e.g. 20px 15px 10px 0).",
+      "default": "60px 0 50px 0"
+    },
+    {
+      "type": "text",
+      "id": "margin_laptop",
+      "label": "Section Margin on Laptop",
+      "default": "45px 0 50px 0"
+    },
+    {
+      "type": "header",
+      "content": "Form Configuration"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_buy_now",
+      "label": "Show dynamic checkout button",
+      "default": false
+    }
+  ],
+  "blocks": [
+    {
+      "type": "icon_text",
+      "name": "Badge Icon and Text",
+      "settings": [
+        {
+          "type": "text",
+          "id": "icon",
+          "label": "Icon Name",
+          "default": "icon-information"
+        },
+        {
+          "type": "range",
+          "id": "icon_width",
+          "min": 20,
+          "max": 70,
+          "step": 1,
+          "unit": "px",
+          "label": "Icon Width",
+          "default": 20
+        },
+        {
+          "type": "textarea",
+          "id": "info",
+          "label": "Information text"
+        },
+        {
+          "type": "color",
+          "id": "color_icon",
+          "label": "Icon Color",
+          "default": "#478107"
+        },
+        {
+          "type": "color",
+          "id": "color_text",
+          "label": "Text Color",
+          "default": "#444444"
+        }
+      ]
+    }
+  ],
+  "default": {
+    "blocks": [
+      {
+        "type": "icon_text",
+        "settings": {
+          "icon": "icon-information",
+          "info": "24 Hours Delivery"
+        }
+      },
+      {
+        "type": "icon_text",
+        "settings": {
+          "icon": "icon-information",
+          "info": "100% Secure Payment"
+        }
+      }
+    ]
+  }
+}
+{% endschema %}

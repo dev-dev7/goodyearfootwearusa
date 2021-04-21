@@ -1,0 +1,32 @@
+{% comment %}
+Renders sidebar menu on homepage
+  Accepts:
+    - sidebar_menu: <Linklists> selected menu to show
+
+  Usage:
+    {% render 'index_sidebar_menu', sidebar_menu: section.settings.sidebar_menu %}
+{% endcomment %}
+
+<nav role="navigation" class="text-left">
+{%- if linklists[sidebar_menu] != blank -%}
+  <h4 class="font-body category-title">{{ linklists[sidebar_menu].title }}</h4>
+  <ul class="ds-flex list-style-none flex-column category-list">
+    {%- for link in linklists[sidebar_menu].links -%}
+      {%- assign icon_name = link.title | remove: '[' | split: ']' | first | strip_html -%}
+      {%- assign link_title = link.title | split: ']' | last -%}
+      <li class="category-link">
+        <a href="{{ link.url }}" class="ds-flex align-center">{% render 'render_icon', icon_name: icon_name %}{{ link_title }}</a>
+      </li>
+    {%- endfor -%}
+  </ul>
+{%- else -%}
+  <h4 class="font-body category-title">SELECT MENU</h4>
+  <ul class="ds-flex list-style-none flex-column category-list">
+    {%- for i in (1..10) -%}
+      <li class="category-link">
+        <a href="#" class="ds-flex align-center">{% render 'icon-book-full' %}Change me {{ i }}</a>
+      </li>
+    {%- endfor -%}
+  </ul>
+{%- endif -%}
+</nav>

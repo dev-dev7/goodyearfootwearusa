@@ -1,0 +1,24 @@
+{%- if collection -%}
+{%- if collection.previous_product -%}
+  <div class="product-item-container prev-product">
+    <a href="{{ collection.previous_product }}" title="Previous Product" class="product-nav">
+      {% render 'icon-dir-left' %}
+    </a>
+    <div class="product-popup image-loading">
+      <img class="lazyload" data-src="{{ collection.previous_product.featured_image | img_url: '100x'}}" alt="{{ collection.previous_product.title }}"/>
+      <h3 class="product-name">{{ collection.previous_product.title }}</h3>
+    </div>
+  </div><!-- .product-item-container -->
+{%- endif -%}
+{%- if collection.next_product -%}
+  <div class="product-item-container next-product">
+    <a href="{{ collection.next_product }}" title="Next Product" class="product-nav">
+      {% render 'icon-dir-right' %}
+    </a>
+    <div class="product-popup image-loading">
+      <img class="lazyload" data-src="{{ collection.next_product.featured_image | img_url: '100x'}}" alt="{{ collection.next_product.title }}"/>
+      <h3 class="product-name">{{ collection.next_product.title }}</h3>
+    </div>
+  </div><!-- .product-item-container -->
+{%- endif -%}
+{%- endif -%}

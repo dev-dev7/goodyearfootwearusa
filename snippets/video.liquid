@@ -1,0 +1,53 @@
+{% comment %}
+Renders video
+  Accepts:
+    - video: block with settings from a section
+
+  Usage:
+    {%- render 'video' with block -%}
+{% endcomment %}
+
+{%- assign video_url = video.settings.slide_video -%}
+{%- if video.settings.slide_img != blank -%}
+  {%- assign img = video.settings.slide_img | img_url: '1200x' -%}
+{%- else -%}
+  {%- assign img = "" -%}
+{%- endif -%}
+
+{%- if video.settings.show_controls -%}
+  {%- assign show_controls = 'controls' -%}
+{%- else -%}
+  {%- assign show_controls = '' -%}
+{%- endif -%}
+
+{%- if video.settings.autoplay -%}
+  {%- assign autoplay = 'autoplay' -%}
+{%- else -%}
+  {%- assign autoplay = '' -%}
+{%- endif -%}
+
+{%- if video.settings.playsinline -%}
+  {%- assign playsinline = 'playsinline' -%}
+{%- else -%}
+  {%- assign playsinline = '' -%}
+{%- endif -%}
+
+{%- if video.settings.loop -%}
+  {%- assign video_loop = 'loop="loop"' -%}
+{%- else -%}
+  {%- assign video_loop = '' -%}
+{%- endif -%}
+
+<div class="video-wrap{% if autoplay == 'autoplay' %} playing{% endif %}" data-wholeplay="{{ video.settings.wholeplay }}" style="padding-top: {{ video.settings.video_ratio }}%">
+  {% if video_url contains 'cdn.shopify.com' %}
+    <video class="video" poster="{{ img }}" {{ playsinline }} {{ show_controls }} {{ video_loop }} muted {{ autoplay }} data-html5-video>
+      <source src="{{ video_url | replace: 'http:', '' | replace: 'https:', '' }}"/>
+    </video>
+    {%- if video.settings.show_unmute -%}
+      <button class="btn-video play-video" style="color:{{ video.settings.c_pause }};left:{{ video.settings.xp_pause }}%;top:{{ video.settings.yp_pause }}%;">{% render 'icon-play-2'%}</button>
+      <button class="btn-video pause-video" style="color:{{ video.settings.c_pause }};left:{{ video.settings.xp_pause }}%;top:{{ video.settings.yp_pause }}%;">{% render 'icon-pause'%}</button>
+    {%- endif -%}
+  {% else %}
+    <iframe data-src="{{ video_url }}" allowfullscreen="allowfullscreen" data-autoplay="{{ autoplay }}" allow="autoplay"></iframe>
+  {% endif %}
+</div><!-- video-wrap -->

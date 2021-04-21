@@ -1,0 +1,48 @@
+{% comment %}
+Renders product in a grid style
+  Accepts:
+    - block: <Block> Section block to show
+
+  Usage:
+    {% render 'store_info_block', block: block %}
+{% endcomment %}
+
+{%- case block.type -%}
+  {%- when "title_desc" -%}
+    <div class="store-info__text position-relative" {{block.shopify_attributes}}>
+      {%- if block.settings.title != blank -%}
+        <h2 style="color:{{ block.settings.color_title }}">{{ block.settings.title | newline_to_br }}</h2>
+      {%- endif -%}
+      {%- if block.settings.desc != blank -%}
+        <p class="description" style="color:{{ block.settings.color_desc }}">{{ block.settings.desc | newline_to_br }}</p>
+      {%- endif -%}
+      {%- if block.settings.btn1_title != blank -%}
+        <a href="{{ block.settings.btn1_link | default: '#' }}" class="btn {{ block.settings.btn1_style }}">{{ block.settings.btn1_title }}</a>
+      {%- endif -%}
+
+      {%- if block.settings.btn2_title != blank -%}
+        <a href="{{ block.settings.btn2_link | default: '#' }}" class="btn {{ block.settings.btn2_style }} btn-second">{{ block.settings.btn2_title }}</a>
+      {%- endif -%}
+    </div>
+  {%- else -%}
+    <div class="store-info__img position-relative {{ block.settings.text_pos }}" {{block.shopify_attributes}}>
+      <div class="description">
+        {%- if block.settings.title != blank -%}
+          <h2 style="color:{{ block.settings.color_title }}">{{ block.settings.title | newline_to_br }}</h2>
+        {%- endif -%}
+        {%- if block.settings.desc != blank -%}
+          <p style="color:{{ block.settings.color_desc }}">{{ block.settings.desc | newline_to_br }}</p>
+        {%- endif -%}
+      </div>
+      <div class="store-info__bg{{ block.settings.width }}" {{ block.shopify_attributes }}>
+        <div class="sii-container">
+          {%- if block.settings.image != blank -%}
+            {% render 'image', m_img: block.settings.image %}
+          {%- else -%}
+            {% capture current %}{% cycle 1, 2 %}{% endcapture %}
+            {{ 'lifestyle-' | append: current | placeholder_svg_tag: 'placeholder' }}
+          {%- endif -%}
+        </div><!-- .sii-container -->
+      </div>
+    </div>
+{%- endcase -%}

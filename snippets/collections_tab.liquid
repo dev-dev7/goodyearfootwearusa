@@ -1,0 +1,225 @@
+{% comment %}
+Renders images in layout 3 style
+  Accepts:
+    - collections_tab: content type - section/block
+      = title: <String> Title of the section
+      = tab_title_style: <String> Tab title style (values: "default", "italic")
+      = subtitle_style: <String> Style for tab (values: "default", "center-big", "center-icon") This is only configurable for section type
+      = limit: <Number> limit number of products to show
+      = num_cols: <Number> columns of products grid
+      = card_style: <String> set card style (available values: "vertical-default", "vertical-advanced", "vertical-progressive", "horizontal-default", "horizontal-advanced", "horizontal-progressive")
+      = card_border: <Boolean> show border around product card
+      = card_shadow: <Boolean> show box shadow around product card
+      = prd_img_ft: <String> return class name to apply darkness to product image
+
+  Block variables:
+    - tab_list: list of tabs
+    - icons_list: list of icons to show under tab title
+
+  Usage:
+    {% include 'collections_tab' with section %}
+    {% include 'collections_tab' with block %}
+{% endcomment %}
+
+{% liquid
+assign tab_list = ''
+assign icons_list = ''
+assign at_least_one = false
+assign section_title = collections_tab.settings.title
+assign tab_title_style = collections_tab.settings.tab_title_style
+assign subtitle_style = collections_tab.settings.subtitle_style
+assign limit = collections_tab.settings.limit
+assign num_cols = collections_tab.settings.cols
+assign card_style = collections_tab.settings.card_style
+assign card_border = collections_tab.settings.card_border
+assign card_shadow = collections_tab.settings.card_shadow
+assign showall_title = collections_tab.settings.btn_title
+assign showall_style = collections_tab.settings.btn_style
+assign prd_img_ft = collections_tab.settings.prd_img_ft
+
+if card_style contains 'horizontal'
+  assign img_max = 250
+else
+  if settings.layout == 'full_width'
+    assign screen_width = 1920
+  else
+    assign screen_width = settings.layout
+  endif
+  assign img_max = screen_width | divided_by: num_cols
+endif
+
+assign card_type = card_style | replace: '-', '_' | prepend: 'product_card_'
+%}
+
+<div class="vs-grid-isotope">
+{%- if section_title != blank -%}
+  <h3 class="block-title">{{ section_title }}</h3>
+{%- endif -%}
+
+<div class="tabs ds-flex flex-column position-relative">
+
+{%- if c_type == 'block' -%}
+  <div class="isotope-container row {{ card_style }} {{ prd_img_ft }}">
+    {%- for index in (1..5) -%}
+      {%- assign first_block = forloop.first -%}
+      {% capture collection_id %}collection_{{ index }}{% endcapture %}
+
+      {%- if collections_tab.settings[collection_id] != blank -%}
+        {%- assign collection_name = collections_tab.settings[collection_id] -%}
+        {%- assign crt_ct = collections[collection_name] -%}
+        {%- assign tab_list = tab_list | append: crt_ct.handle | append: ';' -%}
+
+        {%- for product in crt_ct.products limit: limit -%}
+          {%- assign class = 'vnd-ist-' | append: crt_ct.handle -%}
+
+          {%- if at_least_one -%}
+            {%- assign class = class | append: ' ds-none' -%}
+          {%- endif -%}
+
+          <div class="grid-items__{{ num_cols }} {{ class }}">
+            {% include card_type, collection: crt_ct, product: product, card_border: card_border, card_shadow: card_shadow, img_max: img_max %}
+          </div>
+        {%- endfor -%}
+
+        {%- if showall_title != blank -%}
+          {%- assign class = 'collection-tab__show-all-btn text-center width-100 vnd-ist-' | append: crt_ct.handle -%}
+          {%- if at_least_one -%}
+            {%- assign class = class | append: ' ds-none' -%}
+          {%- endif -%}
+
+          <div class="{{ class }}">
+            <a href="{{ crt_ct.url | default: '#' }}" class="btn {{ showall_style }}">{{ showall_title }}</a>
+          </div>
+        {%- endif -%}
+
+        {%- assign at_least_one = true -%}
+      {%- endif -%}
+    {%- endfor -%}
+
+    {%- unless at_least_one -%}
+      {%- for index in (1..5) -%}
+        {% assign tab_list = tab_list | append: 'unassigned-' | append: forloop.index | append: ';' %}
+        {%- assign block_index = forloop.index -%}
+
+        {%- for i in (1..limit) -%}
+          <div class="grid-items__{{ num_cols }} vnd-ist-unassigned-{{ block_index }}">
+            {%- capture pp_index -%}{% cycle 1, 2, 3, 4, 5, 6 %}{%- endcapture -%}
+            {% render 'product_card', pp_index: pp_index, card_border: card_border, card_shadow: card_shadow %}
+          </div>
+        {%- endfor -%}
+      {%- endfor -%}
+    {%- endunless -%}
+  </div><!-- .isotope-container -->
+
+{%- else -%}
+  <div class="isotope-container row {{ card_style }} {{ prd_img_ft }}" {{ block.shopify_attributes }}>
+    {%- for block in collections_tab.blocks -%}
+      {%- assign icons_list = icons_list | append: block.settings.icon | append: ';' -%}
+      {%- assign collection_name = block.settings.collection -%}
+      {%- assign crt_ct = collections[collection_name] -%}
+      {%- if collection_name == blank or crt_ct == blank -%}
+        {%- assign tab_list = tab_list | append: 'unassigned-' | append: forloop.index | append: ';' -%}
+        {%- assign block_index = forloop.index -%}
+        {%- for i in (1..limit) -%}
+          <div class="grid-items__{{ num_cols }} vnd-ist-unassigned-{{ block_index }}{% if at_least_one %} ds-none{% endif %}">
+            {%- capture pp_index -%}{% cycle 1, 2, 3, 4, 5 %}{%- endcapture -%}
+            {% render 'product_card', pp_index: pp_index, card_border: card_border, card_shadow: card_shadow %}
+          </div>
+        {%- endfor -%}
+        {%- assign at_least_one = true -%}
+      {%- else -%}
+        {%- assign tab_list = tab_list | append: crt_ct.handle | append: ';' -%}
+        {%- assign class = 'vnd-ist-' | append: crt_ct.handle -%}
+        {%- if at_least_one -%}
+          {%- assign class = class | append: ' ds-none' -%}
+        {%- endif -%}
+        {%- for product in crt_ct.products limit: limit -%}
+          <div class="grid-items__{{ num_cols }} {{ class }}">
+            {% include card_type, collection: crt_ct, product: product, card_border: card_border, card_shadow: card_shadow %}
+          </div>
+        {%- endfor -%}
+        {%- if showall_title != blank -%}
+          {%- assign class = 'collection-tab__show-all-btn text-center width-100 vnd-ist-' | append: crt_ct.handle -%}
+          <div class="{{ class }}">
+            <a href="{{ crt_ct.url | default: '#' }}" class="btn {{ showall_style }}">{{ showall_title }}</a>
+          </div>
+        {%- endif -%}
+        {%- assign at_least_one = true -%}
+      {%- endif -%}
+    {%- endfor -%}
+  </div><!-- .isotope-container -->
+{%- endif -%}
+{% assign tab_array = tab_list | remove_last: ';' | split: ';' %}
+{% assign icons_array = icons_list | remove_last: ';' | split: ';' %}
+<ul class="tab-list list-style-none ds-flex flex-wrap {{ collections_tab.settings.tab_title_align }}">
+  <li>
+    <a href="#" class="ds-block isotope-selector active {{ tab_title_style }}" data-target=".vnd-ist-{{ tab_array[0] }}">
+      {%- if icons_array[0] != blank and subtitle_style == 'center-icon' -%}
+        {% include icons_array[0] %}
+      {%- endif -%}
+      {%- if collections[tab_array[0]] != blank -%}
+        <span>{{ collections[tab_array[0]].title }}</span>
+      {%- else -%}
+        <span>{{ tab_array[0] }}</span>
+      {%- endif -%}
+    </a>
+  </li>
+  {%- for tab in tab_array offset: 1 -%}
+    <li>
+      <a href="#" class="ds-block isotope-selector {{ tab_title_style }}" data-target=".vnd-ist-{{ tab }}">
+        {%- if icons_array[forloop.index] != blank and subtitle_style == 'center-icon' -%}
+          {% include icons_array[forloop.index] %}
+        {%- endif -%}
+        {%- if collections[tab] != blank -%}
+          <span>{{ collections[tab].title }}</span>
+        {%- else -%}
+          <span>{{ tab }}</span>
+        {%- endif -%}
+      </a>
+    </li>
+  {%- endfor -%}
+</ul>
+
+{%- capture active_item -%}
+<a href="#" class="ds-flex align-center dd-pp__atv {{ tab_title_style }}">
+  {%- if icons_array[0] != blank and subtitle_style == 'center-icon' -%}
+    {% include icons_array[0] %}
+  {%- endif -%}
+  {%- if collections[tab_array[0]] != blank -%}
+    <span>{{ collections[tab_array[0]].title }}</span>
+  {%- else -%}
+    <span>{{ tab_array[0] }}</span>
+  {%- endif -%}
+  {% render 'icon-dir-down' %}
+</a>
+{%- endcapture -%}
+<div class="isotope-mobile-selector dd-pp__wrp">
+{{ active_item }}
+<div class="dd-pp__list">
+  <a href="#" class="dd-pp__close ds-block">{% render 'icon-close' %}</a>
+  <div class="width-100">
+    <a href="#" class="ds-flex align-center isotope-selector active {{ tab_title_style }}" data-target=".vnd-ist-{{ tab_array[0] }}">
+      {%- if icons_array[0] != blank and subtitle_style == 'center-icon' -%}
+        {% include icons_array[0] %}
+      {%- endif -%}
+      {%- if collections[tab_array[0]] != blank -%}
+        <span>{{ collections[tab_array[0]].title }}</span>
+      {%- else -%}
+        <span>{{ tab_array[0] }}</span>
+      {%- endif -%}
+    </a>
+    {%- for tab in tab_array offset: 1 -%}
+      <a href="#" class="ds-flex align-center isotope-selector {{ tab_title_style }}" data-target=".vnd-ist-{{ tab }}">
+        {%- if icons_array[forloop.index0] != blank and subtitle_style == 'center-icon' -%}
+          {% include icons_array[forloop.index0] %}
+        {%- endif -%}
+        {%- if collections[tab] != blank -%}
+          <span>{{ collections[tab].title }}</span>
+        {%- else -%}
+          <span>{{ tab }}</span>
+        {%- endif -%}
+      </a>
+    {%- endfor -%}
+  </div>
+</div>
+</div>

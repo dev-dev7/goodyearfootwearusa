@@ -1,0 +1,73 @@
+{% comment %}
+Renders product in a grid style
+  Accepts:
+    - collection_carousel_card: <Collection> collection to show
+    - c_desc: <String> description of collection card
+    - cols: <Number> number of items to show at once
+    - img_ar: <String> image aspect ratio of the carousels
+
+  Usage:
+    {% render 'collection_carousel_card', block: block, cols: cols %}
+{% endcomment %}
+{%- liquid
+assign cc = collections[block.settings.collection]
+assign c_desc = block.settings.c_desc
+assign padding = blank
+
+case img_ar
+  when 'square'
+    assign padding = 100
+  when 'rect1'
+    assign padding = 125
+  when 'rect2'
+    assign padding = 150
+endcase
+
+if block.settings.img != blank
+  assign collection_image = block.settings.img
+endif
+
+if cc != blank
+  assign c_title = cc.title
+
+  if collection_image == blank
+    if cc.image
+      assign collection_image = cc.image
+    elsif cc.products.first and cc.products.first.images != empty
+      assign collection_image = cc.products.first.featured_image
+    endif
+  endif
+else
+  assign c_title = 'Showcase'
+  assign c_desc = "Assign me collection"
+endif
+
+if collection_image != blank and img_ar == 'relative'
+  assign ar = collection_image.aspect_ratio
+  assign padding = 100 | divided_by: ar
+endif
+
+if padding == blank
+  assign padding = 150
+endif
+-%}
+<div class="collections-card collection-card__wrapper grid-items__{{ cols }}" {{ block.shopify_attributes }}>
+  <a href="{{ cc.url }}" class="ds-flex position-relative width-100">
+    <div class="position-relative image-loading" style="width: 100%;padding-top:{{ padding }}%;">
+      {%- if collection_image != blank -%}
+      <div data-bg="{{ collection_image | img_url: '450x' }}" alt="" class="lazyload image-bg"></div>
+      {%- else -%}
+      <div class="image-bg">
+        {% capture current %}{% cycle 1, 2 %}{% endcapture %}
+        {{ 'lifestyle-' | append: current | placeholder_svg_tag: 'placeholder' }}
+      </div><!-- image-bg -->
+      {%- endif -%}
+    </div>
+    <div class="collection-info ds-flex flex-column justify-center">
+      {%- if c_desc != blank -%}
+        <h4 class="collection-desc">{{ c_desc }}</h3>
+      {%- endif -%}
+      <h3 class="collection-name">{{ cc.title }}</h3>
+    </div><!-- .collection-info -->
+  </a>
+</div><!-- .collections-card -->

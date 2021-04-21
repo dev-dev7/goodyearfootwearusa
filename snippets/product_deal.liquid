@@ -1,0 +1,13 @@
+{% comment %}
+Renders product deals countdown timer from product description
+  Accepts:
+    - product_deal: <String> Date and time
+
+  Usage:
+    {% render 'product_deal' with product.description %}
+{% endcomment %}
+
+<span class="limited-brand">{{ 'date_formats.limited_offer' | t }}</span>
+<div class="product-deal">
+  <div class="product-date" data-datetime="{{ product_deal }}"></div>
+</div>

@@ -1,0 +1,681 @@
+<div role="banner" class="header header-mobile header-mobile-{{ section.settings.type }}{% if settings.enable_mobile_sticky %} sticky-mobile-enable{% endif %}">
+<div class="mobile-menu-tabs vnd-mobile-menu mobile-menu__{{ section.settings.menu_open_effect }}">
+{%- if settings.show_clt_mb_menu -%}
+  <ul class="tabs-nav ds-flex list-style-none">
+    <li class="tabs-nav__item active"><a href="#vnd-mb-tab1">{{ linklists[section.settings.menu].title }}</a></li>
+    <li class="tabs-nav__item"><a href="#vnd-mb-tab2">{{ settings.collection_sidebar_menu_title }}</a></li>
+  </ul>
+  <div class="tabs-content__item active" id="vnd-mb-tab1">
+{%- endif -%}
+{% include 'header_menu', m_n: section.settings.menu, mobile_menu: true -%}
+{%- if settings.show_clt_mb_menu -%}
+  </div>
+  <div class="tabs-content__item" id="vnd-mb-tab2">
+    {% render 'header_menu', m_n: settings.collection_sidebar_menu, mobile_menu: true -%}
+  </div>
+{%- endif -%}
+</div>
+
+{%- case section.settings.type -%}
+  {%- when '1' -%}
+    <div class="ds-flex align-center mobile-first-row container">
+      <div class="mr-auto">
+        {% render 'logo' %}
+      </div>
+      <div class="ds-flex align-center">
+        {%- for block in section.blocks limit: 3 -%}
+          {%- if block.type == 'cart' -%}
+            <div class="topbar-item cart-wrapper" id="block-{{ block.id }}">
+              <a href="/cart" class="icon-cart cart-amount__{{ block.settings.amount_pos }}" data-no-instant>
+                <div class="position-relative">
+                  {%- assign i_n = block.settings.cart_icon_name | default: settings.cart_icon -%}
+                  {% include i_n %}
+                  <span class="icon-cart__total">{{ cart.item_count }}</span>
+                </div>
+                <span class="header__icon-text">{{ block.settings.title }}</span>
+              </a>
+            </div>
+          {%- else -%}
+            {% include 'topbar_item', item: block %}
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+
+    <div class="ds-flex align-center space-between container">
+      <button class="mobile-btn text-center activator__{{ section.settings.menu_open_effect }}">
+        <span class="mobile-btn__line classic"></span><span class="mobile-btn__line classic"></span><span class="mobile-btn__line classic"></span>
+        {%- if section.settings.menu_title != blank -%}
+          <span class="header__icon-text">{{ section.settings.menu_title }}</span>
+        {%- endif -%}
+      </button>
+
+      {%- for block in section.blocks offset: 3 -%}
+        {% include 'topbar_item', item: block %}
+      {%- endfor -%}
+    </div>
+    {%- capture style1 -%}
+      .header-mobile-1 .mobile-btn{
+        margin-top:4px;
+        margin-left:0
+      }
+      .header-mobile-1 .mobile-first-row{
+        margin-bottom:1.2rem
+      }
+      .sticky-active.header-mobile-1 .mobile-first-row{
+        margin-bottom:0
+      }
+    {%- endcapture -%}
+  {%- when '2' -%}
+    <div class="ds-flex align-center container">
+      <div class="ds-flex align-center flex-wrap flex-1">
+        <button class="mobile-btn text-center activator__{{ section.settings.menu_open_effect }}">
+          <span class="mobile-btn__line"></span><span class="mobile-btn__line"></span><span class="mobile-btn__line"></span>
+          {%- if section.settings.menu_title != blank -%}
+            <span class="header__icon-text">{{ section.settings.menu_title }}</span>
+          {%- endif -%}
+        </button>
+        {%- assign fb = section.blocks[0] -%}
+        {%- if fb != blank -%}
+          {%- if fb.type == 'cart' -%}
+            <div class="topbar-item cart-wrapper" id="block-{{ fb.id }}">
+              <a href="/cart" class="icon-cart cart-amount__{{ fb.settings.amount_pos }}" data-no-instant>
+                <div class="position-relative">
+                  {%- assign i_n = block.settings.cart_icon_name | default: settings.cart_icon -%}
+                  {% include i_n %}
+                  <span class="icon-cart__total">{{ cart.item_count }}</span>
+                </div>
+                <span class="header__icon-text">{{ fb.settings.title }}</span>
+              </a>
+            </div>
+          {%- else -%}
+            {% include 'topbar_item', item: fb %}
+          {%- endif -%}
+        {%- endif -%}
+      </div>
+      <div class="mr-auto ml-auto">
+        {% render 'logo' %}
+      </div>
+      <div class="ds-flex align-center flex-wrap flex-1 justify-end">
+        {% for block in section.blocks offset: 1 %}
+          {%- if block.type == 'cart' -%}
+            <div class="topbar-item cart-wrapper" id="block-{{ block.id }}">
+              <a href="/cart" class="icon-cart cart-amount__{{ block.settings.amount_pos }}" data-no-instant>
+                <div class="position-relative">
+                  {% include settings.cart_icon %}
+                  <span class="icon-cart__total">{{ cart.item_count }}</span>
+                </div>
+                <span class="header__icon-text">{{ block.settings.title }}</span>
+              </a>
+            </div>
+          {%- else -%}
+            {% include 'topbar_item', item: block %}
+          {%- endif -%}
+        {% endfor %}
+      </div>
+    </div>
+    {%- capture style1 -%}
+      .header-mobile-2 .mobile-btn{
+        margin-left:0
+      }
+    {%- endcapture -%}
+  {%- when '4' -%}
+    <div class="ds-flex align-center mobile-first-row container">
+      <div class="mr-auto">
+        {% render 'logo' %}
+      </div>
+      <div class="ds-flex align-center">
+        {%- for block in section.blocks limit: 3 -%}
+          {%- if block.type == 'cart' -%}
+            <div class="topbar-item cart-wrapper" id="block-{{ block.id }}">
+              <a href="/cart" class="icon-cart cart-amount__{{ block.settings.amount_pos }}" data-no-instant>
+                <div class="position-relative">
+                  {%- assign i_n = block.settings.cart_icon_name | default: settings.cart_icon -%}
+                  {% include i_n %}
+                  <span class="icon-cart__total">{{ cart.item_count }}</span>
+                </div>
+                <span class="header__icon-text">{{ block.settings.title }}</span>
+              </a>
+            </div>
+          {%- else -%}
+            {% include 'topbar_item', item: block %}
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+
+    <div class="ds-flex align-center space-between container">
+      <button class="mobile-btn text-center activator__{{ section.settings.menu_open_effect }}">
+        <span class="mobile-btn__line"></span><span class="mobile-btn__line"></span><span class="mobile-btn__line"></span>
+        {%- if section.settings.menu_title != blank -%}
+          <span class="header__icon-text">{{ section.settings.menu_title }}</span>
+        {%- endif -%}
+      </button>
+
+      {%- for block in section.blocks offset: 3 -%}
+        {% include 'topbar_item', item: block %}
+      {%- endfor -%}
+    </div>
+    {%- capture style1 -%}
+      .header-mobile-4 .mobile-btn{
+        margin-left:0
+      }
+      .header-mobile-4 .mobile-first-row{
+        margin-bottom:.5rem
+      }
+      .header-mobile-4 .search-box-fixed .header-search__input{
+        border-top:0;
+        border-right:0;
+        border-left:0;
+        font-style:italic
+      }
+      .sticky-active.header-mobile-4 .mobile-first-row{
+        margin-bottom:0
+      }
+      .header-mobile .search-box-fixed .search-input-container{
+        height:2.6rem
+      }
+      #shopify-section-header-mobile .header-mobile-4 .search-box-fixed .search-button{
+        top:auto;
+        bottom:0;
+      }
+    {%- endcapture -%}
+  {%- else -%}
+    <div class="ds-flex align-center container justify-end flex-wrap">
+      <div class="mr-auto">
+        {% render 'logo' %}
+      </div>
+      <button class="mobile-btn text-center activator__{{ section.settings.menu_open_effect }}">
+        <span class="mobile-btn__line"></span><span class="mobile-btn__line"></span><span class="mobile-btn__line"></span>
+        {%- if section.settings.menu_title != blank -%}
+          <span class="header__icon-text">{{ section.settings.menu_title }}</span>
+        {%- endif -%}
+      </button>
+      {% for block in section.blocks %}
+        {%- if block.type == 'cart' -%}
+          <div class="topbar-item cart-wrapper" id="block-{{ block.id }}">
+            <a href="/cart" class="icon-cart cart-amount__{{ block.settings.amount_pos }}" data-no-instant>
+              <div class="position-relative">
+                {%- assign i_n = block.settings.cart_icon_name | default: settings.cart_icon -%}
+                  {% include i_n %}
+                <span class="icon-cart__total">{{ cart.item_count }}</span>
+              </div>
+              <span class="header__icon-text">{{ block.settings.title }}</span>
+            </a>
+          </div>
+        {%- else -%}
+          {% include 'topbar_item', item: block %}
+        {%- endif -%}
+      {% endfor %}
+    </div>
+{%- endcase -%}
+</div>
+
+{% assign styles = '' -%}
+{%- capture styles -%}
+#shopify-section-header-mobile .header{
+  {%- if section.settings.padding != blank -%}
+  padding:{{ section.settings.padding }};
+  {%- endif -%}
+  background-color:{{ section.settings.c_bg }};
+  color:{{ section.settings.c_text }}
+}
+#shopify-section-header-mobile .topbar-item>a{
+  -ms-flex-direction:column;
+  flex-direction:column;
+  min-width:3.6rem;
+  max-width:8rem;
+  padding:.8rem 1rem
+}
+#shopify-section-header-mobile .header__icon-text,
+#shopify-section-header-mobile .search-button__title,
+#shopify-section-header-mobile .item-subject{
+  display:block;
+  height:1em;
+  padding-top:.8rem;
+  font-size:.9rem;
+  font-family:'Arial',sans-serif;
+  font-weight:400;
+  line-height:1;
+  overflow:visible;
+  text-align:center;
+  text-transform:initial
+}
+#shopify-section-header-mobile .vnd-mobile-menu{
+  background-color:{{ section.settings.c_mb_menu_bg }}
+}
+@media all and (min-width:768px){
+  #shopify-section-header-mobile .header{
+    display:none
+  }
+}
+@media all and (max-width:767px){
+  #shopify-section-header-mobile .mobile-btn{
+    height:auto;
+    padding-top:.8rem;
+    padding-bottom:.8rem
+  }
+  #shopify-section-header-mobile .search-box-fixed .search-input-container{
+    position:relative;
+    opacity:1;
+    visibility:visible
+  }
+  #shopify-section-header-mobile .search-box-fixed .header-search__input{
+    padding-right:3.4rem
+  }
+  #shopify-section-header-mobile .search-box-fixed .search-button{
+    position:absolute;
+    top:2px;
+    right:0;
+    padding-bottom:.5rem;
+    z-index:3
+  }
+  #shopify-section-header-mobile .search-box-fixed .search-button span{
+    display:none
+  }
+}
+@media all and (max-width:375px){
+  #shopify-section-header-mobile .link-logout{
+    display:none
+  }
+  #shopify-section-header-mobile .topbar-item>a{
+    max-width:5rem;
+    padding:.8rem .6rem
+  }
+}
+{{ style1 }}
+{% render 'style_topbar_items', blocks: section.blocks %}
+{%- endcapture -%}
+<style>{{ styles | strip_newlines | remove: '  ' }}</style>
+
+{% schema %}
+{
+  "name": "Mobile Header",
+  "tag": "header",
+  "class": "position-relative",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Mobile Header Configuration"
+    },
+    {
+      "type": "select",
+      "id": "type",
+      "label": "Header Style",
+      "options": [
+        { "value": "1", "label": "Type 1" },
+        { "value": "2", "label": "Type 2" },
+        { "value": "3", "label": "Type 3" },
+        { "value": "4", "label": "Type 4" }
+      ],
+      "default": "3"
+    },
+    {
+      "type": "text",
+      "id": "padding",
+      "label": "Padding",
+      "info": "sequence: top-right-bottom-left (ex: 10px 0 10px 0)",
+      "default": "25px 0 25px 0"
+    },
+    {
+      "type": "color",
+      "id": "c_bg",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "c_text",
+      "label": "Text color",
+      "default": "#444645"
+    },
+    {
+      "type": "header",
+      "content": "Mobile Menu"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "default": "main-menu"
+    },
+    {
+      "type": "text",
+      "id": "menu_title",
+      "label": "Menu button title",
+      "default": "Menu"
+    },
+    {
+      "type": "color",
+      "id": "c_mb_menu_bg",
+      "label": "Menu background color",
+      "default": "#f9f9f9"
+    },
+    {
+      "type": "select",
+      "id": "menu_open_effect",
+      "label": "Mobile open effect",
+      "options": [
+        { "value": "slide-left", "label": "Slide-in from left" },
+        { "value": "drop-down", "label": "Drop down" }
+      ],
+      "default": "slide-left"
+    }
+  ],
+  "blocks": [
+    {
+      "type":"search_box",
+      "name":"Search Box",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "select",
+          "id": "search_style",
+          "label": "Style",
+          "options": [
+            { "value": "search-box-fixed", "label": "Show box" },
+            { "value": "search-box-popup", "label": "Popup box" },
+            { "value": "search-line-popup", "label": "Popup Line" }
+          ],
+          "default": "search-box-popup"
+        },
+        {
+          "type": "text",
+          "id": "search_icon",
+          "label": "Icon",
+          "default": "icon-search",
+          "info": "[Browse icons](https://docs.flexkitux.com/pages/icons-list.html)"
+        },
+        {
+          "type": "range",
+          "id": "size_icon",
+          "min": 12,
+          "max": 24,
+          "step": 1,
+          "unit": "px",
+          "label": "Icons size",
+          "default": 16
+        },
+        {
+          "type": "text",
+          "id": "search_title",
+          "label": "Button title",
+          "default": "Search"
+        },
+        {
+          "type": "paragraph",
+          "content": "Search Button Colors"
+        },
+        {
+          "type": "color",
+          "id": "color_search",
+          "label": "Search button color",
+          "default": "#555555"
+        },
+        {
+          "type": "color",
+          "id": "color_search_h",
+          "label": "Search button color on hover",
+          "default": "#555555"
+        },
+        {
+          "type": "paragraph",
+          "content": "Search Input Box Colors"
+        },
+        {
+          "type": "color",
+          "id": "color_search_ib",
+          "label": "Search input box border color",
+          "default": "#555555"
+        },
+        {
+          "type": "color",
+          "id": "color_search_input",
+          "label": "Search input box text color",
+          "default": "#555555"
+        },
+        {
+          "type": "color",
+          "id": "color_bg",
+          "label": "Search form background color",
+          "default": "#ffffff"
+        }
+      ]
+    },
+    {
+      "type":"wishlist",
+      "name":"Wishlist",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "icon",
+          "label": "Icon",
+          "default": "icon-heart",
+          "info": "[Browse icons](https://docs.flexkitux.com/pages/icons-list.html)"
+        },
+        {
+          "type": "range",
+          "id": "size_icon",
+          "min": 12,
+          "max": 24,
+          "step": 1,
+          "unit": "px",
+          "label": "Icons size",
+          "default": 16
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Wishlist button title",
+          "default": "Wishlist"
+        },
+        {
+          "type": "select",
+          "id": "item_count_pos",
+          "label": "Count position",
+          "options": [
+            { "value": "item-count__default", "label": "Default position" },
+            { "value": "item-count__left", "label": "Left" },
+            { "value": "item-count__right", "label": "Right" }
+          ],
+          "default": "item-count__left"
+        }
+      ]
+    },
+    {
+      "type":"compare",
+      "name":"Comparison List",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "icon",
+          "label": "Icon",
+          "default": "icon-repeat-circle",
+          "info": "[Browse icons](https://docs.flexkitux.com/pages/icons-list.html)"
+        },
+        {
+          "type": "range",
+          "id": "size_icon",
+          "min": 12,
+          "max": 24,
+          "step": 1,
+          "unit": "px",
+          "label": "Icons size",
+          "default": 14
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Button title",
+          "default": "Compare"
+        },
+        {
+          "type": "select",
+          "id": "item_count_pos",
+          "label": "Count position",
+          "options": [
+            { "value": "item-count__default", "label": "Default position" },
+            { "value": "item-count__left", "label": "Left" },
+            { "value": "item-count__right", "label": "Right" }
+          ],
+          "default": "item-count__left"
+        }
+      ]
+    },
+    {
+      "type": "cart",
+      "name": "Cart Dropdown",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "cart_icon_name",
+          "label": "Cart icon",
+          "info": "[Browse icons](https://docs.flexkitux.com/pages/icons-list.html)"
+        },
+        {
+          "type": "range",
+          "id": "size_icon",
+          "min": 12,
+          "max": 24,
+          "step": 1,
+          "unit": "px",
+          "label": "Icons size",
+          "default": 17
+        },
+        {
+          "type": "select",
+          "id": "header_cart_style",
+          "label": "Cart style",
+          "options": [
+            { "value": "show_amount", "label": "Show cart amount beside the icon" },
+            { "value": "show_abs_amount", "label": "Show cart amount on the icon" },
+            { "value": "show_abs_text", "label": "Show cart amount on the icon and text" },
+            { "value": "only_icon", "label": "Show only cart icon" }
+          ],
+          "default": "show_amount"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Cart text",
+          "default": "My Cart"
+        },
+        {
+          "type": "color",
+          "id": "cart_color",
+          "label": "Cart text color",
+          "default": "#312e2e"
+        },
+        {
+          "type": "color",
+          "id": "cart_icon",
+          "label": "Cart icon color",
+          "default": "#555555"
+        },
+        {
+          "type": "paragraph",
+          "content": "Below settings only work when cart style is 'Show cart amount on the icon icon' or 'Show only cart icon'"
+        },
+        {
+          "type": "select",
+          "id": "amount_pos",
+          "label": "Cart amount position",
+          "options": [
+            { "value": "left", "label": "Left" },
+            { "value": "right", "label": "Right" }
+          ],
+          "default": "right"
+        },
+        {
+          "type": "color",
+          "id": "c_amount_bg",
+          "label": "Cart amount background",
+          "default": "#7bae23"
+        },
+        {
+          "type": "color",
+          "id": "c_amount_text",
+          "label": "Cart amount text color",
+          "default": "#ffffff"
+        }
+      ]
+    },
+    {
+      "type": "login",
+      "name": "Customer Login Link",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Please allow customer accounts to show this link. [Learn More](https://help.shopify.com/en/manual/checkout-settings/customer-accounts)"
+        },
+        {
+          "type": "text",
+          "id": "icon",
+          "label": "Icon name",
+          "default": "icon-user-6",
+          "info": "[Browse icons](https://docs.flexkitux.com/pages/icons-list.html)"
+        },
+        {
+          "type": "range",
+          "id": "size_icon",
+          "min": 12,
+          "max": 24,
+          "step": 1,
+          "unit": "px",
+          "label": "Icons size",
+          "default": 14
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "text",
+          "default": "Login"
+        }
+      ]
+    },
+    {
+      "type":"menu_item",
+      "name":"Text with link",
+      "settings": [
+        {
+          "type": "text",
+          "id": "icon",
+          "label": "Icon",
+          "info": "[Browse icons](https://docs.flexkitux.com/pages/icons-list.html)"
+        },
+        {
+          "type": "range",
+          "id": "size_icon",
+          "min": 12,
+          "max": 24,
+          "step": 1,
+          "unit": "px",
+          "label": "Icons size",
+          "default": 14
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Navigation Title",
+          "default": "Contact Us"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Navigation link"
+        }
+      ]
+    }
+  ],
+  "default": {
+    "blocks": [
+      { "type": "cart" },
+      { "type": "search_box" }
+    ]
+  }
+}
+{% endschema %}

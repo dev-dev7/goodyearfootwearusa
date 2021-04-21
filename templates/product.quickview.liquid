@@ -1,0 +1,92 @@
+{%- layout none -%}
+<div class="row space-between">
+  <div class="product-img-area ds-flex space-between {{ settings.qv_thumbs_style }}">
+    {%- if product.images.size >= 1 -%}
+    <div class="thumbs-wrapper position-relative">
+      <div class="thumbs-viewport position-relative">
+        <div class="thumbs-container position-relative">
+          {% for media in product.media %}
+            {%- if media.alt contains '[vnd_' -%}{%- continue -%}{%- endif -%}
+            {%- if media.media_type == 'model' or settings.qv_thumbs_style == 'thumbs-circle' -%}
+              {%- assign padding = 100 -%}
+            {%- else -%}
+              {%- assign padding = 100 | divided_by: media.aspect_ratio -%}
+            {%- endif -%}
+
+            <div class="product-thumb">
+              {%- if media.media_type == 'model' -%}
+                <div class="product-thumb__link position-relative image-loading" href="#" style="padding-top:{{ padding }}%">
+              {%- else -%}
+                <div class="product-thumb__link position-relative image-loading" href="#" style="padding-top:{{ padding }}%">
+              {%- endif -%}
+                <div class="image-bg lazyload" data-bg="{{ media | img_url: '110x', scale: 2 }}"></div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+      <a href="#" class="thumb-arrow__up">{% render 'icon-dir-up' %}</a>
+      <a href="#" class="thumb-arrow__down">{% render 'icon-dir-down' %}</a>
+    </div>
+    {%- endif -%}
+
+    <div class="items-carousel"
+      data-auto="false"
+      data-dots="false"
+      data-nav="true">
+      {%- for media in product.media -%}
+        {%- if media.alt contains '[vnd_' -%}{%- continue -%}{%- endif -%}
+        {% case media.media_type %}
+          {% when 'image' %}
+            <div class="product-img image-loading" style="padding-top:{{ 100 | divided_by: media.aspect_ratio }}%" data-media="{{ media.id }}">
+              <img class="image-bg lazyload product-images" data-src="{{ media | img_url: '600x' }}" data-zoom="{{ media | img_url: 'master' }}" alt="{{ media.alt | default: product.title }}"/>
+            </div>
+          {% when 'external_video' %}
+            <div class="product-img media-container" style="padding-top:{{ 100 | divided_by: media.aspect_ratio }}%" data-media="{{ media.id }}">
+              {{ media | external_video_tag }}
+            </div>
+          {% when 'video' %}
+            <div class="product-img media-container" style="padding-top:{{ 100 | divided_by: media.aspect_ratio }}%" data-media="{{ media.id }}">
+              {{ media | video_tag: controls: true }}
+            </div>
+          {% when 'model' %}
+            <div class="product-img media-container" style="padding-top: 100%" data-media="{{ media.id }}">
+              {{ media | model_viewer_tag }}
+            </div>
+        {% endcase %}
+      {%- endfor -%}
+    </div>
+  </div>
+  <div class="product-details-area">
+    <h1 class="product-name"><a href="{{ product.url | within: collection }} ">{{ product.title }}</a></h1>
+
+    {% render 'product_review', product: product %}
+
+    <div class="product-details__text" style="margin:5px 0">
+
+      {%- if settings.enable_product_availability -%}
+        <span>{{ 'products.product.availability' | t }}: </span>
+
+        <span class="in-stock">
+          {%- if product.selected_or_first_available_variant.inventory_management -%}
+            {%- assign inventory = product.selected_or_first_available_variant.inventory_quantity -%}
+            {%- if inventory > 0 -%}
+              {{ 'products.product.in_stock' | t }}
+            {%- else -%}
+              {{ 'products.product.out_of_stock' | t }}
+            {%- endif -%}
+          {%- else -%}
+            {{ 'products.product.many_in_stock' | t }}
+          {%- endif -%}
+        </span>
+      {%- endif -%}
+    </div><!-- .inventory -->
+
+    {% render 'product_price', price: product.price, compare_at_price: product.compare_at_price %}
+    {% render 'product_description', description: product.description, truncate: 30 %}
+    {%- if product.metafields.vndbasic['dealtime'] != blank -%}
+      {% render 'product_deal' with product.metafields.vndbasic['dealtime'] %}
+    {% endif %}
+    {% render 'product_form' %}
+  </div>
+</div>

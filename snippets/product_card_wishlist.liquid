@@ -1,0 +1,122 @@
+{% comment %}
+Renders product in a grid style
+  Accepts:
+    - product: <Product> product to show
+    - card_border: <Boolean> show border around product card
+
+  Usage:
+    {% include 'product_card_wishlist', product: product, height: section.settings.height %}
+{% endcomment %}
+{%- liquid
+unless img_max
+ assign img_max = 400
+endunless
+
+assign img_max_width = img_max | append: 'x'
+assign product_desc = product.description
+assign available = product.available
+assign a_p = 100 | divided_by: product.featured_image.aspect_ratio
+
+case height
+  when 'square'
+    assign padding = 100
+  when 'rect'
+    assign padding = 130
+  else
+    assign padding = a_p
+endcase
+
+if product.compare_at_price > product.price
+  assign sale = true
+else
+  assign sale = false
+endif
+-%}
+
+{%- if a_p == padding -%}
+{%- capture img -%}
+<img class="link-entire lazyload product-first-image" data-src="{{ product.featured_image | img_url: img_max_width }}" alt="{{ product.title }}"/>
+{%- if product.images[1] != blank and settings.product_other_img != blank -%}
+<img class="link-entire lazyload product-second-image" data-src="{{ product.images[1].src | img_url: img_max_width }}" alt="{{ product.title }}"/>
+{%- endif -%}
+{%- endcapture -%}
+{%- else -%}
+{%- capture img -%}
+<div class="image-bg contain-bg lazyload product-first-image" data-bg="{{ product.featured_image | img_url: img_max_width }}" title="{{ product.title }}"></div>
+{%- if product.images[1] != blank and settings.product_other_img != blank -%}
+<div class="image-bg contain-bg lazyload product-second-image" data-bg="{{ product.images[1].src | img_url: img_max_width }}" title="{{ product.title }}"></div>
+{%- endif -%}
+{%- endcapture -%}
+{%- endif -%}
+
+{%- unless product == blank -%}
+  <div class="product-card {% if card_border == true %} show-border{% endif %}{% if product.metafields.vndbasic['dealtime'] != blank %} has-deal{% endif %}">
+    <a href="#" data-product-handle="{{ product.handle }}" class="btn-wishlist ds-block is-active">{% render 'icon-close' %}</a>
+    <div class="product-img">
+      {%- unless product.featured_image == blank -%}
+        <div class="main-product image-loading" style="padding-top:{{ padding }}%;">
+          {{ img }}
+          <a href="{{ product.url | within: collection }}" class="link-entire"></a>
+        </div><!-- .main-product -->
+      {%- endunless -%}
+
+      {%- if product.metafields.vndbasic['dealtime'] != blank -%}
+        {% render 'product_deal' with product.metafields.vndbasic['dealtime'] %}
+      {% endif %}
+    </div><!-- .product-img -->
+
+    <div class="product-detail">
+      {%- if settings.enable_product_type and product.type != blank -%}
+        <h4 class="product-type">{{ product.type }}</h4>
+      {%- endif -%}
+
+      {%- if settings.enable_product_vendor and product.vendor != blank -%}
+        <h4 class="product-type">{{ product.vendor }}</h4>
+      {%- endif -%}
+
+      {%- unless settings.show_name_after_price -%}
+        <h3 class="product-name">
+          <a href="{{ product.url | within: collection }}">{{ product.title }}</a>
+        </h3>
+
+        {% render 'product_description', description: product_desc, truncate: 30 %}
+      {%- endunless -%}
+
+      <div class="product-info ds-flex">
+        {% render 'product_price', price: product.price, compare_at_price: product.compare_at_price %}
+        {% render 'product_review', product: product %}
+      </div><!-- .product-info -->
+
+      {%- if settings.show_name_after_price -%}
+        <h3 class="product-name">
+          <a href="{{ product.url | within: collection }}">{{ product.title }}</a>
+        </h3>
+        {% render 'product_description', description: product_desc, truncate: 30 %}
+      {%- endif -%}
+
+      {%- include 'card_swatch', product: product -%}
+    </div><!-- .product-details -->
+
+    {% include 'product_advanced_actions', product: product %}
+
+    <div class="product-label">
+      {%- assign taglist = product.tags | join: ', ' -%}
+      {%- if taglist contains 'VndLabel: new' -%}
+        <span class="product-label__new">{{ 'products.product.new' | t }}</span>
+      {%- endif -%}
+
+      {%- if sale -%}
+        {%- if settings.price_sale_style == 'text' -%}
+          <span class="product-label__sale">{{ 'products.product.on_sale' | t }}</span>
+        {%- else -%}
+          <span class="product-label__sale">-{{ product.compare_at_price | minus: product.price | times: 100.0 | divided_by: product.compare_at_price | floor }}%</span>
+        {%- endif -%}
+      {%- endif -%}
+
+      {%- unless product.available -%}
+        <span class="product-label__sold">{{ 'products.product.sold_out' | t }}</span>
+      {%- endunless -%}
+    </div><!-- .product-label -->
+  </div><!-- .product-card -->
+
+{%- endunless -%}

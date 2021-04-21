@@ -1,0 +1,12 @@
+{%- case settings.review_app -%}
+{%- when 'shopify-app' -%}
+  <span class="shopify-product-reviews-badge" data-id="{{ product.id }}"></span>
+{%- when 'ali-reviews' -%}
+  <div product-id="{{ product.id }}" class="alr-display-review-badge"></div>
+{%- when 'loox' -%}
+  <div class="loox-rating" data-id="{{ product.id }}" data-rating="{{ product.metafields.loox.avg_rating }}" data-raters="{{ product.metafields.loox.num_reviews }}"></div>
+{%- when 'judgeme' -%}
+  {% render 'judgeme_widgets', widget_type: 'judgeme_preview_badge', jm_style: '', concierge_install: false, product: product %}
+{%- when 'stampedio' -%}
+  <span class=" stamped-product-reviews-badge" data-product-sku="{{ product.handle }}" data-id="{{ product.id }}" data-product-type="{{product.type}}" data-product-title="{{product.title}}"  style="display:block;">{{ product.metafields.stamped.badge }}</span>
+{%- endcase -%}

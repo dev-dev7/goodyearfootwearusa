@@ -1,0 +1,61 @@
+{% comment %}
+Renders image/video and text content of a slide show
+  Accepts:
+    - t_c: <Object> block settings of a text content
+    - id: <Number> block id
+
+  Usage:
+    {% include 'text_content', t_c: block.settings, id: block.id %}
+{% endcomment %}
+
+<div class="text-content {{ t_c.content_style }} {{ t_c.content_vp }} font-{{ s_c.font_size | default: 10 }}">
+  <div class="{{ t_c.content_hp }} position-relative {{ t_c.content_align }}">
+    {%- if t_c.icon != blank -%}
+      <div class="text-content__icon" style="color:{{ t_c.color_icon }}">
+        {% include 'include_icon', icon_name: t_c.icon %}
+      </div>
+    {%- endif -%}
+
+    {%- if t_c.sub_title != blank -%}
+      <h3 style="color:{{ t_c.sub_color }}">{{ t_c.sub_title | newline_to_br }}</h3>
+    {%- endif -%}
+
+    {%- if t_c.content_style == 'text-beige3' -%}
+      <div class="position-relative">
+    {%- endif -%}
+    {%- if t_c.title != blank -%}
+      <h2 style="color:{{ t_c.color_title }}">{{ t_c.title | newline_to_br }}</h2>
+    {%- endif -%}
+
+    {%- if t_c.desc != blank -%}
+      <p style="color:{{ t_c.color_desc }}">{{ t_c.desc | newline_to_br }}</p>
+    {%- endif -%}
+
+    {%- if t_c.content_style == 'text-beige3' -%}
+      </div>
+    {%- endif -%}
+
+    {%- if t_c.btn_title != blank -%}
+      <a href="{{ t_c.item_link | default: '#' }}" class="btn {{ t_c.btn_style }}" style="color:{{ t_c.color_button }}">
+        {{ t_c.btn_title }}
+        {%- if t_c.btn_title_icon != blank -%}
+          {% include 'include_icon', icon_name: t_c.btn_title_icon %}
+        {%- endif -%}
+      </a>
+    {%- endif -%}
+
+    {%- if t_c.btn_title2 != blank -%}
+      <a href="{{ t_c.item_link2 | default: '#' }}" class="btn btn-second {{ t_c.btn2_style }}" style="color:{{ t_c.color_button2 }}">
+        {{ t_c.btn_title2 }}
+        {%- if t_c.btn_title_icon2 != blank -%}
+          {% include 'include_icon', icon_name: t_c.btn_title_icon2 %}
+        {%- endif -%}
+      </a>
+    {%- endif -%}
+  </div><!-- .content_hp -->
+</div><!-- .text-content -->
+
+{%- if t_c.item_link != blank and t_c.btn_title == blank -%}
+  <a href="{{ t_c.item_link }}" class="link-entire"></a>
+{%- endif -%}
+<style>.block-{{ id }} em{background-color:{{ t_c.em_bg_color }};color:{{ t_c.em_color }}}.block-{{ id }} strong{background-color:{{ t_c.strong_bg_color }};color:{{ t_c.strong_color }}}</style>

@@ -1,0 +1,19 @@
+{%- layout none -%}
+{%- for item in search.results -%}
+  <a class="result-item ds-flex" href="{{ item.url }}">
+    {%- if item.object_type == 'product' -%}
+      {%- if item.featured_image -%}
+        <img class="lazyload" data-src="{{ item.featured_image | img_url: '70x' }}" src="{{ item.featured_image | img_url: '1x' }}" alt="{{ item.title }}" />
+      {%- endif -%}
+      <div class="product-info">
+        <h3 class="product-name">{{ item.title }}</h3>
+        {% render 'product_price', price: item.price, compare_at_price: item.compare_at_price %}
+      </div>
+    {%- elsif settings.predictive_fields == "product,page,article,collection" -%}
+      {%- if item.image -%}
+        <img class="lazyload" data-src="{{ item.image | img_url: '7x' }}" src="{{ item.image | img_url: '1x' }}" alt="{{ item.title }}"/>
+      {%- endif -%}
+      <h3 class="product-name">{{ item.title }}</h3>
+    {%- endif -%}
+  </a>
+{%- endfor -%}

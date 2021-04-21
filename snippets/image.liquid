@@ -1,0 +1,35 @@
+{% comment %}
+Renders images
+  Accepts:
+    - add_class: <String> additional class name of image
+    - a_attr: <String> additional data attributes
+    - m_img: <Image> main image object
+    - image_alt: <String> alt text of image
+    - link_to: <Url> active link of the image
+    - element_type: <String> Switch img tag / div background
+
+  Usage:
+    {% render 'image', m_img: section.settings.back_img, add_class: 'block-image', image_alt: 'free service', link_to: section.settings.link_to %}
+{% endcomment %}
+{%- liquid
+assign ar = m_img.aspect_ratio | default: 1
+unless image_alt
+  assign image_alt = m_img.alt
+endunless
+-%}
+{%- if element_type == 'image' -%}
+  <img class="image-bg lazyload {{ add_class }}" data-src="{{ m_img | img_url: 'master' }}" src="{{ m_img | img_url: '100x' }}" alt="{{ image_alt }}" {{ a_attr }}/>
+{%- elsif element_type == 'png' -%}
+  <img class="lazyload {{ add_class }}" data-src="{{ m_img | img_url: 'master' }}" src="{{ m_img | img_url: '100x' }}" alt="{{ image_alt }}" {{ a_attr }}/>
+{%- else -%}
+  {%- capture srcset -%}
+    {{ m_img | img_url: 'master' }} 1600w,
+    {{ m_img | img_url: '1000x' }} 1000w,
+    {{ m_img | img_url: '600x' }} 600w,
+    {{ m_img | img_url: '200x' }} 200w
+  {%- endcapture -%}
+  <div class="image-bg lazyload {{ add_class }}" data-bgset="{{ srcset }}" data-bg="{{ m_img | img_url: '50x' }}" title="{{ image_alt }}" {{ a_attr }}></div>
+{%- endif -%}
+{%- if link_to != nil -%}
+  <a href="{{ link_to }}" class="link-entire"></a>
+{%- endif -%}

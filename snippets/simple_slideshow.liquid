@@ -1,0 +1,77 @@
+{% comment %}
+Renders simple slideshow with only images
+  Accepts:
+    - simple_slideshow: <Object> block
+      = slide_transition: <String> transition effect of slideshow (values: "slide", "fade")
+      = auto_speed: <Number> auto rotation speed of the carousel
+      = show_dots: <Boolean> show/hide pagination dots
+      = show_nav: <Boolean> show/hide carousel navigation
+      = wrap_around: <Boolean> loop carousel
+      = img1: <Image> First image to show
+      = img2: <Image> Second image to show
+      = link1: <Link> Image 1 link
+      = link2: <Link> Image 2 link
+
+  Usage:
+    {% render 'simple_slideshow' with block %}
+{% endcomment %}
+
+{%- liquid
+assign slide_transition = simple_slideshow.settings.slide_transition
+assign auto_speed = simple_slideshow.settings.auto_speed
+assign show_dots = simple_slideshow.settings.show_dots
+assign dots_color = simple_slideshow.settings.dots_color
+assign color_dots_h = simple_slideshow.settings.color_dots_h
+assign show_nav = simple_slideshow.settings.show_nav
+assign nav_style = simple_slideshow.settings.nav_style
+assign nav_color = simple_slideshow.settings.nav_color
+assign wrap_around = simple_slideshow.settings.wrap_around
+assign img1 = simple_slideshow.settings.img1
+assign img2 = simple_slideshow.settings.img2
+assign link1 = simple_slideshow.settings.link1
+assign link2 = simple_slideshow.settings.link2
+-%}
+
+<div class="vs-homepage-slideshow simple-slideshow-{{ simple_slideshow.id }}">
+  <div class="flickity-carousel {{ slide_transition }} {{ nav_style }}"
+    data-auto="{{ auto_speed }}"
+    data-dots="{{ show_dots }}"
+    data-nav="{{ show_nav }}"
+    data-wraparound="{{ wrap_around }}">
+    {%- if img1 != blank -%}
+      <div class="slide-item" style="padding-top: {{ 100 | divided_by: img1.aspect_ratio }}%">
+        {% render 'image', m_img: img1, link_to: link_slider1 %}
+    {%- else -%}
+      <div class="slide-item" style="padding-top: 65.51%">
+        <div class="image-bg">
+          {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder' }}
+        </div><!-- image-bg -->
+    {%- endif -%}
+
+      {%- if link1 != blank -%}
+        <a href="{{ link1 }}" class="link-entire"></a>
+      {%- endif -%}
+    </div><!-- .slide-item -->
+
+    {%- if img2 != blank -%}
+      <div class="slide-item" style="padding-top: {{ 100 | divided_by: img2.aspect_ratio }}%">
+        {% render 'image', m_img: img2, link_to: link_slider2 %}
+    {%- else -%}
+      <div class="slide-item" style="padding-top: 65.51%">
+        <div class="image-bg">
+          {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder' }}
+        </div><!-- image-bg -->
+    {%- endif -%}
+      {%- if link2 != blank -%}
+        <a href="{{ link2 }}" class="link-entire"></a>
+      {%- endif -%}
+
+    </div><!-- .slide-item -->
+  </div><!-- .flickity-carousel -->
+</div><!-- .vs-homepage-slideshow -->
+<style>
+.simple-slideshow-{{ simple_slideshow.id }} .flickity-page-dots .dot { color: {{ dots_color }} }
+.simple-slideshow-{{ simple_slideshow.id }} .flickity-page-dots .dot:hover,
+.simple-slideshow-{{ simple_slideshow.id }} .flickity-page-dots .is-selected { color: {{ color_dots_h | default: settings.c_theme }} }
+.simple-slideshow-{{ simple_slideshow.id }} .flickity-prev-next-button { border-color: {{ nav_color }};color: {{ nav_color }} }
+</style>

@@ -1,0 +1,39 @@
+{% comment %}
+Renders advertise image in sidebars
+  Accepts:
+    - img: <Image> advertising background image
+    - style: <String> advertising text style (vales: "default", "top-left")
+    - subtitle: <String> advertising subtitle
+    - block_title: <String> advertising title
+    - color: <Color> color of the text
+
+  Usage:
+    {% render 'sidebar_advertise', img: advertise_img, subtitle: advertise_subtitle, block_title: advertise_title,
+      style: advertise_text_style, color: advertise_color, thp: advertise_thp, tvp: advertise_tvp, ta: advertise_ta %}
+{% endcomment %}
+
+{%- liquid
+if tvp == blank
+  assign tvp = 'v-center'
+endif
+
+if thp == blank
+  assign tvp = 'center'
+endif
+-%}
+
+{%- unless img == blank -%}
+  <div class="advertise-container position-relative image-loading" style="padding-top:{{ 100 | divided_by: img.aspect_ratio }}%;">
+    <div class="lazyload image-bg" data-bg="{{ img | img_url: '350x' }}"></div>
+{%- else -%}
+  <div class="advertise-container position-relative" style="padding-top:155.5%;">
+    {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder' }}
+{%- endunless -%}
+
+  <div class="text-content {{ tvp }} {{ style }}" style="color:{{color}}">
+    <div class="{{ thp }} {{ ta }}">
+      <p class="advertise-subtitle">{{ subtitle }}</p>
+      <h2 class="advertise-title">{{ block_title | newline_to_br }}</h2>
+    </div>
+  </div><!-- .text-content -->
+</div><!-- .advertise-container -->

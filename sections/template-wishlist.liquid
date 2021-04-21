@@ -1,0 +1,65 @@
+{%- if page.content != blank and section.settings.pos_page_content == 'top' -%}
+  <div class="container page-wishlist position-relative">
+    <p class="page-description">{{ page.content }}</p>
+  </div>
+{%- endif -%}
+
+<div class="container page-wishlist position-relative">
+  <p class="page-description page-list__empty">{{ 'customer.wishlist.empty' | t }}</p>
+  <div class="row wishlist-grid vertical-default" data-grid-items="{{ section.settings.per_row }}">
+  </div>
+
+  <!-- Loader -->
+  <div class="result-loading active">{% include settings.anm_loading_products %}</div>
+  {%- if section.settings.show_continue -%}
+    <a href="/collections/all" class="btn btn-default browse-more">{{ 'cart.general.continue_shopping' | t }}</a>
+  {%- endif -%}
+</div>
+
+{%- if page.content != blank and section.settings.pos_page_content == 'bottom' -%}
+  <div class="container page-wishlist position-relative">
+    <p class="page-description">{{ page.content }}</p>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Wishlist Section",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Grid Layout Configuration"
+    },
+    {
+      "type": "select",
+      "id": "per_row",
+      "label": "Number of Products Per Row",
+      "options": [
+        { "value": "2", "label": "2" },
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4" },
+        { "value": "5", "label": "5" },
+        { "value": "6", "label": "6" }
+      ],
+      "default": "4"
+    },
+    {
+      "type": "select",
+      "id": "pos_page_content",
+      "label": "Page content position",
+      "options": [
+        { "value": "bottom", "label": "After grid" },
+        { "value": "top", "label": "After page title" }
+      ],
+      "default": "top"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_continue",
+      "label": "Show continue shopping button",
+      "default": true
+    }
+  ]
+}
+{% endschema %}

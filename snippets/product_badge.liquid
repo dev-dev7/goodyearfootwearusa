@@ -1,0 +1,46 @@
+{% comment %}
+Renders product badges in product page
+  Accepts:
+    - blocks: <Object> blocks to show
+
+  Usage:
+    {% include 'product_badge', blocks: section.blocks, style: section.settings.badge_style %}
+{% endcomment %}
+{%- assign css = '' -%}
+{%- for block in blocks -%}
+  {%- assign add_class = 'badge-' | append: block.id -%}
+  <div class="product-badge {{ style }} {{ add_class }}" {{ block.shopify_attributes }}>
+    {%- if block.type == 'icon_text' -%}
+      {% capture css %}{{ css }}
+        .badge-{{ block.id }} svg {
+          width: {{ block.settings.icon_width }}px;
+          color: {{ block.settings.color_icon }};
+        }
+        .badge-{{ block.id }} .promo-title { color: {{ block.settings.color_text }}; }
+      {% endcapture %}
+
+      {% include 'promotion', promo_icon: block.settings.promo_icon, promo_title: block.settings.promo_title %}
+    {%- else -%}
+      {% capture css %}{{ css }}
+        .badge-{{ block.id }} img {
+          width: {{ block.settings.img_width }}px;
+        }
+        .badge-{{ block.id }} .promo-title { color: {{ block.settings.color_text }}; }
+      {% endcapture %}
+
+      <div class="promo-container">
+        {%- unless block.settings.badge_img == blank -%}
+          <div class="promo-image">
+            {% render 'image', m_img: block.settings.badge_img, element_type: 'png' %}
+          </div><!-- .promo-icon -->
+        {%- endunless -%}
+        <div class="promo-content">
+          {%- if block.settings.promo_title != blank -%}
+            <b class="promo-title">{{ block.settings.promo_title | newline_to_br }}</b>
+          {%- endif -%}
+        </div><!-- .promo-content -->
+      </div><!-- .promo-container -->
+    {%- endif -%}
+  </div><!-- style -->
+{%- endfor -%}
+<style>{{ css | strip_newlines | remove: '  ' }}</style>

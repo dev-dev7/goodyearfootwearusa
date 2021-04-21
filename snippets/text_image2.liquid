@@ -1,0 +1,107 @@
+{% comment %}
+Renders images layout 2 in green-style, section-with-sidebar1.section
+  Accepts:
+    - text_image2: <Object> content to show (block/section)
+      = image1: <Image> First image on left block
+      = subtitle1: <String> First block subtitle
+      = title1: <String> First block title
+      = description1: <String> First block description
+      = link_text1: <String> First block button text
+      = link1: <Link> First block button link
+      ... ... ...
+
+  Usage:
+    {% render 'text_image2' with block %}
+{% endcomment %}
+
+{%- liquid
+assign i1 = text_image2.settings.image1
+assign s1 = text_image2.settings.subtitle1
+assign t1 = text_image2.settings.title1
+assign d1 = text_image2.settings.description1
+assign lt1 = text_image2.settings.link_text1
+assign l1 = text_image2.settings.link1
+
+assign i2 = text_image2.settings.image2
+assign s2 = text_image2.settings.subtitle2
+assign t2 = text_image2.settings.title2
+assign d2 = text_image2.settings.description2
+assign lt2 = text_image2.settings.link_text2
+assign l2 = text_image2.settings.link2
+
+assign i3 = text_image2.settings.image3
+assign s3 = text_image2.settings.subtitle3
+assign t3 = text_image2.settings.title3
+assign d3 = text_image2.settings.description3
+assign lt3 = text_image2.settings.link_text3
+assign l3 = text_image2.settings.link3
+-%}
+
+<div class="text-image-layout2 row">
+  <div class="layout-half col-padding grid-items__2">
+    {%- if i1 != blank -%}
+      <div class="position-relative image-loading" style="padding-top:{{ 100 | divided_by: i1.aspect_ratio }}%;">
+        <div class="image-bg lazyload" data-bg="{{ i1 | img_url: 'master' }}"></div>
+    {%- else -%}
+      <div class="position-relative" style="padding-top:55.9597%;">
+        {{ 'image' | placeholder_svg_tag: 'placeholder' }}
+    {%- endif -%}
+      <div class="text-content text-green2 layout-half__top v-center font-10">
+        <div class="left">
+          <h3>{{ s1 }}</h3>
+          <h2>{{ t1 }}</h2>
+          <p>{{ d1 | newline_to_br }}</p>
+          {%- if lt1 != blank -%}
+            <a href="{{ l1 | default: '#' }}" class="btn btn-default">{{ lt1 }}</a>
+          {%- endif -%}
+        </div>
+      </div><!-- .text-content -->
+
+    </div><!-- .position-relative -->
+
+    {%- if i2 != blank -%}
+      <div class="position-relative layout-half__bottom image-loading" style="padding-top:{{ 100 | divided_by: i2.aspect_ratio }}%">
+        <div class="image-bg lazyload" data-bg="{{ i2 | img_url: 'master' }}"></div>
+    {%- else -%}
+      <div class="position-relative layout-half__bottom" style="padding-top:55.9597%">
+        {{ 'image' | placeholder_svg_tag: 'placeholder' }}
+    {%- endif -%}
+
+      <div class="text-content text-green2 v-center font-10">
+        <div class="left">
+          <h3>{{ s2 }}</h3>
+          <h2>{{ t2 }}</h2>
+          {%- if d2 != blank -%}
+            <p>{{ d2 | newline_to_br }}</p>
+          {%- endif -%}
+          {%- if lt2 != blank -%}
+            <a href="{{ l2 | default: '#' }}" class="btn btn-default">{{ lt2 }}</a>
+          {%- endif -%}
+          </div><!-- .center -->
+      </div><!-- .text-content -->
+    </div><!-- .position-relative -->
+  </div><!-- .layout-half -->
+
+  {%- if i3 != blank -%}
+    <div class="layout-half col-padding grid-items__2">
+      <div class="position-relative image-loading" style="padding-top: {{ 100 | divided_by: i3.aspect_ratio }}%;">
+        <div class="image-bg lazyload" data-bg="{{ i3 | img_url: 'master' }}"></div>
+  {%- else -%}
+    <div class="layout-half col-padding grid-items__2">
+      <div class="position-relative" style="padding-top: 119.04%">
+        {{ 'image' | placeholder_svg_tag: 'placeholder' }}
+  {%- endif -%}
+
+      <div class="text-content text-green3 top font-10">
+        <div class="left">
+          <h3>{{ s3 }}</h3>
+          <h2>{{ t3 | newline_to_br }}</h2>
+          <p>{{ d3 | newline_to_br }}</p>
+          {%- if lt3 != blank -%}
+            <a href="{{ l3 | default: '#' }}" class="btn btn-default">{{ lt3 }}</a>
+          {%- endif -%}
+        </div>
+      </div><!-- .text-content -->
+    </div><!-- padding-top -->
+  </div><!-- .layout-half -->
+</div>

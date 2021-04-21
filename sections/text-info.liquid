@@ -1,0 +1,274 @@
+{%- if section.settings.show -%}
+<div class="text-info__{{ section.id }}">
+  <div class="container">
+    <div class="row">
+      <div class="col-padding medium-6">
+        {%- for block in section.blocks -%}
+          {%- if block.settings.pos == 'left' -%}
+            {% include 'text_info_block', block: block %}
+          {%- endif -%}
+        {%- endfor -%}
+      </div><!-- .medium-6 -->
+
+      <div class="col-padding medium-6">
+        {%- for block in section.blocks -%}
+          {%- if block.settings.pos != 'left' -%}
+            {% include 'text_info_block', block: block %}
+          {%- endif -%}
+        {%- endfor -%}
+      </div><!-- .medium-6 -->
+    </div><!-- .row -->
+  </div><!-- .container -->
+</div>
+<style>
+.text-info__{{ section.id }}{margin: {{ section.settings.margin }};background-color:{{section.settings.color_back}}}
+.text-info__{{ section.id }} h2 {color: {{section.settings.color_title}}}
+.text-info__{{ section.id }} p {color: {{section.settings.color_desc}}}
+</style>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Text info",
+  "tag": "section",
+  "class": "vs-text-info",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show",
+      "label": "Show this section",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Section Settings"
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "Section Margin",
+      "info": "Set margin for section top-right-bottom-left (e.g. 20px 15px 10px 0)"
+    },
+    {
+      "type": "color",
+      "id": "color_back",
+      "label": "Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "color_title",
+      "label": "Title color",
+      "default": "#28282b"
+    },
+    {
+      "type": "color",
+      "id": "color_desc",
+      "label": "Description color",
+      "default": "#4a4a4a"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "text",
+      "name": "Title and description",
+      "settings": [
+        {
+          "type": "select",
+          "id": "pos",
+          "label": "Position",
+          "options": [
+            {"value": "left", "label": "Left"},
+            {"value": "right", "label": "Right"}
+          ],
+          "default": "left"
+        },
+        {
+          "type": "textarea",
+          "id": "title",
+          "label": "Heading",
+          "default": "Who we are?"
+        },
+        {
+          "type": "textarea",
+          "id": "desc",
+          "label": "Description",
+          "default": "Maecenas arcu eros, bibendum sit amet massa ut, pellentesque pharetra massa. Proin nisl magna, ultricies vitae auctor id, tempus in augue. Donec volutpat, ex in feugiat vehicula, leo nisi ornare eros, iaculis tempor tortor urna eget sem. Ut a diam eu est egestas. \n\nEaculis eu non mauris. Praesent sit amet ipsum at mauris consequat molestie. Donec a sollicitudin tellus. Donec justo enim, vehicula a aliquam viverra, fringilla fringilla ante. Quisque tincidunt purus odio, nec pellentesque ligula vehicula at. Proin sagittis purus sit amet felis lobortis scelerisque.\n\nMaecenas vitae accumsan ex. Praesent ut consectetur neque. Praesent tempor, augue ac tempus finibus, enim felis venenatis urna, vitae commodo nunc velit iaculis elit. Nulla in elit non quam sollicitudin ultricies in quis metus. Curabitur tincidunt condi eget nibh. "
+        }
+      ]
+    },
+    {
+      "type": "text-icon",
+      "name": "Text with icon",
+      "settings": [
+        {
+          "type": "select",
+          "id": "pos",
+          "label": "Position",
+          "options": [
+            {"value": "left", "label": "Left"},
+            {"value": "right", "label": "Right"}
+          ],
+          "default": "right"
+        },
+        {
+          "type": "textarea",
+          "id": "title",
+          "label": "Title",
+          "default": "What we do"
+        },
+        {
+          "type": "color",
+          "id": "color_title",
+          "label": "Title color",
+          "default": "#28282b"
+        },
+        {
+          "type": "header",
+          "content": "Promotion Block 1"
+        },
+        {
+          "type": "text",
+          "id": "promo_icon1",
+          "label": "Icon 1",
+          "default": "icon-lock-wide"
+        },
+        {
+          "type": "text",
+          "id": "promo_title1",
+          "label": "Title 1",
+          "default": "Payment Secured"
+        },
+        {
+          "type": "textarea",
+          "id": "promo_text1",
+          "label": "Text 1",
+          "default": "In ncec erat elementum, et venenatis purus nec. Aenean hendrerit semper bibendum. Pellentesque sagittis consec."
+        },
+        {
+          "type": "header",
+          "content": "Promotion Block 2"
+        },
+        {
+          "type": "text",
+          "id": "promo_icon2",
+          "label": "Icon 2",
+          "default": "icon-truck"
+        },
+        {
+          "type": "text",
+          "id": "promo_title2",
+          "label": "Title 2",
+          "default": "Free Delivery"
+        },
+        {
+          "type": "textarea",
+          "id": "promo_text2",
+          "label": "Text 2",
+          "default": "Praesent viverra lorem eu enim imperdiet dapibus. Duis eget feugiat odio, quis rhoncus nulla."
+        },
+        {
+          "type": "header",
+          "content": "Promotion Block 3"
+        },
+        {
+          "type": "text",
+          "id": "promo_icon3",
+          "label": "Icon 3",
+          "default": "icon-back-smooth-1"
+        },
+        {
+          "type": "text",
+          "id": "promo_title3",
+          "label": "Title 3",
+          "default": "30 - Day Returns"
+        },
+        {
+          "type": "textarea",
+          "id": "promo_text3",
+          "label": "Text 3",
+          "default": "In nec erat elementum, et venenatis purus nec. Aenean hendrerit semper bibendum. Pellentesque sagittis consec."
+        },
+        {
+          "type": "header",
+          "content": "Promotion Block 4"
+        },
+        {
+          "type": "text",
+          "id": "promo_icon4",
+          "label": "Icon 4",
+          "default": "icon-headset4"
+        },
+        {
+          "type": "text",
+          "id": "promo_title4",
+          "label": "Title 4",
+          "default": "24\/h support"
+        },
+        {
+          "type": "textarea",
+          "id": "promo_text4",
+          "label": "Text 4",
+          "default": "Mauris interdum nulla ante dignissim, vel malesuada Mauris interdum nulla ante dignissim, vel malesuada"
+        },
+        {
+          "type": "header",
+          "content": "Promotion Block 5"
+        },
+        {
+          "type": "text",
+          "id": "promo_icon5",
+          "label": "Icon 5"
+        },
+        {
+          "type": "text",
+          "id": "promo_title5",
+          "label": "Title 5"
+        },
+        {
+          "type": "textarea",
+          "id": "promo_text5",
+          "label": "Text 5"
+        }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "Text info",
+    "category": "Text Section",
+    "blocks": [
+      {
+        "type": "text",
+        "settings": {
+          "pos": "left",
+          "title": "Who we are?",
+          "desc": "Maecenas arcu eros, bibendum sit amet massa ut, pellentesque pharetra massa. Proin nisl magna, ultricies vitae auctor id, tempus in augue. Donec volutpat, ex in feugiat vehicula, leo nisi ornare eros, iaculis tempor tortor urna eget sem. Ut a diam eu est egestas. \n\nEaculis eu non mauris. Praesent sit amet ipsum at mauris consequat molestie. Donec a sollicitudin tellus. Donec justo enim, vehicula a aliquam viverra, fringilla fringilla ante. Quisque tincidunt purus odio, nec pellentesque ligula vehicula at. Proin sagittis purus sit amet felis lobortis scelerisque.\n\nMaecenas vitae accumsan ex. Praesent ut consectetur neque. Praesent tempor, augue ac tempus finibus, enim felis venenatis urna, vitae commodo nunc velit iaculis elit. Nulla in elit non quam sollicitudin ultricies in quis metus. Curabitur tincidunt condi eget nibh."
+        }
+      },
+      {
+        "type": "text-icon",
+        "settings": {
+          "pos": "right",
+          "title": "What we do",
+          "color_title": "#28282b",
+          "promo_icon1": "icon-lock-wide",
+          "promo_title1": "Free Delivery",
+          "promo_text1": "In ncec erat elementum, et venenatis purus nec. Aenean hendrerit semper bibendum. Pellentesque sagittis consec.",
+          "promo_icon2": "icon-truck",
+          "promo_title2": "24\/h support",
+          "promo_text2": "Praesent viverra lorem eu enim imperdiet dapibus. Duis eget feugiat odio, quis rhoncus nulla.",
+          "promo_icon3": "icon-back-smooth-1",
+          "promo_title3": "payment secured",
+          "promo_text3": "In ncec erat elementum, et venenatis purus nec. Aenean hendrerit semper bibendum. Pellentesque sagittis consec.",
+          "promo_icon4": "icon-headset4",
+          "promo_title4": "payment secured",
+          "promo_text4": "Mauris interdum nulla ante dignissim, vel malesuada",
+          "promo_icon5": "",
+          "promo_title5": "",
+          "promo_text5": ""
+        }
+      }
+    ]
+  }]
+}
+{% endschema %}

@@ -1,0 +1,57 @@
+{% comment %}
+Renders product actions in default style
+  Accepts:
+    - product_url: <Url> Product url
+    - handle: <String> Product handle
+    - available: <Boolean> If product is available
+    - variants: <Product Variants> Variants of product
+
+  Usage:
+    {% include 'product_default_actions', product_url: product.url, available: product.available, variants: product.variants, handle: product.handle %}
+{% endcomment %}
+
+{%- unless template contains 'search' -%}
+<div class="product-actions product-default-actions ds-flex">
+  {%- if settings.show_action_quickview -%}
+    {%- if product_url contains '?' -%}
+      {%- capture qv_url -%}{{ product_url }}&view=quickview{%- endcapture -%}
+    {%- else -%}
+      {%- capture qv_url -%}{{ product_url }}?view=quickview{%- endcapture -%}
+    {%- endif -%}
+    <a href="{{ qv_url }}" class="action-item action-quickview" title="{{ 'products.product.quickview' | t }}">{% include settings.search_icon %}</a>
+  {%- endif -%}
+
+  {%- if settings.show_action_addcart -%}
+    <div class="action-cart" title="{{ 'products.product.add_to_cart' | t }}">
+      {%- if available -%}
+        {%- if variants.size > 1 -%}
+          <a href="{{ product_url | within: collection }}" class="action-item">{% include settings.cart_icon %}</a>
+        {%- else -%}
+          <form method="post" action="/cart/add" enctype="multipart/form-data">
+            <input type="hidden" name="quantity" value="1" />
+            <select style="display:none;" name="id">
+              {%- for variant in variants -%}
+                <option value="{{ variant.id }}">{{ variant.title | escape }} - {{ variant.price | money }}</option>
+              {%- endfor -%}
+            </select>
+            <button type="submit" class="btn action-item btn-add-cart">
+              {% include settings.cart_icon %}
+              <span class="spinner"></span>
+            </button>
+          </form>
+        {%- endif -%}
+      {%- else -%}
+        <a href="{{ product_url | within: collection }}" class="action-item">{% include settings.cart_icon %}</a>
+      {%- endif -%}
+    </div><!-- .action-item.action-cart -->
+  {%- endif -%}
+
+  {%- if settings.show_action_wishlist -%}
+    <div class="btn action-item btn-wishlist" data-product-handle="{{ handle }}" title="{{ 'customer.wishlist.add' | t }}" data-remove-title="{{ 'customer.wishlist.remove' | t }}">{% include settings.wishlist_icon %}</div>
+  {%- endif -%}
+
+  {%- if settings.show_action_compare -%}
+    <div class="btn action-item btn-compare" data-product-handle="{{ handle }}" title="{{ 'customer.compare.add' | t }}" data-remove-title="{{ 'customer.compare.remove' | t }}">{% include settings.compare_icon %}</div>
+  {%- endif -%}
+</div><!-- .product-actions -->
+{%- endunless -%}

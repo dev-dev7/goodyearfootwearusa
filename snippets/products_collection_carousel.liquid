@@ -1,0 +1,85 @@
+{% comment %}
+Renders products of a collection in carousel
+  Accepts:
+    - products_collection_carousel: <Object> section or block
+      = block_title: <String> title of the block/section
+      = collection_name: <Collection> collection to show the products
+      = card_style: <String> set card style (values: "vertical-default", "vertical-advanced", "vertical-progressive", "horizontal-default", "horizontal-advanced", "horizontal-progressive")
+      = card_border: <Boolean> show border around product card
+      = card_shadow: <Boolean> show box shadow around product card
+      = auto_speed: <Number> auto rotation speed of the carousel
+      = show_dots: <Boolean> show/hide pagination dots
+      = show_nav: <Boolean> show/hide carousel navigation
+      = nav_style: <String> position of the navigation (values: "nav-top__right", "nav-top__center", "nav-middle")
+      = wrap_around: <Boolean> loop carousel
+      = number_per_row: <Number> number of items to show at once
+      = prd_img_ft: <String> return class name to apply darkness to product image
+
+  Usage:
+    {% include 'products_collection_carousel' with section %}
+    {% include 'products_collection_carousel' with block %}
+{% endcomment %}
+
+{%- liquid
+assign block_title    = products_collection_carousel.settings.title
+assign desc           = products_collection_carousel.settings.desc
+assign pcc_collection = collections[products_collection_carousel.settings.collection_name]
+assign card_style     = products_collection_carousel.settings.card_style
+assign card_type      = card_style | replace: '-', '_' | prepend: 'product_card_'
+assign card_border    = products_collection_carousel.settings.card_border
+assign card_shadow    = products_collection_carousel.settings.card_shadow
+assign auto_speed     = products_collection_carousel.settings.auto_speed
+assign show_dots      = products_collection_carousel.settings.show_dots
+assign show_nav       = products_collection_carousel.settings.show_nav
+assign nav_style      = products_collection_carousel.settings.nav_style
+assign nav_box_shadow = products_collection_carousel.settings.nav_box_shadow
+assign wrap_around    = products_collection_carousel.settings.wrap_around
+assign number_per_row = products_collection_carousel.settings.number_per_row
+assign prd_img_ft     = products_collection_carousel.settings.prd_img_ft
+
+if card_style contains 'horizontal'
+  assign img_max = 250
+else
+  if settings.layout == 'full_width'
+    assign screen_width = 1920
+  else
+    assign screen_width = settings.layout
+  endif
+  assign img_max = screen_width | divided_by: number_per_row
+endif
+-%}
+
+<div class="content-slideshow {{ nav_style }}{% if nav_box_shadow %} nav-box-shadow{% endif %}">
+  {%- if block_title != blank -%}
+    <h3 class="block-title">{{ block_title }}</h3>
+  {%- endif -%}
+  {%- if desc != blank -%}
+    <p class="block-description">{{ desc | newline_to_br }}</p>
+  {%- endif -%}
+  <div class="items-carousel {{ card_style }} {{ prd_img_ft }}"
+    data-auto="{{ auto_speed | default: 5 }}"
+    data-dots="{{ show_dots }}"
+    data-nav="{{ show_nav }}"
+    data-wraparound="{{ wrap_around }}"
+    data-cellalign="left">
+
+    {%- unless pcc_collection == blank -%}
+      {%- if pcc_collection.products_count == 0 -%}
+        <p class="description slide-group">{{ 'collections.general.no_matches' | t }}</p>
+      {%- else -%}
+        {%- for product in pcc_collection.products -%}
+          <div class="card-wrapper grid-items__{{ number_per_row }}">
+            {% include card_type, collection: pcc_collection, product: product, card_border: card_border, card_shadow: card_shadow, img_max: img_max %}
+          </div>
+        {%- endfor -%}
+      {%- endif -%}
+    {%- else -%}
+      {%- for i in (1..6) -%}
+        {%- capture pp_index -%}{% cycle 1, 2, 3, 4, 5, 6 %}{%- endcapture -%}
+        <div class="card-wrapper grid-items__{{ number_per_row }}">
+          {% render 'product_card', pp_index: pp_index, card_border: card_border, card_shadow: card_shadow %}
+        </div>
+      {%- endfor -%}
+    {%- endunless -%}
+  </div><!-- .items-carousel -->
+</div>

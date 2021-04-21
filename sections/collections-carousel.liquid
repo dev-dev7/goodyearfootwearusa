@@ -1,0 +1,327 @@
+{%- liquid
+assign show_section  = section.settings.show_section
+assign section_title = section.settings.title
+assign layout        = section.settings.layout
+assign img_ar        = section.settings.img_ar
+assign auto_speed    = section.settings.auto_speed
+assign show_dots     = section.settings.show_dots
+assign show_nav      = section.settings.show_nav
+assign nav_style     = section.settings.nav_style
+assign cols          = section.settings.cols
+assign item_space    = section.settings.item_space | divided_by: 2
+-%}
+{%- if show_section -%}
+<div class="content-slideshow collections-carousel">
+  <div class="{{ nav_style }} {{ layout }}">
+    {%- if section_title != blank -%}
+      <h2 class="block-title">{{ section_title }}</h2>
+    {%- endif -%}
+
+    <div class="items-carousel {{ section.settings.text_style }}"
+      data-auto="{{ auto_speed }}"
+      data-dots="{{ show_dots }}"
+      data-nav="{{ show_nav }}"
+      data-wraparound="true"
+      data-cellalign="center"
+      data-groupCells="80%">
+      {%- for block in section.blocks -%}
+        {% render 'collection_carousel_card', block: block, cols: cols, img_ar: img_ar %}
+      {%- endfor -%}
+    </div><!-- .items-carousel -->
+  </div><!-- nav_style -->
+</div><!-- .content-slideshow.collections-carousel -->
+{%- capture css -%}
+#shopify-section-{{ section.id }} .collections-carousel{
+  margin:{{ section.settings.margin_mobile }};
+  padding:{{ section.settings.padding }};
+  background-color:{{ section.settings.color_section_bg }}
+}
+#shopify-section-{{ section.id }} .flickity-page-dots .dot{
+  color:{{ section.settings.c_dots }}
+}
+#shopify-section-{{ section.id }} .flickity-page-dots .dot:hover,
+#shopify-section-{{ section.id }} .flickity-page-dots .is-selected{
+  color:{{ section.settings.c_dots_h | default: settings.c_theme }}
+}
+#shopify-section-{{ section.id }} .flickity-prev-next-button{
+  border-color:{{ section.settings.c_nav_border }};
+  background-color:{{ section.settings.c_nav_bg }};
+  color:{{ section.settings.c_nav }}
+}
+#shopify-section-{{ section.id }} .collection-info{
+  background-color:{{ section.settings.c_textbg }}
+}
+#shopify-section-{{ section.id }} .collection-name{
+  color:{{ section.settings.c_title }}
+}
+#shopify-section-{{ section.id }} .collection-desc{
+  color:{{ section.settings.c_desc }}
+}
+#shopify-section-{{ section.id }} .collection-card__wrapper{
+  padding-right:{{ item_space }}px;
+  padding-left:{{ item_space }}px;
+}
+@media all and (min-width: 768px) {
+  #shopify-section-{{ section.id }} .collections-carousel{
+    margin:{{ section.settings.margin_laptop }}
+  }
+}
+@media all and (min-width: 1400px) {
+  #shopify-section-{{ section.id }} .collections-carousel{
+    margin:{{ section.settings.margin }}
+  }
+}
+{%- endcapture -%}
+
+{% style %}
+{{ css | strip_newlines | remove: '  ' }}
+{% endstyle %}
+
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Collections Carousel",
+  "tag": "section",
+  "class": "vs-initialize-slider",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_section",
+      "label": "Show this section?",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        { "value": "container", "label": "Fixed Width" },
+        { "value": "full-width-container", "label": "Full Width" }
+      ],
+      "default": "full-width-container"
+    },
+    {
+      "type": "color",
+      "id": "color_section_bg",
+      "label": "Section background color",
+      "default": "#f4f6f7"
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "Section margin on desktop",
+      "info": "sequence: top-right-bottom-left (ex: 10px 0 10px 0)",
+      "default": "0 0 115px 0"
+    },
+    {
+      "type": "text",
+      "id": "margin_laptop",
+      "label": "Section margin on laptop",
+      "default": "0 0 80px 0"
+    },
+    {
+      "type": "text",
+      "id": "margin_mobile",
+      "label": "Section margin on mobile",
+      "default": "0 0 50px 0"
+    },
+    {
+      "type": "text",
+      "id": "padding",
+      "label": "Section padding on desktop",
+      "info": "sequence: top-right-bottom-left (ex: 10px 0 10px 0)",
+      "default": "85px 0 73px 0"
+    },
+    {
+      "type": "header",
+      "content": "Content Settings"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section title",
+      "default": "Shop by Category"
+    },
+    {
+      "type": "select",
+      "id": "img_ar",
+      "label": "Image size",
+      "options": [
+        {
+          "value": "relative",
+          "label": "Relative to original size"
+        },
+        {
+          "value": "square",
+          "label": "Square: aspect ratio 1:1"
+        },
+        {
+          "value": "rect1",
+          "label": "Rectangle1: aspect ratio 4:5"
+        },
+        {
+          "value": "rect2",
+          "label": "Rectangle2: aspect ratio 2:3"
+        }
+      ],
+      "default": "relative"
+    },
+    {
+      "type": "select",
+      "id": "text_style",
+      "label": "Text Style",
+      "options": [
+        { "value": "collection-text-classic", "label": "Classic" },
+        { "value": "collection-text-advanced", "label": "Advanced" },
+        { "value": "collection-text-bottom", "label": "Bottom left" }
+      ],
+      "default": "collection-text-classic"
+    },
+    {
+      "type": "text",
+      "id": "auto_speed",
+      "label": "Autoplay speed",
+      "info": "'5' for the slideshow to auto rotate every 5 seconds. '0' to disable auto rotate.",
+      "default": "5"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_dots",
+      "label": "Show Pagination Dots",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_nav",
+      "label": "Show Navigation",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "nav_style",
+      "label": "Navigator position",
+      "options": [
+        { "value": "nav-top__right", "label": "Top right" },
+        { "value": "nav-top__center", "label": "Top Center" },
+        { "value": "nav-middle", "label": "Middle center" }
+      ],
+      "default": "nav-top__center"
+    },
+    {
+      "type": "range",
+      "id": "cols",
+      "min": 2,
+      "max": 8,
+      "step": 1,
+      "label": "Number of items to show at once",
+      "default": 5
+    },
+    {
+      "type": "range",
+      "id": "item_space",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "label": "Space between items",
+      "default": 30,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "Color Settings"
+    },
+    {
+      "type": "color",
+      "id": "c_textbg",
+      "label": "Text background",
+      "default": "#f9f7f6"
+    },
+    {
+      "type": "color",
+      "id": "c_title",
+      "label": "Title color",
+      "default": "#27272d"
+    },
+    {
+      "type": "color",
+      "id": "c_desc",
+      "label": "Description color",
+      "default": "#383636"
+    },
+    {
+      "type": "color",
+      "id": "c_dots",
+      "label": "Dots color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "c_dots_h",
+      "label": "Dots hover color"
+    },
+    {
+      "type": "color",
+      "id": "c_nav_bg",
+      "label": "Navigator background",
+      "default": "rgba(0,0,0,0)"
+    },
+    {
+      "type": "color",
+      "id": "c_nav_border",
+      "label": "Navigator border",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "c_nav",
+      "label": "Navigator color",
+      "default": "#333333"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection",
+      "name": "Collection",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "image_picker",
+          "id": "img",
+          "label": "Image",
+          "info": "If this setting is empty, then collection image will be applied"
+        },
+        {
+          "type": "text",
+          "id": "c_desc",
+          "label": "Description",
+          "default": "Save over $50.00 on"
+        }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "Collections Carousel",
+    "category": "Collections",
+    "settings": {
+      "auto_speed": "5"
+    },
+    "blocks": [
+      { "type": "collection" },
+      { "type": "collection" },
+      { "type": "collection" },
+      { "type": "collection" },
+      { "type": "collection" },
+      { "type": "collection" }
+    ]
+  }]
+}
+{% endschema %}

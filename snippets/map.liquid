@@ -1,0 +1,10 @@
+{% comment %}
+Renders map box
+  Accepts:
+    - padding_top: <String> height of the mapbox
+
+  Usage:
+    {% render 'map', padding_top: section.settings.height %}
+{% endcomment %}
+
+<div id="storeLocation" style="padding-top: {{ padding_top }};"></div>

@@ -1,0 +1,54 @@
+{% comment %}
+Renders product in a grid style
+  Accepts:
+    - collection: <Collection> Collection to show
+    - col_num: <Number> Number of collection cards to show in one line
+    - card_style: <String> set card style (available values: "circle", "rect")
+
+  Usage:
+    {% render 'collection_card' with collection, col_num: col_num, card_style: card_style %}
+{% endcomment %}
+{%- liquid
+unless col_num
+  assign col_num = '4'
+endunless
+
+case col_num
+  when '3'
+    assign img_size = '640x'
+  when '4'
+    assign img_size = '480x'
+  when '5'
+    assign img_size = '480x'
+  when '6'
+    assign img_size = '320x'
+  else
+    assign img_size = 'master'
+endcase
+
+assign ar = 1
+if collection_card.image
+  assign collection_image = collection_card.image
+elsif collection_card.products.first and collection_card.products.first.images != empty
+  assign collection_image = collection_card.products.first.featured_image
+else
+  assign collection_image = blank
+endif
+
+if card_style == 'rect' and collection_image != blank
+  assign ar = collection_image.aspect_ratio
+endif
+-%}
+
+<div class="grid-items__{{ col_num }} collection-card__wrapper">
+  <a href="{{ collection_card.url }}" class="ds-flex position-relative">
+    <div class="position-relative collection-card{% unless collection_image == blank %} image-loading{% endunless %}" style="width:100%;padding-top:{{ 100 | divided_by: ar }}%;">
+      {%- unless collection_image == blank -%}
+        <div data-bg="{{ collection_image | img_url: img_size }}" alt="" class="lazyload image-bg"></div>
+      {%- else -%}
+        {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder image-bg' }}
+      {%- endunless -%}
+    </div>
+    <h3 class="collection-name">{{ collection_card.title | default: 'example' }}</h3>
+  </a>
+</div><!-- .collection-card__wrapper -->

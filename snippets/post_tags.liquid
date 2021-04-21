@@ -1,0 +1,26 @@
+{% comment %}
+Renders blog tags on sidebars
+  Accepts:
+    - block_title: <String> set block title
+
+  Usage:
+    {% render 'post_tags', block_title: block.settings.title %}
+{% endcomment %}
+
+{%- if block_title != blank -%}
+  <h3 class="block-title">{{ block_title }}</h3>
+{%- endif -%}
+<ul class="list-style-none ds-flex flex-wrap">
+  {%- for tag in blog.all_tags -%}
+    {%- assign class_name = "" -%}
+    {%- if article.tags contains tag and article -%}
+      {%- assign class_name = "active" -%}
+    {%- endif -%}
+    {%- if current_tags contains tag -%}
+      {%- assign class_name = "active" -%}
+    {%- endif -%}
+    <li class="tag {{class_name}}">
+      <a href="{{ blog.url }}/tagged/{{ tag | handle }}" >{{ tag }}</a>
+    </li>
+  {%- endfor -%}
+</ul>

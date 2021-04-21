@@ -1,0 +1,57 @@
+{% comment %}
+    Renders a contact form
+    Accepts:
+    - form_title: <String> Title of the contact form (optional)
+
+    Usage:
+    {% render 'form_contact' %}
+    {% render 'form_contact', form_title: section.settings.form_title, ph_name: section.settings.name_text,
+          ph_email: section.settings.email_text, ph_message: section.settings.review_text, ph_submit: section.settings.submit_text %}
+{% endcomment %}
+
+{%- liquid
+assign form_title = 'products.product.question_title' | t
+assign ph_name = 'contact.form.name' | t
+assign ph_email = 'contact.form.email' | t
+assign ph_phone = 'contact.form.phone' | t
+assign ph_message = 'contact.form.message' | t
+assign ph_submit = 'products.product.question_button' | t
+-%}
+
+<div class="vpp-bx-wrapper" id="form-contact-product">
+<div class="vpp-bx vb-form form-classic" id="form-contact-product">
+{% form 'contact', id: form.id %}
+  {% render 'form_status', form: form, form_id: formId %}
+
+  {%- if form_title != blank -%}
+    <h2 class="block-title">{{ form_title }}</h3>
+  {%- endif -%}
+  <div class="contact-input__container">
+    <input type="hidden" name="contact[product]" value="{{ name }}" accept-charset="UTF-8">
+    <div class="ds-flex align-center">
+      {%- assign name_attr = 'contact.form.name' | t | handle -%}
+      <label for="contactFormName">{{ 'contact.form.name' | t }}</label>
+      <input type="text" id="contactFormName" name="contact[{{ name_attr }}]" placeholder="{{ ph_name }}*" autocapitalize="words" value="{% if form[name_attr] %}{{ form[name_attr] }}{% elsif customer %}{{ customer.name }}{% endif %}" required="required">
+    </div>
+
+    <div class="ds-flex align-center">
+      <label for="contactFormEmail">{{ 'contact.form.email' | t }}</label>
+      <input type="email" id="contactFormEmail" name="contact[email]" placeholder="{{ ph_email }}*" autocorrect="off" autocapitalize="off" value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}" required="required">
+    </div>
+
+    <div class="ds-flex align-center">
+      <label for="contactFormPhone">{{ 'contact.form.phone' | t }}</label>
+      <input type="tel" id="contactFormPhone" name="contact[phone]" placeholder="{{ ph_phone }}" autocorrect="off" autocapitalize="off" value="{% if form.phone %}{{ form.phone }}{% elsif customer %}{{ customer.phone }}{% endif %}">
+    </div>
+
+    <div class="ds-flex">
+      <label class="label-textarea" for="contactFormMessage">{{ 'contact.form.message' | t }}</label>
+      <textarea rows="5" id="contactFormMessage" name="contact[body]" placeholder="{{ ph_message }}*" required="required">{% if form.body %}{{ form.body }}{% else %}{{ 'products.product.question_default_html' | t: product_name: name }}{% endif %}</textarea>
+    </div>
+
+    <button class="btn btn-default">{{ ph_submit }}</button>
+  </div>
+{% endform %}
+<div class="vpp-close">{% render 'icon-close' %}</div>
+</div>
+</div>

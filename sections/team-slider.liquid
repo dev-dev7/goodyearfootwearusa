@@ -1,0 +1,217 @@
+{% liquid
+  assign block_title = section.settings.title
+  assign description = section.settings.description
+  assign container_class = section.settings.slide_layout
+  assign enable_carousel = section.settings.enable_carousel
+  assign number_per_row = section.settings.number_per_row
+%}
+
+{%- if section.settings.show_section -%}
+<div class="position-relative content-slideshow team-slider" style="margin: {{ section.settings.margin }};">
+  <div class="{{ container_class }} {{ section.settings.nav_style }}">
+
+    {%- if block_title != blank -%}
+      <h2 class="block-title">{{ block_title }}</h2>
+    {%- endif -%}
+    {%- if description != blank -%}
+      <p class="block-description">{{ description | newline_to_br }}</p>
+    {%- endif -%}
+
+    {%- if enable_carousel -%}
+      <div class="items-carousel"
+        data-auto="{{ section.settings.auto_speed }}"
+        data-dots="{{ section.settings.show_dots }}"
+        data-nav="{{ section.settings.show_nav }}"
+        data-wraparound="true"
+        data-cellalign="left">
+    {%- else -%}
+      <div class="row">
+    {%- endif -%}
+
+    {%- for block in section.blocks -%}
+      <div class="position-relative card-wrapper grid-items__{{ number_per_row }}" {{ block.shopify_attributes }}>
+        {%- if block.settings.slide_img != blank -%}
+          <div class="position-relative image-loading" style="padding-top:{{ 100 | divided_by: block.settings.slide_img.aspect_ratio }}%;">
+            <img class="image-bg lazyload" data-src="{{ block.settings.slide_img | img_url: 'master' }}" />
+          </div>
+        {%- else -%}
+          <div class="position-relative" style="padding-top: 50%;">
+            <div class="placeholder">
+              <div class="ds-flex align-center justify-center" style="height: 100%;">
+                {% render 'icon-avatar' %}
+              </div>
+            </div>
+          </div>
+        {%- endif -%}
+
+          <div class="member-content">
+            {%- if block.settings.name != blank -%}
+              <h3>{{ block.settings.name }}</h3>
+            {%- endif -%}
+            {%- if block.settings.job_title != blank -%}
+              <h4>{{ block.settings.job_title }}</h4>
+            {%- endif -%}
+            {%- if block.settings.description != blank -%}
+              <p class="ds-block">{{ block.settings.description | newline_to_br }}</p>
+            {%- endif -%}
+          </div><!-- .member-content -->
+      </div><!-- .position-relative.card-wrapper -->
+
+    {%- else -%}
+
+      {%- for i in (1..6) -%}
+        <div class="position-relative card-wrapper grid-items__{{ number_per_row }}" {{ block.shopify_attributes }}>
+          <div class="position-relative" style="padding-top: 50%;">
+            <div class="placeholder">
+              <div class="ds-flex align-center justify-center" style="height: 100%;">
+                {% render 'icon-avatar' %}
+              </div>
+            </div><!-- placeholder -->
+          </div><!-- .position-relative -->
+
+          <div class="member-content">
+            <h3>Name {{ i }}</h3>
+            <h4>Member job title</h4>
+            <p class="ds-block">Sed urna diam, scelerisque a ultricies in, dignissim luctus ex, tempor felis dictum sed.</p>
+          </div><!-- .member-content -->
+        </div><!-- .position-relative.cardwrapper -->
+      {%- endfor -%}
+    {%- endfor -%}
+    </div><!-- .row / .items-carousel -->
+  </div><!-- container_class -->
+</div><!-- position-relative.slideshow.content-slideshow -->
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Team Members",
+  "tag": "section",
+  "class": "vs-initialize-slider",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_section",
+      "label": "Show/Hide this section",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Section Settings"
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "Section Margin",
+      "info": "Set margin for section top-right-bottom-left (e.g. 20px 15px 10px 0)",
+      "default": "0 0 150px 0"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Title",
+      "default": "Meet our Team"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Section Description",
+      "default": "Aliquam auctor ut eros sed pharetra, at cursus consequat velit."
+    },
+    {
+      "type": "select",
+      "id": "slide_layout",
+      "label": "Slide Layout",
+      "options": [
+        { "value": "container", "label": "Default" },
+        { "value": "full-width-container", "label": "Full Width" }
+      ],
+      "default": "container"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_carousel",
+      "label": "Enable slideshow",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Slideshow Settings"
+    },
+    {
+      "type": "text",
+      "id": "auto_speed",
+      "label": "Autoplay",
+      "info": "'5' for the slideshow to auto rotate every 5 seconds. '0' to disable auto rotate.",
+      "default": "5"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_dots",
+      "label": "Show Pagination Dots",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_nav",
+      "label": "Show Navigation",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "nav_style",
+      "label": "Navigator position",
+      "options": [
+        { "value": "nav-top__right", "label": "Top right" },
+        { "value": "nav-top__center", "label": "Top center" },
+        { "value": "nav-middle", "label": "Middle center" }
+      ],
+      "default": "nav-top__center"
+    },
+    {
+      "type": "range",
+      "id": "number_per_row",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "label": "Members count per row",
+      "default": 3
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Image slide",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "slide_img",
+          "label": "Slide Image",
+          "info": "370*400px recommended"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Name",
+          "default": "Hunter Gonzales"
+        },
+        {
+          "type": "text",
+          "id": "job_title",
+          "label": "Job Title",
+          "default": "President"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "Sed urna diam, scelerisque a ultricies in, dignissim luctus ex, tempor felis dictum sed."
+        }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "Team Members",
+    "category": "Image"
+  }]
+}
+{% endschema %}

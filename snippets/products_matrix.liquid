@@ -1,0 +1,60 @@
+{%- liquid
+assign section_title  = products_matrix.settings.title
+assign collection     = collections[products_matrix.settings.collection_name]
+assign number_per_row = products_matrix.settings.number_per_row
+assign number_of_rows = products_matrix.settings.number_of_rows
+assign break_at   = number_per_row | times: number_of_rows
+assign item_space = products_matrix.settings.item_space
+assign prd_img_ft = products_matrix.settings.prd_img_ft
+-%}
+
+{%- if section_title != blank -%}
+  <h3 class="block-title">{{ section_title }}</h3>
+{%- endif -%}
+
+<div class="row {{ prd_img_ft }}" style="margin: 0 -{{ item_space | divided_by: 2 }}px;">
+
+  {%- unless collection == blank -%}
+    {%- if collection.products_count == 0 -%}
+      <p class="description slide-group">{{ 'collections.general.no_matches' | t }}</p>
+    {%- else -%}
+      {%- for product in collection.products limit: break_at -%}
+        <div class="products-matrix ds-flex grid-items__{{ number_per_row }}" style="padding: 0 {{ item_space | divided_by: 2 }}px;">
+          <div class="product-img">
+            {%- if product.featured_image != blank -%}
+              <div class="position-relative image-loading" style="padding-top: {{ 100 | divided_by: product.featured_image.aspect_ratio }}%">
+                <img class="image-bg lazyload" data-src="{{ product.featured_image.src | img_url: '150x' }}" />
+              </div>
+            {%- else -%}
+              <div class="position-relative" style="padding-top:130%;">
+                {% capture pp_index %}{% cycle 1,2,3,4,5,6 %}{% endcapture %}
+                {{ 'product-' | append: pp_index | placeholder_svg_tag: 'placeholder' }}
+              </div>
+            {%- endif -%}
+          </div><!-- .product-img -->
+          <div class="product-detail">
+            <h3 class="product-name">
+              <a href="{{ product.url | within: collection }}">{{ product.title }}</a>
+            </h3>
+            {% render 'product_price', price: product.price, compare_at_price: product.compare_at_price %}
+          </div><!-- .product-detail -->
+        </div><!-- .product-matrix -->
+      {%- endfor -%}
+    {%- endif -%}
+  {%- else -%}
+    {%- for i in (1..break_at) -%}
+      {% capture pp_index %}{% cycle 1,2,3,4,5,6 %}{% endcapture %}
+      <div class="products-matrix ds-flex grid-items__{{ number_per_row }}" style="padding: 0 {{ item_space | divided_by: 2 }}px;">
+        <div class="product-img">
+          <div class="position-relative" style="padding-top:130%;">
+            {{ 'product-' | append: pp_index | placeholder_svg_tag: 'placeholder' }}
+          </div>
+        </div>
+        <div class="product-detail">
+          <h3 class="product-name"><a href="#">Product Title</a></h3>
+          {% render 'product_price', price: 777, compare_at_price: 999 %}
+        </div>
+      </div><!-- .product-matrix -->
+    {%- endfor -%}
+  {%- endunless -%}
+</div>

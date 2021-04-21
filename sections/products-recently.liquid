@@ -1,0 +1,150 @@
+{%- if section.settings.show -%}
+{%- assign number_per_row = section.settings.number_per_row -%}
+{%- assign number_of_rows = section.settings.number_of_rows -%}
+{%- assign section_title = section.settings.section_title -%}
+{%- assign enable_carousel = section.settings.enable_carousel -%}
+{%- assign limit = number_per_row | times: number_of_rows -%}
+{%- assign prd_img_ft = section.settings.prd_img_ft -%}
+<div style="margin: {{ section.settings.margin }};">
+
+  <div class="content-slideshow container {{ section.settings.nav_style }}">
+    {%- if section_title != blank -%}
+      <h3 class="block-title">{{ section_title }}</h3>
+    {%- endif -%}
+
+    {%- if enable_carousel -%}
+      <div class="items-carousel recently-view-wrapper {{ section.settings.card_style }} {{ prd_img_ft }}"
+        data-auto="{{ section.settings.auto_speed }}"
+        data-dots="{{ section.settings.show_dots }}"
+        data-nav="{{ section.settings.show_nav }}"
+        data-wraparound="true"
+        data-cellalign="left"
+        data-numCol="{{ section.settings.number_per_row }}"
+        data-numLimit="{{ limit }}">
+    {%- else -%}
+      <div class="row recently-view-wrapper {{ section.settings.card_style }} {{ prd_img_ft }}"
+        data-numCol="{{ section.settings.number_per_row }}" data-numLimit="{{ limit }}">
+    {%- endif -%}
+
+    </div><!-- .items-carousel / .row -->
+  </div><!-- .content-slideshow -->
+</div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Recently Viewed Products",
+  "tag": "section",
+  "class": "vs-product-recent",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Settings",
+      "info": "This section appears after customers visit some products"
+    },
+    {
+      "type": "checkbox",
+      "id": "show",
+      "label": "Show section",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "Section Margin",
+      "info": "Set margin for section top-right-bottom-left (e.g. 20px 15px 10px 0)",
+      "default": "110px 0 150px"
+    },
+    {
+      "type": "header",
+      "content": "Section Configuration"
+    },
+    {
+      "type": "text",
+      "id": "section_title",
+      "label": "Section Title",
+      "default": "Recently Viewed"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_carousel",
+      "label": "Enable Carousel",
+      "info": "Disable to show products in grid layout",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "number_per_row",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "label": "Products to show per row",
+      "default": 5
+    },
+    {
+      "type": "range",
+      "id": "number_of_rows",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "label": "Number of rows",
+      "default": 2
+    },
+    {
+      "type": "text",
+      "id": "auto_speed",
+      "label": "Autoplay Speed",
+      "info": "5 means rotate every 5 seconds. 0 to disable auto rotate.",
+      "default": "5"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_dots",
+      "label": "Show Pagination Dots",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_nav",
+      "label": "Show Navigation",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "nav_style",
+      "label": "Navigator position",
+      "options": [
+        { "value": "nav-top__right", "label": "Top right" },
+        { "value": "nav-top__center", "label": "Top center" },
+        { "value": "nav-middle", "label": "Middle center" }
+      ],
+      "default": "nav-top__right"
+    },
+    {
+      "type": "select",
+      "id": "card_style",
+      "label": "Product Card Style",
+      "options": [
+        { "value": "horizontal", "label": "Horizontal" },
+        { "value": "vertical", "label": "Vertical" }
+      ],
+      "default": "horizontal"
+    },
+    {
+      "type": "radio",
+      "id": "prd_img_ft",
+      "label": "Add darkness to product images",
+      "options": [
+        { "value": "img-br-100", "label": "No" },
+        { "value": "img-br-97", "label": "Yes" }
+      ],
+      "default": "img-br-100",
+      "info": "Recommended for white background product images"
+    }
+  ],
+  "presets": [{
+    "name": "Recently Viewed Products",
+    "category": "Product"
+  }]
+}
+{% endschema %}

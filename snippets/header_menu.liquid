@@ -1,0 +1,426 @@
+{% comment %}
+Renders product in a grid style
+  Accepts:
+    - a_c: <Boolean> Align menu center
+    - s_di: <Boolean> Show dropdown icon
+    - m_n: <Linklist> Menu links
+    - m_a: <String> Menu appear animation
+
+  Usage:
+    {% render 'header_menu', blocks: blocks, m_n: config.menu, a_c: config.header_menu_center, m_a: config.menu_anm %}
+{% endcomment %}
+{%- if mobile_menu -%}
+<nav role="navigation" class="header-menu">
+  <ul class="list-style-none">
+    {%- for link in linklists[m_n].links -%}
+      <li class="header-menu-item{% if link.current %} active{% endif %}">
+      {%- if link.links != blank -%}
+        <a href="{{ link.url }}" class="ds-flex align-center {% if link.url contains request.path and link.url contains '#' %} vnd-link__move{% endif %}">
+          <span class="position-relative menu-tt__{{ link.title | handleize }}">{{ link.title }}</span>
+          <span class="right-expander ds-flex">{% render 'icon-dir-down' %}</span>
+        </a>
+
+        <div class="sub-menu dropdown-classic">
+          <ul class="child-menu list-style-none">
+            {%- if menu_style == 'dropdown-mega2' -%}
+              <a href="#" class="menu-back position-absolute">{% render 'icon-arrow-right'%}</a>
+            {%- endif -%}
+            {%- for childlink in link.links -%}
+              {%- if childlink.links != blank -%}
+                <li class="menu-item">
+                  <a href="{{ childlink.url }}" class="menu-list-header{% if childlink.current and childlink.url contains '#' %} vnd-link__move{% endif %}">
+                    <span class="position-relative menu-tt__{{ childlink.title | handleize }}">{{ childlink.title }}</span>
+                  </a>
+                  <ul class="menu-grandchild list-style-none">
+                    {%- for grandchild in childlink.links -%}
+                      <li>
+                        <a href="{{ grandchild.url }}" class="menu-item-link{% if grandchild.current and grandchild.url contains '#' %} vnd-link__move{% endif %}">
+                          <span class="position-relative menu-tt__{{ grandchild.title | handleize }}">{{ grandchild.title }}</span>
+                        </a>
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+                </li>
+              {%- else -%}
+                <li class="menu-item">
+                  <a href="{{ childlink.url }}" class="menu-item-link{% if link.current and link.url contains '#' %} vnd-link__move{% endif %}">
+                    <span class="position-relative menu-tt__{{ childlink.title | handleize }}">{{ childlink.title }}</span>
+                  </a>
+                </li>
+              {%- endif -%}
+            {%- endfor -%}
+          </ul>
+        </div><!-- .sub-menu -->
+      {%- else -%}
+        <a href="{{ link.url }}" class="ds-flex align-center{% if link.current and link.url contains '#' %} vnd-link__move{% endif %}">
+          <span class="position-relative menu-tt__{{ link.title | handleize }}">{{ link.title }}</span>
+        </a>
+      {%- endif -%}
+      </li>
+    {%- endfor -%}
+  </ul>
+</nav>
+{%- else -%}
+<nav role="navigation" class="header-menu{% if a_c %} mr-auto{% endif %} header-anm_{{ menu_anm }} vnd-desk-menu">
+  <ul class="header-menu-list ds-flex list-style-none align-center flex-wrap{% if a_c %} justify-center{% endif %}">
+    {%- for link in linklists[m_n].links -%}
+      {%- assign menu_title = link.title -%}
+      {%- assign handleized = menu_title | handleize -%}
+      <li class="header-menu-item{% if link.current %} active{% endif %}">
+      {%- if link.links != blank -%}
+        <a href="{{ link.url }}" class="ds-flex align-center {% if link.url contains request.path and link.url contains '#' %} vnd-link__move{% endif %}">
+          <span class="position-relative menu-tt__{{ handleized }}">{{ menu_title }}</span>
+          {%- if s_di -%}
+            <span class="right-expander ds-flex">{% render 'icon-dir-down' %}</span>
+          {%- endif -%}
+        </a>
+
+        {%- assign c_b = blank -%}
+        {%- assign c_class = 'sub-menu ds-flex flex-column' -%}
+
+        {%- assign style_blocks = blocks | map: 'settings' | where: 'menu_label', menu_title -%}
+        {%- for block in style_blocks -%}
+          {%- if block.type contains 'dropdown-mega' or block.type == 'dropdown-classic' -%}
+            {%- assign c_b = block -%}
+            {%- break -%}
+          {%- endif -%}
+        {%- endfor -%}
+
+        {%- if c_b != blank -%}
+          {%- assign c_class = c_class | append: ' ' | append: c_b.type | append: ' ' | append: c_b.font_item | append: ' ' | append: c_b.style -%}
+          {%- if c_b.width == 'container' -%}
+            {%- assign c_class = c_class | append: ' container' -%}
+          {%- elsif c_b.width == 'boxed' -%}
+            {%- assign c_class = c_class | append: ' boxed' -%}
+          {%- endif -%}
+        {%- else -%}
+          {%- assign c_class = c_class | append: ' dropdown-classic font-arial border-none' -%}
+        {%- endif -%}
+
+        <div class="{{ c_class }}" data-menu-label="{{ handleized }}">
+          {%- if c_b.width == 'full-width' -%}
+            <div class="container">
+          {%- endif -%}
+          {%- if c_b.type == 'dropdown-mega1' -%}
+            <div class="menu-top-img ds-flex">
+              {%- for index in (1..6) -%}
+                {%- capture ti_id %}top_img{{ index }}{%- endcapture -%}
+                {%- capture til_id %}top_il{{ index }}{%- endcapture -%}
+                {%- if c_b[ti_id] != blank -%}
+                  {%- if c_b[til_id] != blank -%}
+                    <div class="img-grid-item">
+                      <a href="{{ c_b[til_id] }}" class="image-loading">
+                  {%- else -%}
+                    <div class="img-grid-item image-loading">
+                  {%- endif -%}
+                  <img class="lazyload" data-src="{{ c_b[ti_id] | img_url: 'master' }}" alt="Menu Top Banner" />
+                  {%- if c_b[til_id] != blank -%}
+                    </a>
+                  {%- endif -%}
+                </div>
+                {%- endif -%}
+              {%- endfor -%}
+            </div><!-- .menu-top-img -->
+          {%- endif -%}
+
+          {%- if c_b.type != 'dropdown-mega3' -%}
+            <ul class="child-menu list-style-none">
+              {%- if c_b.type == 'dropdown-mega2' -%}
+                <a href="#" class="menu-back position-absolute">{% render 'icon-arrow-right' %}</a>
+              {%- endif -%}
+              {%- for childlink in link.links -%}
+                {%- if childlink.links != blank -%}
+                  <li class="menu-item">
+                    <a href="{{ childlink.url }}" class="{{ c_b.font_header }} menu-list-header{% if childlink.current and childlink.url contains '#' %} vnd-link__move{% endif %}">
+                      <span class="position-relative menu-tt__{{ childlink.title | handleize }}">{{ childlink.title }}</span>
+                      {%- if c_class contains 'dropdown-classic' or c_class contains 'dropdown-mega2' -%}
+                        {% render 'icon-dir-down' %}
+                      {%- endif -%}
+                    </a>
+                    <ul class="menu-grandchild list-style-none">
+                      {%- for grandchild in childlink.links -%}
+                        <li>
+                          <a href="{{ grandchild.url }}" class="menu-item-link{% if grandchild.current and grandchild.url contains '#' %} vnd-link__move{% endif %}">
+                            <span class="position-relative menu-tt__{{ grandchild.title | handleize }}">{{ grandchild.title }}</span>
+                          </a>
+                        </li>
+                      {%- endfor -%}
+                    </ul>
+                  </li>
+                {%- else -%}
+                  <li class="menu-item">
+                    <a href="{{ childlink.url }}" class="menu-item-link{% if link.current and link.url contains '#' %} vnd-link__move{% endif %}">
+                      <span class="position-relative menu-tt__{{ childlink.title | handleize }}">{{ childlink.title }}</span>
+                    </a>
+                  </li>
+                {%- endif -%}
+              {%- endfor -%}
+
+              {%- if c_b.show_social_links == true -%}
+                <li class="menu-item dropdown-mega__social-links">
+                  <span class="menu-list-header {{ c_b.font_header }}">
+                    {{ c_b.social_title }}
+                  </span>
+                  {% include 'footer_social_icons' %}
+                </li>
+                <style>.dropdown-mega__social-links .social-link{border-color:{{ c_b.color_icon_bd }};background-color:{{ c_b.color_icon_bg }};color:{{ c_b.color_icon }}}</style>
+              {%- endif -%}
+            </ul>
+          {%- endif -%}
+
+          {%- if c_b.type == 'dropdown-mega2' -%}
+            <div class="menu-rs-img width-100 ds-flex">
+              {%- for index in (1..5) -%}
+                {%- capture ti_id %}img{{ index }}{%- endcapture -%}
+                {%- capture til_id %}il{{ index }}{%- endcapture -%}
+                {%- capture st_id %}st{{ index }}{%- endcapture -%}
+                {%- capture tt_id %}tt{{ index }}{%- endcapture -%}
+                {%- if c_b[ti_id] != blank -%}
+                  {%- if c_b.img_sz == 'design1' -%}
+                    {%- assign padding = 100 -%}
+                  {%- elsif c_b.img_sz == 'design2' -%}
+                    {%- assign padding = 130 -%}
+                  {%- else -%}
+                    {%- assign padding = 100 | divided_by: c_b[ti_id].aspect_ratio -%}
+                  {%- endif -%}
+                  {%- if c_b[til_id] != blank -%}
+                    <div class="img-grid-item">
+                      <a href="{{ c_b[til_id] }}">
+                  {%- else -%}
+                    <div class="img-grid-item">
+                  {%- endif -%}
+                  <div class="position-relative image-loading" style="padding-top:{{ padding }}%">
+                  {%- if c_b.img_sz == 'origin' -%}
+                    <img class="lazyload link-entire" data-src="{{ c_b[ti_id] | img_url: 'master' }}" alt="Menu Top Banner" />
+                  {%- else -%}
+                    <div class="image-bg lazyload" data-bg="{{ c_b[ti_id] | img_url: 'master' }}" aria-content="Menu sidebar image"></div>
+                  {%- endif -%}
+                  </div>
+                  {%- if c_b[st_id] != blank -%}
+                    <span class="ds-block">{{ c_b[st_id] }}</span>
+                  {% endif %}
+                  {%- if c_b[tt_id] != blank -%}
+                    <strong class="ds-block">{{ c_b[tt_id] }}</strong>
+                  {% endif %}
+                  {%- if c_b[til_id] != blank -%}
+                    </a>
+                  {%- endif -%}
+                </div>
+                {%- endif -%}
+              {%- endfor -%}
+            </div><!-- .menu-top-img -->
+          {%- endif -%}
+
+          {%- if c_b.type == 'dropdown-mega1' -%}
+            <div class="menu-bottom-img ds-flex">
+              {%- for index in (1..4) -%}
+                {%- capture bi_id %}bottom_img{{ index }}{%- endcapture -%}
+                {%- capture bil_id %}btt_il{{ index }}{%- endcapture -%}
+                {%- if c_b[bi_id] != blank -%}
+                  {%- if c_b[bil_id] != blank -%}
+                    <div class="img-grid-item">
+                      <a href="{{ c_b[bil_id] }}">
+                  {%- else -%}
+                    <div class="img-grid-item image-loading">
+                  {%- endif -%}
+                  <img class="lazyload" data-src="{{ c_b[bi_id] | img_url: 'master' }}" alt="Menu Bottom Banner" />
+                  {%- if c_b[bil_id] != blank -%}
+                    </a>
+                  {%- endif -%}
+                </div>
+                {%- endif -%}
+              {%- endfor -%}
+            </div><!-- .menu-bottom-img -->
+          {%- endif -%}
+
+          {%- if c_b.type == 'dropdown-mega3' -%}
+            <div class="ds-flex align-start">
+              <ul class="child-menu-activators list-style-none ds-flex flex-column {{ c_b.font_header }}">
+                {%- for index in (1..4) -%}
+                  {%- capture m_id -%}child_menu{{ index }}{%- endcapture -%}
+                  {%- if linklists[c_b[m_id]] != blank -%}
+                    <li>
+                      <a href="#" data-target=".dropdown3-cm__{{ handleized }}-{{ index }}" class="menu-list-header">
+                      <span class="position-relative menu-tt__{{ linklists[c_b[m_id]].title | handleize }}">{{ linklists[c_b[m_id]].title }}</span>
+                      </a>
+                    </li>
+                  {%- endif -%}
+                {%- endfor -%}
+                <li><a href="/collections/all" class="btn btn-text">{{ 'collections.general.shop_all' | t }}{% render 'icon-dir-double-right' %}</a></li>
+              </ul>
+
+              <div class="child-menus__wrapper ds-flex">
+              {%- for index in (1..4) -%}
+                {%- capture m_id -%}child_menu{{ index }}{%- endcapture -%}
+                {%- assign gc_menu = linklists[c_b[m_id]] -%}
+                {%- if gc_menu != blank -%}
+                  <ul class="child-menu ds-flex list-style-none dropdown3-cm__{{ handleized }}-{{ index }}{% if index == 1 %} active{% endif %}">
+                  {%- for childlink in gc_menu.links -%}
+                    {%- if childlink.links != blank -%}
+                      <li class="menu-item">
+                        <a href="{{ childlink.url }}" class="menu-list-header{% if childlink.current and childlink.url contains '#' %} vnd-link__move{% endif %} {{ c_b.font_header }}">
+                          <span class="position-relative menu-tt__{{ childlink.title | handleize }}">{{ childlink.title }}</span>
+                        </a>
+                        <ul class="menu-grandchild list-style-none {{ c_b.font_item }}">
+                          {%- for grandchild in childlink.links -%}
+                            <li>
+                              <a href="{{ grandchild.url }}" class="menu-item-link{% if grandchild.current and grandchild.url contains '#' %} vnd-link__move{% endif %}">
+                                <span class="position-relative menu-tt__{{ grandchild.title | handleize }}">{{ grandchild.title }}</span>
+                              </a>
+                            </li>
+                          {%- endfor -%}
+                        </ul>
+                      </li>
+                    {%- else -%}
+                      <li class="menu-item">
+                        <a href="{{ childlink.url }}" class="menu-item-link{% if link.current and link.url contains '#' %} vnd-link__move{% endif %} {{ c_b.font_header }}">
+                          <span class="position-relative menu-tt__{{ childlink.title | handleize }}">{{ childlink.title }}</span>
+                        </a>
+                      </li>
+                    {%- endif -%}
+                  {%- endfor -%}
+                  </ul>
+                {%- endif -%}
+              {%- endfor -%}
+              </div>
+            </div>
+
+            <div class="menu-bottom-img ds-flex">
+              {%- for index in (1..2) -%}
+                {%- capture i_id -%}img{{ index }}{%- endcapture -%}
+                {%- capture cp_id -%}content_pos{{ index }}{% endcapture -%}
+                {%- capture cvp_id -%}content_vpos{{ index }}{%- endcapture -%}
+                {%- capture ca_id -%}content_align{{ index }}{%- endcapture -%}
+                {%- capture cs_id -%}content_style{{ index }}{%- endcapture -%}
+                {%- capture tt_id -%}top_title{{ index }}{%- endcapture -%}
+                {%- capture mt_id -%}main_title{{ index }}{%- endcapture -%}
+                {%- capture st_id -%}sub_title{{ index }}{%- endcapture -%}
+                {%- capture ctt_id -%}color_top_title{{ index }}{%- endcapture -%}
+                {%- capture cmt_id -%}color_main_title{{ index }}{%- endcapture -%}
+                {%- capture stc_id -%}sub_color{{ index }}{%- endcapture -%}
+                {%- capture ec_id -%}em_color{{ index }}{%- endcapture -%}
+                {%- capture ebc_id -%}em_bg_color{{ index }}{%- endcapture -%}
+                {%- capture sc_id -%}strong_color{{ index }}{%- endcapture -%}
+                {%- capture sbc_id -%}strong_bg_color{{ index }}{%- endcapture -%}
+                {%- capture bt_id -%}btn_title{{ index }}{%- endcapture -%}
+                {%- capture bti_id -%}btn_title_icon{{ index }}{%- endcapture -%}
+                {%- capture bl_id -%}btn_link{{ index }}{%- endcapture -%}
+                {%- capture bs_id -%}btn_style{{ index }}{%- endcapture -%}
+                {%- if c_b[i_id] != blank -%}
+                  {%- if c_b.img_sz == 'design' -%}
+                    {%- assign padding = 40.35 -%}
+                  {%- else -%}
+                    {%- assign padding = 100 | divided_by: c_b[i_id].aspect_ratio -%}
+                  {%- endif -%}
+                  <div class="img-grid-item position-relative mega3-{{ handleized }}-{{ index }}">
+                    <div class="position-relative image-loading" style="padding-top:{{ padding }}%">
+                      <div class="image-bg lazyload" data-bg="{{ c_b[i_id] | img_url: 'master' }}" aria-content="{{ c_b[mt_id] }}"></div>
+                    </div>
+                    <div class="text-content {{ c_b[cs_id] }} {{ c_b[cvp_id] }} font-10">
+                      <div class="{{ c_b[cp_id] }} position-relative {{ c_b[ca_id] }}">
+                        {%- if c_b[tt_id] != blank -%}
+                          <h3 style="color:{{ c_b[stc_id] }}">{{ c_b[tt_id] | newline_to_br }}</h3>
+                        {%- endif -%}
+                        {%- if c_b[mt_id] != blank -%}
+                          <h2 style="color:{{ c_b[cmt_id] }}">{{ c_b[mt_id] | newline_to_br }}</h2>
+                        {%- endif -%}
+                        {%- if c_b[st_id] != blank -%}
+                          <p style="color:{{ c_b[stc_id] }}">{{ c_b[st_id] | newline_to_br }}</p>
+                        {%- endif -%}
+                        {%- if c_b[bt_id] != blank -%}
+                          <a href="{{ c_b[bl_id] | default: '#' }}" class="btn {{ c_b[bs_id] }}">
+                            {{ c_b[bt_id] }}
+                            {%- if c_b[bti_id] != blank -%}
+                              {% render 'render_icon', icon_name: c_b[bti_id] %}
+                            {%- endif -%}
+                          </a>
+                        {%- endif -%}
+                      </div><!-- .content_hp -->
+                    </div><!-- .text-content -->
+
+                    {%- if c_b[bl_id] != blank and c_b[bt_id] == blank -%}
+                      <a href="{{ c_b[bl_id] }}" class="link-entire"></a>
+                    {%- endif -%}
+                    <style>.mega3-{{ handleized }}-{{ index }} em{background-color:{{ c_b[ebc_id] }};color:{{ c_b[ec_id] }}}.mega3-{{ handleized }}-{{ index }} strong{background-color:{{ c_b[sbc_id] }};color:{{ c_b[sc_id] }}}</style>
+                  </div>
+                {%- endif -%}
+              {%- endfor -%}
+            </div><!-- .menu-bottom-img -->
+          {%- endif -%}
+
+          {%- if c_b.type == 'dropdown-mega4' -%}
+            <div class="image-layout2 ds-flex">
+              {%- for index in (1..3) -%}
+                {%- capture i_id -%}img{{ index }}{%- endcapture -%}
+                {%- capture cs_id -%}content_style{{ index }}{%- endcapture -%}
+                {%- capture tt_id -%}top_title{{ index }}{%- endcapture -%}
+                {%- capture mt_id -%}main_title{{ index }}{%- endcapture -%}
+                {%- capture st_id -%}sub_title{{ index }}{%- endcapture -%}
+                {%- capture ctt_id -%}color_top_title{{ index }}{%- endcapture -%}
+                {%- capture cmt_id -%}color_main_title{{ index }}{%- endcapture -%}
+                {%- capture stc_id -%}sub_color{{ index }}{%- endcapture -%}
+                {%- capture bt_id -%}btn_title{{ index }}{%- endcapture -%}
+                {%- capture bti_id -%}btn_title_icon{{ index }}{%- endcapture -%}
+                {%- capture bl_id -%}btn_link{{ index }}{%- endcapture -%}
+                {%- capture bs_id -%}btn_style{{ index }}{%- endcapture -%}
+                {%- capture l_id -%}label{{ index }}{%- endcapture -%}
+                {%- capture lc_id -%}label_c{{ index }}{%- endcapture -%}
+                {%- capture lb_id -%}label_bg{{ index }}{%- endcapture -%}
+                <div class="image-block-item">
+                  <div class="relative-content {{ c_b[cs_id] }} font-10">
+                    <div class="position-relative left">
+                      {%- if c_b[tt_id] != blank -%}
+                        <h3 style="color:{{ c_b[ctt_id] }}">{{ c_b[tt_id] }}</h3>
+                      {%- endif -%}
+                      {%- if c_b[mt_id] != blank -%}
+                        <h2 style="color:{{ c_b[cmt_id] }}">{{ c_b[mt_id] | newline_to_br }}</h2>
+                      {%- endif -%}
+                      {%- if c_b[st_id] != blank -%}
+                        <p style="color:{{ c_b[stc_id] }}">{{ c_b[st_id] | newline_to_br }}</p>
+                      {%- endif -%}
+                      {%- if c_b[bt_id] != blank -%}
+                        <a href="{{ c_b[bl_id] | default: '#' }}" class="btn {{ c_b[bs_id] }}">
+                          {{ c_b[bt_id] }}
+                          {%- if c_b[bti_id] != blank -%}
+                            {% include 'include_icon', icon_name: c_b[bti_id] %}
+                          {%- endif -%}
+                        </a>
+                      {%- endif -%}
+                    </div>
+                  </div><!-- .relative-content -->
+                  {%- if c_b[i_id] != blank -%}
+                    {%- if c_b.img_sz == 'design' -%}
+                      {%- assign padding = 168.18 -%}
+                    {%- else -%}
+                      {%- assign padding = 100 | divided_by: c_b[i_id].aspect_ratio -%}
+                    {%- endif -%}
+                    <div class="position-absolute" style="width:{{ c_b[i_id].width }}px">
+                      <div class="position-relative" style="padding-top:{{ padding }}%">
+                        <div class="image-bg lazyload" data-bg="{{ c_b[i_id] | img_url: 'master' }}"></div>
+                      </div>
+                    </div>
+                  {%- endif -%}
+                  {%- if c_b[l_id] != blank -%}
+                    <div class="content-label" style="background-color:{{ c_b[lb_id] }};color:{{ c_b[lc_id] }}">
+                      {{ c_b[l_id] }}
+                    </div>
+                  {%- endif -%}
+                </div>
+              {%- endfor -%}
+            </div><!-- .menu-bottom-img -->
+          {%- endif -%}
+
+          {%- if c_b.width == 'full-width' -%}
+            </div>
+          {%- endif -%}
+        </div><!-- .sub-menu -->
+      {%- else -%}
+        <a href="{{ link.url }}" class="ds-flex align-center{% if link.current and link.url contains '#' %} vnd-link__move{% endif %}">
+          <span class="position-relative menu-tt__{{ handleized }}">{{ menu_title }}</span>
+        </a>
+      {%- endif -%}
+      </li>
+    {%- endfor -%}
+  </ul>
+</nav>
+{%- endif -%}

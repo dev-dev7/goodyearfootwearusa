@@ -1,0 +1,382 @@
+{%- liquid
+assign width          = section.settings.width
+assign img_position   = section.settings.img_position
+assign img_count      = section.settings.img_count
+assign badge_position = section.settings.badge_position
+assign badge_style    = section.settings.badge_style
+-%}
+
+<div class="product-layout product-layout__grid">
+  <div class="{{ width }}">
+    <div class="product-main row space-between">
+      <div class="product-img-area {{ img_position }}">
+
+        <div class="row width-100 grid-products__desktop">
+          {%- for media in product.media -%}
+            {%- if media.alt contains '[vnd_' -%}{%- continue -%}{%- endif -%}
+            <div class="grid-items__{{ img_count }} grid-product__items">
+              {% case media.media_type %}
+                {% when 'image' %}
+                  <div class="product-img image-loading" style="padding-top:{{ 100 | divided_by: media.aspect_ratio }}%" data-media="{{ media.id }}">
+                    <img class="image-bg lazyload product-images" data-src="{{ media | img_url: '1000x' }}" data-zoom="{{ media | img_url: 'master' }}" alt="{{ media.alt | default: product.title }}"/>
+                  </div>
+                {% when 'external_video' %}
+                  <div class="product-img media-container" style="padding-top:{{ 100 | divided_by: media.aspect_ratio }}%" data-media="{{ media.id }}">
+                    {{ media | external_video_tag }}
+                    <div class="media-type-badge">{% render 'icon-media-video' %}</div>
+                  </div>
+                {% when 'video' %}
+                  <div class="product-img media-container" style="padding-top:{{ 100 | divided_by: media.aspect_ratio }}%" data-media="{{ media.id }}">
+                    {{ media | video_tag: controls: true }}
+                    <div class="media-type-badge">{% render 'icon-media-video' %}</div>
+                  </div>
+                {% when 'model' %}
+                  <div class="product-img media-container" style="padding-top: 100%" data-media="{{ media.id }}">
+                    {{ media | model_viewer_tag: preload: true, reveal-when-loaded: true, auto-rotate: true, camera-controls: true }}
+                    <div class="media-type-badge">{% render 'icon-media-model' %}</div>
+                  </div>
+              {% endcase %}
+            </div><!-- .grid-items__ -->
+          {%- endfor -%}
+        </div><!-- .row -->
+        <div class="items-carousel grid-products__mobile" id="grid-products__mobile">
+          {%- for media in product.media -%}
+            {%- if media.alt contains '[vnd_' -%}{%- continue -%}{%- endif -%}
+            <div class="grid-items__{{ img_count }}">
+              {% case media.media_type %}
+                {% when 'image' %}
+                  <div class="product-img image-loading" style="padding-top:{{ 100 | divided_by: media.aspect_ratio }}%" data-media="{{ media.id }}">
+                    <img class="image-bg lazyload product-images" data-src="{{ media | img_url: '1000x' }}" data-zoom="{{ media | img_url: 'master' }}" alt="{{ media.alt | default: product.title }}"/>
+                  </div>
+                {% when 'external_video' %}
+                  <div class="product-img media-container" style="padding-top:{{ 100 | divided_by: media.aspect_ratio }}%" data-media="{{ media.id }}">
+                    {{ media | external_video_tag }}
+                    <div class="media-type-badge">{% render 'icon-media-video' %}</div>
+                  </div>
+                {% when 'video' %}
+                  <div class="product-img media-container" style="padding-top:{{ 100 | divided_by: media.aspect_ratio }}%" data-media="{{ media.id }}">
+                    {{ media | video_tag: controls: true }}
+                    <div class="media-type-badge">{% render 'icon-media-video' %}</div>
+                  </div>
+                {% when 'model' %}
+                  <div class="product-img media-container" style="padding-top: 100%" data-media="{{ media.id }}">
+                    {{ media | model_viewer_tag: preload: true, reveal-when-loaded: true, auto-rotate: true, camera-controls: true }}
+                    <div class="media-type-badge">{% render 'icon-media-model' %}</div>
+                  </div>
+              {% endcase %}
+            </div><!-- .grid-items__ -->
+          {%- endfor -%}
+        </div><!-- .items-carousel -->
+      </div><!-- .product-img-area -->
+
+      <div class="product-details-area position-relative sticky-dir-up">
+        {% include 'product_page_details', section: section %}
+
+        {%- if settings.prd_zoom_pos == 'right' -%}
+          <div class="zoom-container"></div>
+        {%- endif -%}
+      </div><!-- .product-details-area -->
+    </div><!-- .row.space-between -->
+
+    {%- if section.settings.show_prev_next -%}
+      {% render 'product_prev_next_links' %}
+    {%- endif -%}
+  </div><!-- .container -->
+
+  {%- if section.blocks.size > 0 and badge_position == 'bottom-full' -%}
+    {%- if badge_style != 'classic' -%}
+      <div class="full-width product-badge__{{ badge_style }}">
+    {%- endif -%}
+    <div class="product-badges bottom-full container row">
+      {% include 'product_badge', blocks: section.blocks, style: badge_style %}
+    </div><!-- .product-badges.bottom-full -->
+    {%- if badge_style != 'classic' -%}
+      </div><!-- .full-width -->
+    {%- endif -%}
+  {%- endif -%}
+</div><!-- .product-layout.product-layout__grid -->
+{%- if section.settings.show_question_form -%}
+  {% render 'form_contact_product', name: product.title %}
+{%- endif -%}
+{%- capture css -%}
+#shopify-section-{{ section.id }} { margin:{{ section.settings.margin_mobile }}; }
+@media all and (min-width: 768px) {
+  #shopify-section-{{ section.id }} { margin:{{ section.settings.margin_laptop }}; }
+}
+@media all and (min-width: 1400px) {
+  #shopify-section-{{ section.id }} { margin:{{ section.settings.margin }}; }
+}
+{%- endcapture -%}
+<style>{{ css | strip_newlines | remove: '  ' }}</style>
+<script>
+    document.getElementById("grid-products__mobile").className += ' is-draggable'
+</script>
+{% schema %}
+{
+  "name": "Main Information",
+  "tag": "section",
+  "class": "products-template",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Width, Space"
+    },
+    {
+      "type": "select",
+      "id": "width",
+      "label": "Section Width",
+      "options": [
+        { "value": "container", "label": "Fixed Width" },
+        { "value": "container-1500", "label": "1500px" },
+        { "value": "full-width-container", "label": "Full Width" }
+      ],
+      "default": "full-width-container"
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "Section Margin on Desktop",
+      "info": "Set margin for section top-right-bottom-left (e.g. 20px 15px 10px 0).",
+      "default": "40px 0 150px 0"
+    },
+    {
+      "type": "text",
+      "id": "margin_laptop",
+      "label": "Section Margin on Laptop",
+      "default": "30px 0 100px 0"
+    },
+    {
+      "type": "text",
+      "id": "margin_mobile",
+      "label": "Section Margin on Mobile",
+      "default": "30px 0 75px 0"
+    },
+    {
+      "type": "header",
+      "content": "Product Image"
+    },
+    {
+      "type": "select",
+      "id": "img_count",
+      "label": "Grid images number",
+      "options": [
+        { "value": "1", "label": "1" },
+        { "value": "2", "label": "2" },
+        { "value": "3", "label": "3" }
+      ],
+      "default": "1"
+    },
+    {
+      "type": "select",
+      "id": "img_position",
+      "label": "Product Image Position",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_prev_next",
+      "label": "Show links to prev/next products",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_sku",
+      "label": "Show Product SKU",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "Show vendor",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_product_type",
+      "label": "Show product type",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_buy_now",
+      "label": "Show dynamic checkout button",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_share_btns",
+      "label": "Show social sharing buttons",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_question_form",
+      "label": "Show product question link",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Payment Information"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_payment_info",
+      "label": "Show payment information",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "payment_title",
+      "label": "Title",
+      "default": "Guaranteed Safe Checkout"
+    },
+    {
+      "type": "image_picker",
+      "id": "payments_img",
+      "label": "Payment information image",
+      "info": "Image size 428*32px recommended"
+    },
+    {
+      "type": "textarea",
+      "id": "payment_svgs",
+      "label": "Use SVGs instead",
+      "default": "amazon_payments, american_express, apple_pay, bitcoin, dankort, diners_club, discover, dogecoin, dwolla, forbrugsforeningen, interac, google_pay, jcb, klarna, klarna-pay-later, litecoin, maestro, master, paypal, shopify_pay, sofort, visa",
+      "info": "amazon_payments, american_express, apple_pay, bitcoin, dankort, diners_club, discover, dogecoin, dwolla, forbrugsforeningen, interac, google_pay, jcb, klarna, klarna-pay-later, litecoin, maestro, master, paypal, shopify_pay, sofort, visa"
+    },
+    {
+      "type": "header",
+      "content": "Product Badges"
+    },
+    {
+      "type": "select",
+      "id": "badge_style",
+      "label": "Product badge style",
+      "options": [
+        { "value": "classic", "label": "Classic" },
+        { "value": "advanced", "label": "Advanced" },
+        { "value": "modern", "label": "Modern" }
+      ],
+      "default": "classic"
+    },
+    {
+      "type": "select",
+      "id": "badge_position",
+      "label": "Product badge position",
+      "options": [
+        { "value": "bottom-full", "label": "Full width under product images" },
+        { "value": "side-fixed", "label": "In product information column" }
+      ],
+      "default": "bottom-full"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "icon_text",
+      "name": "Badge Icon and Text",
+      "settings": [
+        {
+          "type": "text",
+          "id": "promo_icon",
+          "label": "Icon Name [Browse icons](https://docs.flexkitux.com/pages/icons-list.html)"
+        },
+        {
+          "type": "range",
+          "id": "icon_width",
+          "min": 20,
+          "max": 70,
+          "step": 1,
+          "unit": "px",
+          "label": "Icon Width",
+          "default": 32
+        },
+        {
+          "type": "textarea",
+          "id": "promo_title",
+          "label": "Title"
+        },
+        {
+          "type": "color",
+          "id": "color_icon",
+          "label": "Icon Color",
+          "default": "#333333"
+        },
+        {
+          "type": "color",
+          "id": "color_text",
+          "label": "Text Color",
+          "default": "#333333"
+        }
+      ]
+    },
+    {
+      "type": "image_text",
+      "name": "Badge Image and Text",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "badge_img",
+          "label": "Badge image",
+          "info": "Image size 50*50px recommended, Image type is png"
+        },
+        {
+          "type": "range",
+          "id": "img_width",
+          "min": 40,
+          "max": 240,
+          "step": 2,
+          "unit": "px",
+          "label": "Image Width",
+          "default": 80
+        },
+        {
+          "type": "textarea",
+          "id": "promo_title",
+          "label": "Title"
+        },
+        {
+          "type": "color",
+          "id": "color_text",
+          "label": "Text Color",
+          "default": "#333333"
+        }
+      ]
+    }
+  ],
+  "default": {
+    "blocks": [
+      {
+        "type": "icon_text",
+        "settings": {
+          "promo_icon": "icon-truck",
+          "promo_title": "Free Delivery"
+        }
+      },
+      {
+        "type": "icon_text",
+        "settings": {
+          "promo_icon": "icon-headset2",
+          "promo_title": "24/h support"
+        }
+      },
+      {
+        "type": "icon_text",
+        "settings": {
+          "promo_icon": "icon-back-smooth-1",
+          "promo_title": "30 - Day returns"
+        }
+      },
+      {
+        "type": "icon_text",
+        "settings": {
+          "promo_icon": "icon-lock-wide",
+          "promo_title": "payment secured"
+        }
+      }
+    ]
+  }
+}
+{% endschema %}

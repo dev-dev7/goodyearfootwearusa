@@ -1,0 +1,55 @@
+{%- assign img_url = section.settings.image_type | asset_url -%}
+{%- if section.settings.custom_image != nil -%}
+  {%- assign img_url = section.settings.custom_image | img_url: 'master' -%}
+{%- endif -%}
+
+<div style="padding: {{ section.settings.section_padding }};">
+  <div class="container">
+    <div class="text-center">
+      <img class="lazyload" data-src="{{ img_url }}" style="width: auto;max-width: 100%;" alt="{{ 'general.404.title' | t }}"/>
+      <h1>{{ 'general.404.title' | t }}</h1>
+      <a class="btn btn-default" href="/">{{ section.settings.button_text }}</a>
+    </div><!-- text-center -->
+  </div><!-- .container -->
+</div>
+
+<style>
+.template-404 h1 {margin:90px 0 35px;text-transform:uppercase;}
+</style>
+{% schema %}
+{
+  "name": "404",
+  "settings": [
+    {
+      "type": "text",
+      "id": "section_padding",
+      "label": "Section padding",
+      "info": "Set padding for section top-right-bottom-left (ex: 0 0 10px 0)",
+      "default": "180px 0 220px 0"
+    },
+    {
+      "type": "select",
+      "id": "image_type",
+      "label": "Image Type",
+      "options": [
+        { "value": "404_1.png", "label": "Sweating" },
+        { "value": "404_2.png", "label": "Dull" },
+        { "value": "404_3.png", "label": "Sobbing" }
+      ],
+      "default": "404_1.png"
+    },
+    {
+      "type": "image_picker",
+      "id": "custom_image",
+      "label": "Use Custom Image",
+      "info": "615x260px recommended"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text",
+      "default": "BACK TO HOMEPAGE"
+    }
+  ]
+}
+{% endschema %}

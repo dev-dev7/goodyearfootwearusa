@@ -1,0 +1,688 @@
+{%- liquid
+assign products_per_row = section.settings.products_per_row
+assign card_style       = section.settings.card_style
+assign card_type        = card_style | replace: '-', '_' | prepend: 'product_card_'
+assign prd_img_ft       = section.settings.prd_img_ft
+assign card_border      = section.settings.card_border
+assign card_shadow      = section.settings.card_shadow
+assign load_mode        = section.settings.load_mode
+assign limit_num        = section.settings.number_row | times: products_per_row
+assign filter_design    = section.settings.filter_design
+assign show_sort        = section.settings.show_sort
+assign filter_pos       = section.settings.filter_pos
+assign show_grid_switch = section.settings.show_grid_switch
+assign show_page_sizer  = section.settings.show_page_sizer
+assign page_sizer_nums  = section.settings.page_sizer_nums
+assign show_active_tags = section.settings.show_active_tags
+assign show_result_text = section.settings.show_result_text
+assign min_p  = blank
+assign max_p  = blank
+assign cr_pg  = 1
+paginate collections[collection.handle].products by 1000
+assign cp = collections[collection.handle].products
+endpaginate
+if collection.handle == 'types'
+  paginate collections.all.products by 1000
+  assign cp = collections.all.products | where: 'type', collection.current_type
+  endpaginate
+endif
+if collection.handle == 'vendors'
+  paginate collections.all.products by 1000
+  assign cp = collections.all.products | where: 'vendor', collection.current_vendor
+  endpaginate
+endif
+assign sort_by = collection.sort_by
+assign tags_list = ''
+assign tags_url  = ''
+assign params    = ''
+for tag in current_tags
+  if tag contains 'price::'
+    assign new_tag = tag | replace: '::', '%3A%3A'
+    assign tags_url = tags_url | append: '%2B' | append: new_tag
+    assign price_tag = tag | remove: 'price::'
+    assign min_p = price_tag | split: '-' | first | plus: 0
+    assign max_p = price_tag | split: '-' | last | plus: 0
+  elsif tag contains 'page::'
+    assign cr_pg = tag | remove: 'page::' | plus: 0
+    if cr_pg == 0
+      assign cr_pg = 1
+    endif
+  elsif tag contains 'show::'
+    assign custom_limit = tag | remove: 'show::' | plus: 0
+    if custom_limit != blank and custom_limit != 0
+      assign new_tag = tag | replace: '::', '%3A%3A'
+      assign tags_url = tags_url | append: '%2B' | append: new_tag
+      assign limit_num = custom_limit
+    endif
+  else
+    assign tags_list = tags_list | append: ',' | append: tag
+    assign tags_url = tags_url | append: '%2B' | append: tag
+  endif
+endfor
+assign tags_list = tags_list | remove_first: ',' | split: ','
+assign tags_url = tags_url | remove_first: '%2B'
+
+assign price_sort = cp | sort: 'price'
+assign range_min = price_sort[0].price
+assign range_max = price_sort[-1].price
+assign a_count = 0
+
+case sort_by
+  when 'price-ascending'
+    assign cp = cp | sort: 'price'
+  when 'price-descending'
+    assign cp = cp | sort: 'price' | reverse
+  when 'title-ascending'
+    assign cp = cp | sort: 'title'
+  when 'title-descending'
+    assign cp = cp | sort: 'title' | reverse
+  when 'created-ascending'
+    assign cp = cp | sort: 'published_at'
+  when 'created-descending'
+    assign cp = cp | sort: 'published_at' | reverse
+endcase
+
+assign s_pos = cr_pg | minus: 1 | times: limit_num
+assign c_pos = 0
+assign c_pos_f = true
+assign t_pos = 0
+
+for pp in cp
+  assign active_tags = pp.tags | join: ',' | prepend: ',' | append: ',' | downcase
+  assign cond = true
+
+  if min_p != blank and pp.price_min < min_p
+    assign cond = false
+    continue
+  endif
+
+  if max_p != blank and pp.price_min > max_p
+    assign cond = false
+    continue
+  endif
+
+  for tag in tags_list
+    assign downtag = tag | downcase | append: ',' | prepend: ','
+    unless active_tags contains downtag
+      assign cond = false
+      break
+    endunless
+  endfor
+
+  if cond == true
+    assign a_count = a_count | plus: 1
+    if t_pos != s_pos
+      assign t_pos = t_pos | plus: 1
+    elsif c_pos_f
+      assign c_pos = forloop.index0
+      assign c_pos_f = false
+    endif
+  endif
+endfor
+
+assign total_page = a_count | divided_by: limit_num | floor
+assign pc_m = a_count | modulo: limit_num
+if pc_m > 0
+  assign total_page = total_page | plus: 1
+endif
+-%}
+{%- capture shop_url -%}{{ shop.url }}/collections/{{ collection.handle }}{%- endcapture -%}
+{%- if tags_url -%}
+{% capture tag_params %}constraint={{ tags_url }}{% endcapture %}
+{%- endif -%}
+{%- if sort_by != blank and sort_by != collection.default_sort_by -%}
+{% capture sort_params %}&sort_by={{ sort_by }}{% endcapture %}
+{%- endif -%}
+{%- capture next_pl -%}{{ shop_url }}?{{ tag_params }}{% if tags_url != blank %}+{% endif %}page%3A%3A{{ cr_pg | plus: 1 }}{{ sort_params }}{%- endcapture -%}
+{%- capture prev_pl -%}{{ shop_url }}?{{ tag_params }}{% if tags_url != blank %}+{% endif %}page%3A%3A{{ cr_pg | minus: 1 }}{{ sort_params }}{%- endcapture -%}
+{%- capture custom_pagination -%}
+<nav role="navigation" class="pagination-container">
+  <ul class="pagination list-style-none ds-flex">
+    {%- if cr_pg > 1 -%}
+      <li class="paginate-item">
+        <a href="{{ prev_pl }}">{% render 'icon-dir-left' %}</a>
+      </li>
+    {%- endif -%}
+
+    {%- assign dl = cr_pg | minus: 2 -%}
+    {%- assign dr = cr_pg | plus: 2 -%}
+
+    {%- for pi in (1..total_page) -%}
+      {%- unless pi == cr_pg -%}
+        {%- if pi > 1 and pi < dl -%}
+          {%- continue -%}
+        {%- endif -%}
+        {%- if pi < total_page and pi > dr -%}
+          {%- continue -%}
+        {%- endif -%}
+        {%- if pi == dr or pi == dl -%}
+          {%- if pi > 2 and pi < total_page -%}
+            <li class="paginate-item"><a href="{{ shop_url }}?{{ tag_params }}{% if tags_url != blank %}+{% endif %}page%3A%3A{{ pi }}{{ sort_params }}">...</a></li>
+            {%- continue -%}
+          {%- endif -%}
+        {%- endif -%}
+        <li class="paginate-item">
+          <a href="{{ shop_url }}?{{ tag_params }}{% if tags_url != blank %}+{% endif %}page%3A%3A{{ pi }}{{ sort_params }}">{{ pi }}</a>
+        </li>
+      {%- else -%}
+        <li class="paginate-item active" aria-current="page"><span>{{ pi }}</span></li>
+      {%- endunless -%}
+    {%- endfor -%}
+
+    {%- if cr_pg < total_page -%}
+      <li class="paginate-item">
+        <a href="{{ next_pl }}">{% render 'icon-dir-right' %}</a>
+      </li>
+    {%- endif -%}
+  </ul>
+</nav>
+{%- endcapture -%}
+
+<div class="collection-sort cfd-{{ filter_design }}">
+  <div class="collection-sort__header">
+    <div class="container position-relative">
+      <div class="row">
+        <div class="col-padding medium-9 small-8 ds-flex align-center flex-wrap space-between">
+          {%- if show_sort -%}
+            {% render 'template_collection_sort', design: filter_design %}
+          {%- endif -%}
+
+          {%- if filter_pos == 'popup' -%}
+            {% render 'template_collection_filter_dd', design: filter_design, blocks: section.blocks, max_p: max_p, min_p: min_p, range_max: range_max, range_min: range_min, tags_list: tags_list, cp: cp %}
+          {%- endif -%}
+
+          {%- if show_grid_switch -%}
+            {% render 'template_collection_grid_switcher', design: filter_design %}
+          {%- endif -%}
+
+          {%- if show_page_sizer -%}
+            {% render 'template_collection_limit_selector', design: filter_design, limit_num: limit_num, page_sizer_nums: page_sizer_nums %}
+          {%- endif -%}
+        </div>
+
+        <div class="col-padding medium-3 small-4 ds-flex overflow-hidden">
+          {%- if total_page > 1 and load_mode == 'default' -%}
+            {{ custom_pagination }}
+          {%- endif -%}
+        </div>
+      </div><!-- .row -->
+    </div><!-- .container -->
+  </div><!-- .collection-sort__header -->
+  {%- if tags_list != blank or min_p != blank -%}
+    {%- if show_active_tags -%}
+      <div class="active-tags">
+        <div class="container">
+          <div class="row">
+            <div class="col-padding medium-9 small-8 ds-flex flex-wrap filter-tag">
+              {%- for tag in tags_list -%}
+                <a href="#" class="active-tag__item ds-flex align-center" data-tag="{{ tag | downcase | strip }}">
+                  {% render 'icon-close' %}
+                  <span class="filter-content">{{ tag | strip }}</span>
+                </a>
+              {%- endfor -%}
+              {%- if min_p != blank and max_p != blank -%}
+                <a href="#" class="active-tag__item ds-flex align-center" data-tag="price::{{ min_p }}-{{ max_p}}">
+                  {% render 'icon-close' %}
+                  <span>{{ min_p | money }} - {{ max_p | money }}</span>
+                </a>
+              {%- endif -%}
+            </div>
+            <div class="col-padding medium-3 small-4 ds-flex align-center">
+              <a href="#" class="active-tag__item clear-tags ds-flex align-center">
+                {% render 'icon-close' %}
+                <span>{{ 'collections.general.clear_filters' | t }}</span>
+              </a>
+            </div>
+          </div>
+        </div><!-- .container -->
+      </div><!-- .active-tags -->
+    {%- endif -%}
+    {%- if show_result_text -%}
+      <div class="filter-result_container">
+        <div class="container">
+          {%- if a_count > 0 -%}
+            <strong class="description">{{ 'collections.general.result_count' | t: count: a_count }}</strong>
+          {%- else -%}
+            <strong class="description">{{ 'collections.general.no_result' | t }}</strong>
+          {%- endif -%}
+        </div><!-- .container -->
+      </div><!-- .filter-result_container -->
+    {%- endif -%}
+  {%- endif -%}
+</div><!-- .collection-sort -->
+
+<div class="container">
+  <div class="row position-relative">
+
+    <div class="large-{% if settings.collection_sidebar_pos != 'none' %}9 height-100{% else %}12{% endif %} col-padding grid" id="collectionsContent">
+      <div class="row {{ card_style }} {{ prd_img_ft }}">
+      {%- if a_count > 0 -%}
+        {%- assign aa_count = 0 -%}
+        {%- for pp in cp offset: c_pos -%}
+          {%- if min_p != blank and min_p > pp.price_min -%}{%- continue -%}{%- endif -%}
+          {%- if max_p != blank and max_p < pp.price_min -%}{%- continue -%}{%- endif -%}
+          {%- assign active_tags = pp.tags | join: ',' | prepend: ',' | append: ',' | downcase -%}
+          {%- assign skip = false -%}
+          {%- for tag in tags_list -%}
+            {%- assign downtag = tag | downcase | append: ',' | prepend: ',' -%}
+            {%- unless active_tags contains downtag -%}
+              {%- assign skip = true -%}
+              {%- break -%}
+            {%- endunless -%}
+          {%- endfor -%}
+          {%- if skip -%}
+            {%- continue -%}
+          {%- endif -%}
+          {%- assign aa_count = aa_count | plus: 1 -%}
+          <div class="grid-items__{{ products_per_row }} collection-card__wrapper">
+            {% include card_type, product: pp, card_border: card_border, card_shadow: card_shadow, height: section.settings.card_img_height %}
+          </div>
+          {%- if aa_count == limit_num -%}{%- break -%}{%- endif -%}
+        {%- endfor -%}
+
+        {%- if total_page > 1 -%}
+          {%- case load_mode -%}
+          {%- when 'scroll-load' -%}
+            {%- if cr_pg < total_page -%}
+            <div id="infinite-more-link" data-target="{{ next_pl }}">
+              {% include settings.anm_loading_products %}
+            </div>
+            {%- endif -%}
+          {%- when 'button-load' -%}
+            {%- if cr_pg < total_page -%}
+            <button class="btn btn-default load-more" data-target="{{ next_pl }}"><span>{{ 'collections.general.load_more' | t }}</span>{% include settings.anm_loading_products %}</button>
+            {%- endif -%}
+          {%- else -%}
+            <div class="col-padding grid-items__1 ds-flex align-center cfd-{{ filter_design }}">
+              {%- assign start = s_pos | plus: 1 -%}
+              {%- assign end = s_pos | plus: limit_num -%}
+              {%- if end > a_count -%}
+                {%- assign end = a_count -%}
+              {%- endif -%}
+              {%- assign range = start | append: '-' | append: end -%}
+              <p>{{ 'collections.general.show_products_range' | t: range: range, total: a_count }}</p>
+              {{ custom_pagination }}
+            </div>
+          {%- endcase -%}
+        {%- endif -%}
+      {%- endif -%}
+      </div><!-- .row -->
+    </div><!-- .large-9 / .large-12 -->
+
+    {%- if settings.collection_sidebar_pos != 'none' -%}
+      <div class="mobile-sidebar height-100 large-3 col-padding {{ settings.collection_sidebar_pos }}">
+
+        <div class="sidebar-block">
+          {% render 'collection_sidebar_navigation', sidebar_menu: section.settings.sidebar_menu %}
+        </div>
+
+        {%- for block in section.blocks -%}
+          <div class="sidebar-block" {{block.shopify_attributes}}>
+            {%- if filter_pos == 'sidebar' -%}
+              {%- if block.type == 'filter_by_tags' -%}
+                {% render 'collection_sidebar_filter' with block, c_tags: tags_list, max_p: max_p, min_p: min_p, cp: cp %}
+
+              {%- elsif block.type == 'filter_by_price' -%}
+                {%- if block.settings.title != blank -%}
+                  <h3 class="block-title">{{ block.settings.title }}</h3>
+                {%- endif -%}
+                <input type="hidden" id="vnd-price-range" class="slider-input" data-min="{{ range_min }}" data-max="{{ range_max }}" data-range-start="{{ min_p }}" data-range-end ="{{ max_p }}" />
+              {%- endif -%}
+            {%- endif -%}
+
+            {%- if block.type == 'advertise_image' -%}
+              {%- assign advertise_img = block.settings.img -%}
+              {%- assign advertise_subtitle = block.settings.subtitle -%}
+              {%- assign advertise_title = block.settings.title -%}
+              {%- assign advertise_text_style = block.settings.advertise_text_style -%}
+              {%- assign advertise_thp = block.settings.advertise_thp -%}
+              {%- assign advertise_tvp = block.settings.advertise_tvp -%}
+              {%- assign advertise_ta = block.settings.advertise_ta -%}
+              {%- assign advertise_color = block.settings.color -%}
+              {% render 'sidebar_advertise', img: advertise_img, subtitle: advertise_subtitle, block_title: advertise_title,
+                style: advertise_text_style, color: advertise_color, thp: advertise_thp, tvp: advertise_tvp, ta: advertise_ta %}
+            {%- endif -%}
+          </div><!-- .sidebar-block -->
+        {%- endfor -%}
+      </div><!-- .mobile-sidebar.large-3 -->
+      <div class="mobile-sidebar-toggler">
+        {% render 'icon-dir-left' %}
+      </div><!-- .mobile-sidebar-toggler -->
+    {%- endif -%}
+
+    <div class="result-loading">{% include settings.anm_loading_products %}</div>
+  </div><!-- .row -->
+</div><!-- .container -->
+{%- capture css -%}
+.collection-sort__header{
+  border-color:{{ section.settings.color_bd_at }}
+}
+.active-tags{
+  background-color:{{ section.settings.color_bg_at }};
+  border-color:{{ section.settings.color_bd_at }}
+}
+{%- endcapture -%}
+<style>{{ css | strip_newlines | remove: '  ' }}</style>
+{% schema %}
+{
+  "name": "Collection Layout",
+  "tag": "section",
+  "class": "collection-layout",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Filters Bar"
+    },
+    {
+      "type": "select",
+      "id": "filter_design",
+      "label": "Elements design",
+      "options": [
+        { "value": "classic", "label": "Classic" },
+        { "value": "advanced", "label": "Advanced" }
+      ],
+      "default": "classic"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_sort",
+      "label": "Show sort options",
+      "default": true,
+      "info": "Allow customers to sort products"
+    },
+    {
+      "type": "radio",
+      "id": "filter_pos",
+      "label": "Filters position",
+      "options": [
+        { "value": "popup", "label": "Popup" },
+        { "value": "sidebar", "label": "Sidebar" }
+      ],
+      "default": "popup",
+      "info": "Set where to show filter options"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_grid_switch",
+      "label": "Show layout switchers",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_page_sizer",
+      "label": "Show pagination size dropdown",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "page_sizer_nums",
+      "label": "Page sizes",
+      "default": "16,24,32",
+      "info": "Separate by comma"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_active_tags",
+      "label": "Show applied filters",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "color_bg_at",
+      "label": "Active tags block background color",
+      "default": "#f7f7f7"
+    },
+    {
+      "type": "color",
+      "id": "color_bd_at",
+      "label": "Active tags block border color",
+      "default": "#ececec"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_result_text",
+      "label": "Notify filtered products count",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Grid Layout Configuration"
+    },
+    {
+      "type": "select",
+      "id": "products_per_row",
+      "label": "Number of Products Per Row",
+      "options": [
+        { "value": "2", "label": "2" },
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4" },
+        { "value": "5", "label": "5" },
+        { "value": "6", "label": "6" }
+      ],
+      "default": "4"
+    },
+    {
+      "type": "select",
+      "id": "number_row",
+      "label": "Number of Rows",
+      "options": [
+        { "value": "2", "label": "2" },
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4" },
+        { "value": "5", "label": "5" },
+        { "value": "6", "label": "6" }
+      ],
+      "default": "4"
+    },
+    {
+      "type": "select",
+      "id": "card_style",
+      "label": "Product Card Style",
+      "options": [
+        { "value": "vertical-default", "label": "Vertical default" },
+        { "value": "vertical-advanced", "label": "Vertical advanced" },
+        { "value": "vertical-classic", "label": "Vertical classic" },
+        { "value": "vertical-details", "label": "Vertical details" },
+        { "value": "vertical-modern", "label": "Vertical modern" },
+        { "value": "vertical-progressive", "label": "Vertical progressive" },
+        { "value": "horizontal-default", "label": "Horizontal default" },
+        { "value": "horizontal-advanced", "label": "Horizontal advanced" },
+        { "value": "horizontal-classic", "label": "Horizontal classic" },
+        { "value": "horizontal-modern", "label": "Horizontal modern" },
+        { "value": "horizontal-progressive", "label": "Horizontal progressive" }
+      ],
+      "default": "vertical-default"
+    },
+    {
+      "type": "select",
+      "id": "card_img_height",
+      "label": "Image size",
+      "options": [
+        { "value": "relative", "label": "Relative to original size" },
+        { "value": "square", "label": "Square: aspect ratio 1:1" },
+        { "value": "rect", "label": "Rectangle: aspect ratio 10:13" }
+      ],
+      "default": "rect"
+    },
+    {
+      "type": "radio",
+      "id": "prd_img_ft",
+      "label": "Add darkness to product images",
+      "options": [
+        { "value": "img-br-100", "label": "No" },
+        { "value": "img-br-97", "label": "Yes" }
+      ],
+      "default": "img-br-100",
+      "info": "Recommended for white background product images"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_border",
+      "label": "Show border around product cards",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "card_shadow",
+      "label": "Show box shadow around product cards",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "load_mode",
+      "label": "Products loading mode",
+      "options": [
+        { "value": "default", "label": "Use pagination" },
+        { "value": "scroll-load", "label": "Infinite scrolling" },
+        { "value": "button-load", "label": "Use load more button" }
+      ],
+      "default": "default"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "filter_by_tags",
+      "name": "Filter by tags",
+      "settings": [
+        {
+          "type": "select",
+          "id": "type",
+          "label": "Block Type",
+          "options": [
+            { "value": "checkbox", "label": "Checkbox" },
+            { "value": "color", "label": "Color" }
+          ],
+          "default": "checkbox"
+        },
+        {
+          "type": "select",
+          "id": "tick_style",
+          "label": "Checkbox Type",
+          "options": [
+            { "value": "tick-rectangle", "label": "Rectangle" },
+            { "value": "tick-circle", "label": "Circle" }
+          ],
+          "default": "tick-rectangle"
+        },
+        { "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "brand"
+        },
+        {
+          "type": "textarea",
+          "id": "tags_list",
+          "label": "Tags",
+          "info": "Input tags separated with comma(,)",
+          "default": "Armani, Bulgari, Dolce & Gabbana, Cristian Dior, Givenchy"
+        }
+      ]
+    },
+    {
+      "type": "filter_by_price",
+      "name": "Filter by price",
+      "settings": [
+        { "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "price"
+        }
+      ]
+    },
+    {
+      "type": "advertise_image",
+      "name": "Image with Text",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "img",
+          "label": "Background Image"
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "label": "Sub Title",
+          "default": "HUAWEI WATCH"
+        },
+        {
+          "type": "textarea",
+          "id": "title",
+          "label": "Text",
+          "default": "TIMELESS DESIGN"
+        },
+        {
+          "type": "select",
+          "id": "advertise_text_style",
+          "label": "Content style",
+          "options": [
+            { "value": "default", "label": "Green Style" },
+            { "value": "top-left", "label": "Blue Style" }
+          ],
+          "default": "top-left"
+        },
+        {
+          "type": "select",
+          "id": "advertise_thp",
+          "label": "Horizontal position of content",
+          "options": [
+            { "value": "left", "label": "Left" },
+            { "value": "center", "label": "Center" },
+            { "value": "right", "label": "Right" }
+          ],
+          "default": "center"
+        },
+        {
+          "type": "select",
+          "id": "advertise_tvp",
+          "label": "Vertical position of content",
+          "options": [
+            { "value": "v-top", "label": "Top" },
+            { "value": "v-center", "label": "Center" },
+            { "value": "v-bottom", "label": "Bottom" }
+          ],
+          "default": "v-center"
+        },
+        {
+          "type": "select",
+          "id": "advertise_ta",
+          "label": "Text alignment of content",
+          "options": [
+            { "value": "text-left", "label": "Left" },
+            { "value": "text-center", "label": "Center" },
+            { "value": "text-right", "label": "Right" }
+          ],
+          "default": "text-center"
+        },
+        {
+          "type": "color",
+          "id": "color",
+          "label": "Advertisement Text Color",
+          "default": "#fff"
+        }
+      ]
+    }
+  ],
+  "default": {
+    "blocks": [
+      { "type": "filter_by_tags" },
+      {
+        "type": "filter_by_tags",
+        "settings": {
+          "type": "color",
+          "title": "color",
+          "tags_list": "#8bc24a, #4baf4f, #019587, #2095f2, #02a8f4, #2095f2,\n#3e50b4, #9b27b0, #ccdb38,\n#fdc006, #fd5621, #785446, \n#9d9d9d, #5f7c8a"
+        }
+      },
+      {
+        "type": "filter_by_tags",
+        "settings": {
+          "type": "checkbox",
+          "title": "storage size",
+          "tags_list": "16GB, 32GB, 64GB, 132GB"
+        }
+      },
+      { "type": "advertise_image" }
+    ]
+  }
+}
+{% endschema %}

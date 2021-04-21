@@ -1,0 +1,267 @@
+{%- liquid
+assign products_per_row = section.settings.products_per_row
+if section.settings.number_row == '0'
+  assign limit = 9999
+else
+  assign limit = section.settings.number_row | times: products_per_row
+endif
+assign sidebar_pos = section.settings.sidebar_pos
+assign terms = search.terms | split: 'product_type:' | first
+assign terms = terms | split: 'tag:' | first
+assign terms = terms | split: 'vendor:' | first
+assign terms = terms | remove: '*' | strip
+-%}
+
+<div style="margin: {{ section.settings.margin }}px;">
+  <div class="container search-result">
+    <div class="row">
+      {%- paginate search.results by limit -%}
+        {%- if sidebar_pos != 'none' -%}
+          <div class="large-3 col-padding mobile-sidebar height-100 {{ sidebar_pos }}">
+
+            <div class="sidebar-block">
+              {% render 'collection_sidebar_navigation' %}
+            </div>
+
+            {%- for block in section.blocks -%}
+              <div class="sidebar-block" {{block.shopify_attributes}}>
+                {%- if block.type == 'filter_by_price' -%}
+                  {%- assign result_products = search.results | where: "object_type", "product" -%}
+                  {%- assign price_sort = result_products | sort: 'price' -%}
+
+                  {%- if result_products.size > 0 -%}
+                    {%- if block.settings.title != blank -%}
+                      <h3 class="block-title">{{ block.settings.title }}</h3>
+                    {%- endif -%}
+                    <input type="hidden" class="slider-input price-range" data-min="{{ price_sort[0].price | money_without_currency }}" data-max="{{ price_sort[-1].price | money_without_currency }}"/>
+                  {%- endif -%}
+
+                {%- elsif block.type == 'advertise_image' -%}
+                  {%- assign advertise_img = block.settings.img -%}
+                  {%- assign advertise_subtitle = block.settings.subtitle -%}
+                  {%- assign advertise_title = block.settings.title -%}
+                  {%- assign advertise_text_style = block.settings.advertise_text_style -%}
+                  {%- assign advertise_thp = block.settings.advertise_thp -%}
+                  {%- assign advertise_tvp = block.settings.advertise_tvp -%}
+                  {%- assign advertise_ta = block.settings.advertise_ta -%}
+                  {%- assign advertise_color = block.settings.color -%}
+                  {% render 'sidebar_advertise', img: advertise_img, subtitle: advertise_subtitle, block_title: advertise_title,
+                    style: advertise_text_style, color: advertise_color, thp: advertise_thp, tvp: advertise_tvp, ta: advertise_ta %}
+                {%- endif -%}
+              </div><!-- .sidebar-block -->
+            {%- endfor -%}
+          </div><!-- .large-3.mobile-sidebar -->
+          <div class="mobile-sidebar-toggler">
+            {% render 'icon-dir-left' %}
+          </div><!-- .mobile-sidebar-toggler -->
+
+          <div class="large-9 col-padding height-100">
+        {%- else -%}
+          <div class="large-12 col-padding">
+        {%- endif -%}
+
+          {%- if search.performed -%}
+            <h3 class="page-title">{{ 'general.search.results_with_count_html' | t: count: search.results_count, terms: terms }}</h3>
+
+            <div class="row vertical-default">
+              {%- for item in search.results -%}
+                {%- if item.object_type == 'product' -%}
+                  {%- assign product = item -%}
+                  {%- assign tags_list = product.tags | join: ',' -%}
+                  <div class="grid-items__{{ products_per_row }} collection-card__wrapper" data-tags=",{{ tags_list }},">
+                    {% include 'product_card_vertical_default', product: product %}
+                  </div>
+                {%- else -%}
+                  <div class="medium-12 col-padding">
+                    <h5><a href="{{ item.url }}" target="_blank">{{ item.title }}</a></h5>
+                    <p>{{ item.content | strip_html | truncatewords: 40 | highlight: terms }}</p>
+                  </div>
+                {%- endif -%}
+              {%- else -%}
+                <div class="col-padding">
+                  <form action="/search" method="get" role="search" class="search-form search-box-fixed" autocomplete="off">
+                    <div class="search-input-container position-relative">
+                      <input type="text" name="q" class="sidebar-search__input" value="{{ terms }}"
+                        placeholder="{{ 'general.search.placeholder' | t }}">
+                      {%- if settings.search_predictive -%}<div class="result-container"></div>{%- endif -%}
+                    </div>
+
+                    <button type="submit" class="search-button search-with-brand">{% include settings.search_icon %}</button>
+                  </form>
+                </div>
+              {%- endfor -%}
+            </div><!-- .row -->
+          {%- else -%}
+            <h3 class="page-title">{{ 'general.search.title' | t }}</h3>
+            <form action="/search" method="get" role="search" class="search-form search-box-fixed" autocomplete="off">
+              <div class="search-input-container position-relative">
+                <input type="text" name="q" class="sidebar-search__input" value="{{ terms }}"
+                  placeholder="{{ 'general.search.placeholder' | t }}">
+                {%- if settings.search_predictive -%}<div class="result-container"></div>{%- endif -%}
+              </div>
+
+              <button type="submit" class="search-button search-with-brand">{% include settings.search_icon %}</button>
+            </form>
+          {%- endif -%}
+
+          {%- if paginate.pages > 1 -%}
+            {% render 'pagination', paginate: paginate %}
+          {%- endif -%}
+        </div><!-- .large-9 -->
+      {%- endpaginate -%}
+    </div><!-- .row -->
+  </div><!-- .container -->
+</div>
+
+{% schema %}
+{
+  "name": "Search Layout",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "Section margin",
+      "info": "Set margin for section top-right-bottom-left (e.g. 20px 15px 10px 0)",
+      "default": "60px 0 180px 0"
+    },
+    {
+      "type": "header",
+      "content": "Grid Layout Configuration"
+    },
+    {
+      "type": "select",
+      "id": "products_per_row",
+      "label": "Number of Products Per Row",
+      "options": [
+        { "value": "2", "label": "2" },
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4" },
+        { "value": "5", "label": "5" },
+        { "value": "6", "label": "6" }
+      ],
+      "default": "4"
+    },
+    {
+      "type": "select",
+      "id": "number_row",
+      "label": "Number of Rows",
+      "options": [
+        { "value": "0", "label": "0 - Show all products" },
+        { "value": "2", "label": "2" },
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4" },
+        { "value": "5", "label": "5" },
+        { "value": "6", "label": "6" }
+      ],
+      "default": "4"
+    },
+    {
+      "type": "header",
+      "content": "Sidebar Configuration"
+    },
+    {
+      "type": "select",
+      "id": "sidebar_pos",
+      "label": "Show Sidebar",
+      "options": [
+        { "value": "right", "label": "Right" },
+        { "value": "left", "label": "Left" },
+        { "value": "none", "label": "Hide" }
+      ],
+      "default": "right"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "filter_by_price",
+      "name": "Filter by price",
+      "settings": [
+        { "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "price"
+        }
+      ]
+    },
+    {
+      "type": "advertise_image",
+      "name": "Image with Text",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "img",
+          "label": "Background Image"
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "label": "Sub Title",
+          "default": "HUAWEI WATCH"
+        },
+        {
+          "type": "textarea",
+          "id": "title",
+          "label": "Text",
+          "default": "TIMELESS DESIGN"
+        },
+        {
+          "type": "select",
+          "id": "advertise_text_style",
+          "label": "Content style",
+          "options": [
+            { "value": "default", "label": "Green Style" },
+            { "value": "top-left", "label": "Blue Style" }
+          ],
+          "default": "top-left"
+        },
+        {
+          "type": "select",
+          "id": "advertise_thp",
+          "label": "Horizontal position of content",
+          "options": [
+            { "value": "left", "label": "Left" },
+            { "value": "center", "label": "Center" },
+            { "value": "right", "label": "Right" }
+          ],
+          "default": "center"
+        },
+        {
+          "type": "select",
+          "id": "advertise_tvp",
+          "label": "Vertical position of content",
+          "options": [
+            { "value": "v-top", "label": "Top" },
+            { "value": "v-center", "label": "Center" },
+            { "value": "v-bottom", "label": "Bottom" }
+          ],
+          "default": "v-center"
+        },
+        {
+          "type": "select",
+          "id": "advertise_ta",
+          "label": "Text alignment of content",
+          "options": [
+            { "value": "text-left", "label": "Left" },
+            { "value": "text-center", "label": "Center" },
+            { "value": "text-right", "label": "Right" }
+          ],
+          "default": "text-center"
+        },
+        {
+          "type": "color",
+          "id": "color",
+          "label": "Advertisement Text Color",
+          "default": "#fff"
+        }
+      ]
+    }
+  ],
+  "default": {
+    "blocks": [
+      { "type": "filter_by_price" },
+      { "type": "advertise_image" }
+    ]
+  }
+}
+{% endschema %}

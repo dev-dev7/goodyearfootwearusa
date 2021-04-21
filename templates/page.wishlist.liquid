@@ -1,0 +1,16 @@
+<div class="container position-relative">
+  <h1 class="page-title">{{ page.title }}</h1>
+  <a href="#" class="btn btn-text clear-wishlist">{% render 'icon-trash-can' %}<span>{{ 'customer.remove_all' | t }}</span></a>
+</div>
+
+{% section 'template-wishlist' %}
+
+<style>
+.page-wishlist .page-description{margin:4px 0 57px;}
+.wishlist-grid.is-visible{max-height:2000px;transition:all .35s;visibility:visible;opacity:1}.wishlist-card{margin:10px 0 80px}.browse-more{margin:75px auto}
+.wishlist-grid .action-quickview{display:none}.wishlist-grid .product-name{font-size:1.6rem;}.wishlist-grid .current-price{font-size:1.7rem;}.wishlist-grid .old-price{margin-right:10px;}
+.wishlist-grid.vertical-default .wishlist-card .product-actions{position:relative;top:0;left:0;width:100%;transform:none;visibility:visible;opacity:1;}
+.wishlist-card .action-cart,.wishlist-card .btn{width:100%;height:auto;min-width:auto;}.wishlist-card .btn svg{display:none;}.wishlist-card .product-label{right:auto;left:1.5rem;}.wishlist-card .product-actions{margin-top:2.3rem;}
+.wishlist-card .btn-wishlist{position:absolute;top:15px;right:15px;border-radius:100%;background-color:transparent !important;color:#8c8c8c;z-index:1;cursor:pointer}.wishlist-card .btn-wishlist svg{display:block;width:11px;}
+.clear-wishlist{display:none;position:absolute;top:15px;right:15px;font-size:1.2rem;}.clear-wishlist svg{width:13px;margin-right:7px;}
+</style>

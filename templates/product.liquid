@@ -1,0 +1,77 @@
+{%- case settings.product_layout -%}
+{%- when 'classic' -%}
+  <div itemscope itemtype="http://schema.org/Product">
+    {% section 'template-product-classic' %}
+    {% section 'template-product-details-tabs' %}
+  </div>
+  {% section 'products-related' %}
+  {% section 'product-recommendations' %}
+{%- when 'grid' -%}
+  <div itemscope itemtype="http://schema.org/Product">
+    {% section 'template-product-grid' %}
+    {% section 'template-product-details-tabs' %}
+    {% section 'template-product-extra-images-grid' %}
+  </div>
+  {% section 'products-related' %}
+  {% section 'product-recommendations' %}
+  {% section 'template-product-service-promotion' %}
+{%- when 'center-image' -%}
+  <div itemscope itemtype="http://schema.org/Product">
+    {% section 'template-product-center-image' %}
+    {% section 'template-product-details-tabs' %}
+    {% section 'template-product-extra-images-center' %}
+  </div>
+  {% section 'products-related' %}
+  {% section 'product-recommendations' %}
+  {% section 'instagram' %}
+{%- when 'sidebar' -%}
+  <div class="container">
+    <div class="row" itemscope itemtype="http://schema.org/Product">
+      <div class="large-9 col-padding">
+        {% section 'template-product-sidebar-main' %}
+        {% section 'template-product-details-tabs' %}
+      </div>
+      <div class="template-product-sidebar mobile-sidebar large-3 col-padding">
+        {% section 'template-product-sidebar' %}
+      </div>
+      <div class="mobile-sidebar-toggler">
+        {% render 'icon-dir-left' %}
+      </div><!-- .mobile-sidebar-toggler -->
+    </div>
+  </div>
+  {% section 'text-with-image4' %}
+  {% section 'products-related' %}
+  {% section 'product-recommendations' %}
+  {% section 'products-recently' %}
+  {% section 'instagram' %}
+{%- when 'sticky-form' -%}
+  <div class="container">
+    <div class="row" itemscope itemtype="http://schema.org/Product">
+      <div class="large-9 col-padding">
+        {% section 'template-product-sticky-layout' %}
+        {% section 'template-product-details-tabs' %}
+      </div>
+      <div class="large-3 mobile-sidebar col-padding height-100">
+        {% section 'template-product-sticky-form' %}
+      </div>
+    </div>
+  </div>
+  {% section 'template-product-service-promotion' %}
+  {% section 'products-related' %}
+  {% section 'product-recommendations' %}
+  {% section 'products-recently' %}
+  {% section 'text-with-image-tiles' %}
+{%- else -%}
+  <div itemscope itemtype="http://schema.org/Product">
+    {% section 'template-product-default' %}
+    {% section 'template-product-showcase' %}
+    {% section 'template-product-extra-images' %}
+    {% section 'template-product-details-tabs' %}
+    {% section 'template-product-extra-video' %}
+  </div>
+  {% section 'products-related' %}
+  {% section 'product-recommendations' %}
+  {% section 'text-with-image4' %}
+  {% section 'products-recently' %}
+  {% section 'template-product-service-promotion' %}
+{%- endcase -%}

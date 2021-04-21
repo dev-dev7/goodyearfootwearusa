@@ -1,0 +1,55 @@
+{%- liquid
+assign block_title    = products_masonry.settings.title
+assign description    = products_masonry.settings.description
+assign c_collection   = collections[products_masonry.settings.collection]
+assign rows           = products_masonry.settings.rows
+assign cols           = products_masonry.settings.cols
+assign num_limit      = rows | times: cols
+assign main_pos       = products_masonry.settings.main_pos
+assign main_style     = products_masonry.settings.main_style
+assign main_card_type = main_style | replace: '-', '_' | prepend: 'product_card_'
+assign card_style     = products_masonry.settings.card_style
+assign card_type      = card_style | replace: '-', '_' | prepend: 'product_card_'
+assign card_border    = products_masonry.settings.card_border
+assign card_shadow    = products_masonry.settings.card_shadow
+assign prd_img_ft     = products_masonry.settings.prd_img_ft
+-%}
+
+{%- if block_title != blank -%}
+  <h3 class="block-title">{{ block_title }}</h3>
+{%- endif -%}
+{%- if description != blank -%}
+  <p class="block-description">{{ description }}</p>
+{%- endif -%}
+
+<div class="products-masonry row {% if card_style contains 'vertical' %}vertical{% else %}horizontal{% endif %} cols-{{ cols }} {{ prd_img_ft }}">
+
+{%- unless c_collection == blank -%}
+  <div class="masonry-main item-1x {{ main_pos }} {{ main_style }}">
+    {% include main_card_type, collection: c_collection, product: c_collection.products[0],card_border: card_border, card_shadow: card_shadow, img_max: 500 %}
+  </div>
+  <div class="masonry-grid item-{{ cols }}x {{ card_style }}">
+    <div class="row">
+      {%- for product in c_collection.products limit: num_limit offset: 1 -%}
+        <div class="grid-items__{{ cols }}">
+          {% include card_type, collection: c_collection, product: product, card_border: card_border, card_shadow: card_shadow %}
+        </div>
+      {%- endfor -%}
+    </div><!-- .row -->
+  </div><!-- .masonry-grid -->
+{%- else -%}
+  <div class="masonry-main item-1x {{ main_pos }} {{ main_style }}">
+    {% render 'product_card', card_border: card_border, card_shadow: card_shadow, pp_index: 1 %}
+  </div>
+  <div class="masonry-grid item-{{ cols }}x {{ card_style }}">
+    <div class="row">
+      {%- for index in (1..num_limit) -%}
+        {% capture pp_index %}{% cycle 2, 3, 4, 5, 6 %}{% endcapture %}
+        <div class="grid-items__{{ cols }}">
+          {% render 'product_card', card_border: card_border, card_shadow: card_shadow, pp_index: pp_index %}
+        </div>
+      {%- endfor -%}
+    </div><!-- .row -->
+  </div><!-- .masonry-grid -->
+{%- endunless -%}
+</div>

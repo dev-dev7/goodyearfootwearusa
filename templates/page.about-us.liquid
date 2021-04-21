@@ -1,0 +1,19 @@
+<div class="page-about">
+  {% section 'template-aboutus' %}
+
+  {%- if page.content != blank -%}
+    <div class="container aboutus-custom-content">
+      {{ page.content }}
+    </div>
+  {%- endif -%}
+
+  {% section 'text-with-image-masonry' %}
+  {% section 'newsletter' %}
+  {% section 'service-promotion-1' %}
+  {% section 'store-info' %}
+  {% section 'text-info' %}
+  {% section 'testimonials' %}
+  {% section 'team-slider' %}
+  {% section 'manufacturer' %}
+  {% section 'map' %}
+</div>

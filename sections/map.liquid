@@ -1,0 +1,180 @@
+{%- if section.settings.show_section -%}
+<div style="margin: {{ section.settings.margin }};" class="vs-google-map-{{ section.id }} position-relative">
+  {% render 'map', padding_top: section.settings.height %}
+  {%- if section.settings.show_form -%}
+    <div class="contact-on__map {{ section.settings.style }}">
+      <div class="container">
+        <div class="col-padding ds-flex align-center" style="background-color: {{ section.settings.color_bg }}">
+          <div class="vb-form{% if section.settings.style == 'form-right' %} compact{% endif %}">
+            {% render 'form_contact', form_title: section.settings.form_title, ph_name: section.settings.name_text,
+              ph_email: section.settings.email_text, ph_message: section.settings.review_text, ph_submit: section.settings.submit_text %}
+          </div><!-- .vb-form -->
+
+          {%- if section.blocks.size > 0 -%}
+            <div class="map-contact__dtl">
+              {%- for block in section.blocks -%}
+                <div class="contact-dtl__ctn">
+                  {%- if block.settings.icon != blank -%}
+                    <div class="contact-dtl__ic">
+                      {% include block.settings.icon %}
+                    </div>
+                  {%- endif -%}
+
+                  {%- if block.settings.title != blank -%}
+                    <h4 class="contact-dtl__tt">{{ block.settings.title }}</h4>
+                  {%- endif -%}
+
+                  {%- if block.settings.detail1 != blank -%}
+                    <p class="contact-dtl__if">{{ block.settings.detail1 }}</p>
+                  {%- endif -%}
+
+                  {%- if block.settings.detail2 != blank -%}
+                    <p class="contact-dtl__if">{{ block.settings.detail2 }}</p>
+                  {%- endif -%}
+
+                  {%- if block.settings.detail3 != blank -%}
+                    <p class="contact-dtl__if">{{ block.settings.detail3 }}</p>
+                  {%- endif -%}
+                </div>
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+        </div><!-- .col-padding -->
+      </div><!-- .container -->
+    </div><!-- .contact-on__map -->
+  {%- endif -%}
+</div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Google Map",
+  "tag": "section",
+  "class": "vs-google-map",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_section",
+      "label": "Show/Hide this section",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "Section Margin",
+      "info": "Set margin for section top-right-bottom-left (e.g. 20px 15px 10px 0)"
+    },
+    {
+      "type": "text",
+      "id": "height",
+      "label": "Map Size",
+      "default": "450px"
+    },
+    {
+      "type": "header",
+      "content": "Contact form"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_form",
+      "label": "Show/hide contact form",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "style",
+      "label": "Form Style",
+      "options": [
+        { "value": "form-right", "label": "Clean contact form on the right" },
+        { "value": "form-center", "label": "Full-width contact form" }
+      ],
+      "default": "form-right"
+    },
+    {
+      "type": "color",
+      "id": "color_bg",
+      "label": "Background Color",
+      "default": "#f0f0f0"
+    },
+    {
+      "type": "text",
+      "id": "form_title",
+      "label": "Title",
+      "default": "QUICK CONTACT"
+    },
+    {
+      "type": "text",
+      "id": "name_text",
+      "label": "Name Placeholder",
+      "default": "Enter your name"
+    },
+    {
+      "type": "text",
+      "id": "email_text",
+      "label": "Email Placeholder",
+      "default": "Enter your e-mail"
+    },
+    {
+      "type": "text",
+      "id": "review_text",
+      "label": "Review Placeholder",
+      "default": "Write your review"
+    },
+    {
+      "type": "text",
+      "id": "submit_text",
+      "label": "Button Text",
+      "default": "Send"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "contact_details",
+      "name": "Contact Details",
+      "settings": [
+        {
+          "type": "text",
+          "id": "icon",
+          "label": "Icon",
+          "default": "icon-location"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Address"
+        },
+        {
+          "type": "text",
+          "id": "detail1",
+          "label": "Detail 1",
+          "default": "Oxford Street 48/188, London,"
+        },
+        {
+          "type": "text",
+          "id": "detail2",
+          "label": "Detail 2",
+          "default": "United Kingdom, 24-157"
+        },
+        {
+          "type": "text",
+          "id": "detail3",
+          "label": "Detail 3"
+        }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "Google Map",
+    "category": "Map",
+    "settings": {
+      "show_section": true,
+      "height": "450px"
+    }
+  }]
+}
+{% endschema %}

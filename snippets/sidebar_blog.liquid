@@ -1,0 +1,79 @@
+{% comment %}
+Renders blogs carousel in sidebar
+  Accepts:
+    - block_title: <String> Block title
+    - selected: <Blog> Selected blog to show
+    - show_count: <Number> Number of articles to show at once
+    - auto_speed: <Number> Carousel autoplay speed, default is 6 when no value is set
+
+  Usage:
+    {% render 'sidebar_blog', block_title: section.settings.blogs_title, selected: section.settings.blog,
+        show_count: section.settings.blog_show_count %}
+{% endcomment %}
+
+{% if show_count == blank %}
+  {% assign show_count = 3 %}
+{% endif %}
+{%- if block_title != blank -%}
+  <h3 class="block-title">{{ block_title }}</h3>
+{%- endif -%}
+<div class="sidebar-carousel vs-initialize-slider">
+  <div class="items-carousel"
+    data-auto="{{ auto_speed | default: 6 }}"
+    data-dots="false"
+    data-nav="true"
+    data-wraparound="true">
+    {%- unless selected == blank -%}
+      {%- assign selected_blog = blogs[selected] -%}
+      {%- if selected_blog.articles_count > 0 -%}
+        {%- for article in selected_blog.articles -%}
+          {%- assign row = forloop.index | modulo: show_count -%}
+          {%- if row == 1 or show_count == 1 -%}
+            <div class="slide-group">
+          {%- endif -%}
+          <div class="slide-item ds-flex">
+            {%- if article.image != blank -%}
+              <div class="article-img">
+                <div class="position-relative image-loading" style="padding-top:100%;">
+                  <div class="image-bg lazyload" data-bg="{{ article.image | img_url: 'x150' }}"></div>
+                </div>
+            </div>
+            {%- endif -%}
+            <div class="article-detail">
+              {{ article.published_at | time_tag: '%d %b, %Y', datetime:'%Y-%m-%d' }}
+              <span class="article-name">
+                <a href="{{ article.url }}">{{ article.title }}</a>
+              </span>
+            </div>
+          </div><!-- .slide-item -->
+          {%- if row == 0 or forloop.last -%}
+            </div><!-- .slide-group -->
+          {%- endif -%}
+        {%- endfor -%}
+      {%- else -%}
+        <p>{{ 'blogs.general.no_articles' | t }}</p>
+      {%- endif -%}
+    {%- else -%}
+      {%- for i in (1..6) -%}
+        {% assign row = forloop.index | modulo: show_count %}
+        {%- if row == 1 or show_count == 1 -%}
+          <div class="slide-group">
+        {%- endif -%}
+          <div class="slide-item ds-flex align-center">
+            <div class="article-img">
+              <div style="padding-top: 100%;">
+                {{ 'image' | placeholder_svg_tag: 'placeholder' }}
+              </div>
+            </div>
+            <div class="article-detail">
+              <time>Nov {{ i }}, 201{{ i }}</time>
+              <span class="article-name">Curabitur Faucibus Aliquam</span>
+            </div>
+          </div><!-- .slide-item -->
+        {%- if row == 0 or forloop.last -%}
+          </div><!-- .slide-group -->
+        {%- endif -%}
+      {%- endfor -%}
+    {%- endunless -%}
+  </div><!-- .items-carousel -->
+</div>

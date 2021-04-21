@@ -1,0 +1,70 @@
+{% comment %}
+Renders Footer bottom
+  Accepts:
+    - footer_bottom: <Block> footer bottom block object
+      = type: <String> Bottom content type (available values: "social_icons", "store_payment", "custom_image", "none")
+      = block_title: <String> Footer bottom title
+      = copyright: <String> copyright text
+      = style: <String> Content layout style (available values: "center", "space-between")
+      = m_img: <Image> Custom image to show with copyright
+      = color_icon: <Color> Social icon color
+      = color_icon_bd: <Color> Social icon border color
+      = color_icon_bg: <Color> Social icon background color
+
+  Usage:
+    {% render 'footer_bottom' with block %}
+{% endcomment %}
+
+{%- liquid
+assign type = footer_bottom.settings.type
+assign m_img = footer_bottom.settings.m_img
+assign cbd = footer_bottom.settings.color_icon_bd
+assign ci = footer_bottom.settings.color_icon
+assign cbg = footer_bottom.settings.color_icon_bg
+-%}
+{%- unless type == blank or type == 'none' -%}
+<div class="footer-bottom block-{{ footer_bottom.id }}" {{ footer_bottom.shopify_attributes }}>
+  <div class="container ds-flex flex-wrap align-center {% if footer_bottom.settings.style == 'center' %}flex-column text-center{% else %}space-between{% endif %}">
+    <div class="footer-bottom__content">
+      {%- if footer_bottom.settings.block_title != blank -%}
+        <h3 class="footer-bottom__title {{ footer_bottom.settings.font_header }} {{ footer_bottom.settings.fw_header }}">{{ footer_bottom.settings.block_title | newline_to_br }}</h3>
+      {%- endif -%}
+      {%- if footer_bottom.settings.copyright != blank -%}
+        <small class="footer-bottom__text {{ footer_bottom.settings.font_body }} {{ footer_bottom.settings.fw_body }}">{{ footer_bottom.settings.copyright | newline_to_br }}</small>
+      {%- endif -%}
+    </div>
+
+    {%- if type == 'social_icons' -%}
+      {% include 'footer_social_icons' %}
+      <style>.block-{{footer_bottom.id}} .social-link{border-color:{{cbd}};background-color:{{cbg}};color:{{ci}}}</style>
+    {%- elsif type == 'custom_image' -%}
+      {%- if m_img != blank -%}
+        <div class="footer-payment__icon position-relative" style="width:{{m_img.width}}px;height:{{m_img.height}}px">
+          {% render 'image', m_img: m_img, element_type: 'png', alt: 'layout.footer.payment_methods' | t %}
+        </div>
+      {%- endif -%}
+    {%- elsif "store_payment" -%}
+      {% render 'footer_bottom_payment' %}
+    {%- endif -%}
+
+  </div><!-- .container -->
+</div><!-- .footer-bottom -->
+
+{%- if footer_bottom.settings.use_custom_padding -%}
+{% style %}
+  .footer-bottom {
+    padding: {{ footer_bottom.settings.padding_mobile }};
+  }
+  @media screen and (min-width: 768px) {
+    .footer-bottom {
+      padding: {{ footer_bottom.settings.padding_laptop }};
+    }
+  }
+  @media screen and (min-width: 1600px) {
+    .footer-bottom {
+      padding: {{ footer_bottom.settings.padding }};
+    }
+  }
+{%- endstyle -%}
+{%- endif -%}
+{%- endunless -%}

@@ -1,0 +1,52 @@
+{% unless sidebar_menu %}
+  {% assign sidebar_menu = settings.collection_sidebar_menu %}
+{% endunless %}
+{% assign collection_list = linklists[sidebar_menu] %}
+{%- if settings.collection_sidebar_menu_title != blank -%}
+  <h3 class="block-title">{{ settings.collection_sidebar_menu_title }}</h3>
+{%- endif -%}
+
+<ul class="sidebar-navigation list-style-none">
+  {% for link in collection_list.links %}
+    {% assign child_handle = link.title | handleize %}
+
+    {%- if linklists[child_handle].links != blank -%}
+      <li class="nav-level__0{% if link.active %} active expanded{% endif %}">
+        <a href="#" class="expand">
+          {% render 'icon-dir-down' %}
+        </a>
+        <a href="{{ link.url }}" class="nav-list__link">{{ link.title }}</a>
+
+        <ul class="nav-child__wrapper list-style-none ds-none">
+          {% for childlink in linklists[child_handle].links %}
+            {% assign grand_child_handle = childlink.title | handle %}
+            {%- if linklists[grand_child_handle].links != blank -%}
+              <li class="nav-level__1{% if childlink.active %} active expanded{% endif %}">
+                <a href="#" class="expand">
+                  {% render 'icon-dir-down' %}
+                </a>
+                <a href="{{ childlink.url }}" class="nav-list__link">{{ childlink.title }}</a>
+
+                <ul class="nav-child__wrapper list-style-none">
+                  {%- for grand_child_link in linklists[grand_child_handle].links -%}
+                    <li class="nav-level__2{% if grand_child_link.active %} active{% endif %}">
+                      <a href="{{ grand_child_link.url }}" class="nav-list__link">{{ grand_child_link.title }}</a>
+                    </li>
+                  {%- endfor -%}
+                </ul>
+              </li>
+            {%- else -%}
+              <li class="nav-level__1{% if childlink.active %} active{% endif %}">
+                <a href="{{ childlink.url }}" class="nav-list__link">{{ childlink.title }}</a>
+              </li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
+      </li>
+    {%- else -%}
+      <li class="nav-level__0{% if link.active %} active{% endif %}">
+        <a href="{{ link.url }}" class="nav-list__link">{{ link.title }}</a>
+      </li>
+    {%- endif -%}
+  {% endfor %}
+</ul>

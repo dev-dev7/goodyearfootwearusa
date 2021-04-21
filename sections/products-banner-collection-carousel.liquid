@@ -1,0 +1,435 @@
+{%- liquid
+assign card_border = section.settings.card_border
+assign card_shadow = section.settings.card_shadow
+assign card_style = section.settings.card_style
+assign card_type = card_style | replace: '-', '_' | prepend: 'product_card_'
+assign limit = section.settings.cols | times: section.settings.rows
+
+if card_style contains 'horizontal'
+  assign img_max = 250
+else
+  if settings.layout == 'full_width'
+    assign screen_width = 1920
+  else
+    assign screen_width = settings.layout
+  endif
+  assign img_max = screen_width | divided_by: section.settings.cols
+endif
+-%}
+
+<div class="content-slideshow">
+  <div class="container {{ section.settings.nav_style }}">
+    {%- if section.settings.title != blank -%}
+      <h2 class="block-title">{{ section.settings.title }}</h2>
+    {%- endif -%}
+
+    <div class="products-masonry-triggers-list">
+    {%- for block in section.blocks -%}
+      {%- assign pcc_collection = collections[block.settings.collection] -%}
+      {%- unless pcc_collection == blank -%}
+        <span class="products-masonry-trigger{% if forloop.first %} active{% endif %}" data-slide="{{ forloop.index0 }}">{{ pcc_collection.title }}</span>
+      {%- else -%}
+        <span class="products-masonry-trigger{% if forloop.first %} active{% endif %}" data-slide="{{ forloop.index0 }}">Collection {{ forloop.index }}</span>
+      {%- endunless -%}
+    {%- endfor -%}
+    </div>
+
+    {%- if section.settings.desc != blank -%}
+      <p class="block-description">{{ section.settings.desc }}</p>
+    {%- endif -%}
+
+    <div class="items-carousel{% if section.settings.nav_box_shadow %} nav-box-shadow{% endif %} {{ section.settings.prd_img_ft }}"
+      data-auto="{{ section.settings.auto_speed }}"
+      data-dots="{{ section.settings.show_dots }}"
+      data-nav="{{ section.settings.show_nav }}"
+      data-wraparound="true"
+      data-cellalign="center"
+      data-groupCells="false">
+      {%- for block in section.blocks -%}
+        {%- assign pcc_collection = collections[block.settings.collection] -%}
+        <div class="ds-flex width-100" {{ block.shopify_attributes }} data-index="{{ forloop.index0 }}">
+          {%- if block.settings.side_img != blank -%}
+            <div class="side-image flex-1 position-relative block-{{ block.id }}">
+              <div class="position-relative" style="padding-top:{{ 100 | divided_by: block.settings.side_img.aspect_ratio }}%">
+                {% render 'image', m_img: block.settings.side_img, image_alt: block.settings.title %}
+              </div>
+              {% include 'text_content', t_c: block.settings, id: block.id %}
+            </div>
+          {%- endif -%}
+          <div class="items-container flex-1 ds-flex flex-wrap {{ card_style }}">
+          {%- unless pcc_collection == blank -%}
+            {%- if pcc_collection.products_count == 0 -%}
+              <p class="description col-padding">{{ 'collections.general.no_matches' | t }}</p>
+            {%- else -%}
+              {%- for product in pcc_collection.products limit: limit -%}
+                <div class="grid-items__{{ section.settings.cols }}">
+                  {% include card_type, collection: pcc_collection, product: product, card_border: card_border, card_shadow: card_shadow, img_max: img_max %}
+                </div>
+              {%- endfor -%}
+            {%- endif -%}
+          {%- else -%}
+            {%- for i in (1..limit) -%}
+              {%- capture pp_index -%}{% cycle 1, 2, 3, 4, 5, 6 %}{%- endcapture -%}
+              <div class="grid-items__{{ section.settings.cols }}">
+                {% render 'product_card', pp_index: pp_index, card_border: card_border, card_shadow: card_shadow %}
+              </div>
+            {%- endfor -%}
+          {%- endunless -%}
+          </div>
+        </div>
+      {%- endfor -%}
+    </div><!-- .items-carousel -->
+  </div><!-- nav_style -->
+</div><!-- .content-slideshow.collections-carousel -->
+
+{%- liquid
+assign c_nav_h_bg_alpha = section.settings.c_nav_h_bg | color_extract: 'alpha'
+-%}
+{% style %}
+#shopify-section-{{ section.id }}{
+  margin:{{ section.settings.margin_mobile }}
+}
+#shopify-section-{{ section.id }} .flickity-prev-next-button{
+  border-color:{{ section.settings.nav_border }};
+  background-color:{{ section.settings.nav_bg }};
+  color:{{ section.settings.c_nav }}
+}
+{%- if c_nav_h_bg_alpha !=0 -%}
+  #shopify-section-{{ section.id }} .flickity-prev-next-button:hover{
+    border-color:{{ section.settings.c_nav_h_bg }} !important;
+    background-color:{{ section.settings.c_nav_h_bg }} !important
+  }
+{%- endif -%}
+@media screen and (min-width: 768px) {
+  #shopify-section-{{ section.id }}{
+    margin:{{ section.settings.margin_laptop }}
+  }
+}
+@media screen and (min-width: 1400px) {
+  #shopify-section-{{ section.id }}{
+    margin:{{ section.settings.margin }}
+  }
+}
+{%- endstyle -%}
+
+{% schema %}
+{
+  "name": "Products masonry carousel",
+  "tag": "section",
+  "class": "vs-products-masonry-carousel",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section title",
+      "default": "Build Your Routine."
+    },
+    {
+      "type": "textarea",
+      "id": "desc",
+      "label": "Section description"
+    },
+    {
+      "type": "header",
+      "content": "Carousel settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "wrap_around",
+      "label": "Loop carousel",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "auto_speed",
+      "label": "Autoplay Speed",
+      "info": "5 means rotate every 5 seconds. 0 to disable auto rotate.",
+      "default": "5"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_dots",
+      "label": "Show Pagination Dots",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_nav",
+      "label": "Show Navigation",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "nav_style",
+      "label": "Navigator position",
+      "options": [
+        { "value": "nav-top__right", "label": "Top right" },
+        { "value": "nav-top__center", "label": "Top center" },
+        { "value": "nav-middle", "label": "Middle center" }
+      ],
+      "default": "nav-middle"
+    },
+    {
+      "type": "color",
+      "id": "nav_border",
+      "label": "Navigator border color",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "nav_bg",
+      "label": "Navigator background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "c_nav",
+      "label": "Navigator icon color",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "c_nav_h_bg",
+      "label": "Navigator hover background color",
+      "default": "rgba(0,0,0,0)"
+    },
+    {
+      "type": "checkbox",
+      "id": "nav_box_shadow",
+      "label": "Add box-shadow to navigators",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Product card configuration"
+    },
+    {
+      "type": "select",
+      "id": "card_style",
+      "label": "Product Card Style",
+      "options": [
+        { "value": "vertical-advanced", "label": "Vertical advanced" },
+        { "value": "vertical-classic", "label": "Vertical classic" },
+        { "value": "vertical-default", "label": "Vertical default" },
+        { "value": "vertical-modern", "label": "Vertical modern" },
+        { "value": "vertical-progressive", "label": "Vertical progressive" },
+        { "value": "vertical-details", "label": "Vertical details" },
+        { "value": "horizontal-advanced", "label": "Horizontal advanced" },
+        { "value": "horizontal-classic", "label": "Horizontal classic" },
+        { "value": "horizontal-default", "label": "Horizontal default" },
+        { "value": "horizontal-progressive", "label": "Horizontal progressive" },
+        { "value": "horizontal-modern", "label": "Horizontal modern" }
+      ],
+      "default": "horizontal-classic"
+    },
+    {
+      "type": "radio",
+      "id": "prd_img_ft",
+      "label": "Add darkness to product images",
+      "options": [
+        { "value": "img-br-100", "label": "No" },
+        { "value": "img-br-97", "label": "Yes" }
+      ],
+      "default": "img-br-100",
+      "info": "Recommended for white background product images"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_border",
+      "label": "Show border around product cards",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "card_shadow",
+      "label": "Show boxshadow around product cards",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Layout options"
+    },
+    {
+      "type": "range",
+      "id": "rows",
+      "label": "Number of rows",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "cols",
+      "label": "Number of columns",
+      "min": 1,
+      "max": 3,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "header",
+      "content": "Space settings",
+      "info": "Set space between other sections"
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "Section margin on desktop",
+      "info": "sequence: top-right-bottom-left (ex: 10px 0 10px 0)",
+      "default": "0 0 250px 0"
+    },
+    {
+      "type": "text",
+      "id": "margin_laptop",
+      "label": "Margin on laptop",
+      "default": "0 0 120px 0"
+    },
+    {
+      "type": "text",
+      "id": "margin_mobile",
+      "label": "Margin on mobile",
+      "default": "0 0 60px 0"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection",
+      "name": "Collection",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "header",
+          "content": "Side promotion settings",
+          "info": "You can ignore this settings if you want a simple products grid layout"
+        },
+        {
+          "type": "image_picker",
+          "id": "side_img",
+          "label": "Side image",
+          "info": "Recommended size: 410x550px"
+        },
+        {
+          "type": "textarea",
+          "id": "title",
+          "label": "Promotion text",
+          "default": "Feed your skin with\n<em><span>100%</span> Botanical</em>\nsuper ingredient.",
+          "info": "use <em> and <strong> tags for special characters"
+        },
+        {
+          "type": "select",
+          "id": "content_style",
+          "label": "Content style",
+          "options": [
+            {"value": "text-green1", "label": "Green 1"},
+            {"value": "text-green2", "label": "Green 2"},
+            {"value": "text-green3", "label": "Green 3"},
+            {"value": "text-orange", "label": "Orange"},
+            {"value": "text-citrus1", "label": "Citrus 1"},
+            {"value": "text-citrus2", "label": "Citrus 2"},
+            {"value": "citrus-style2", "label": "Citrus 3"},
+            {"value": "text-yellow1", "label": "Yellow 1"},
+            {"value": "text-yellow2", "label": "Yellow 2"},
+            {"value": "text-blue1", "label": "Blue 1"},
+            {"value": "text-blue2", "label": "Blue 2"},
+            {"value": "text-beige1", "label": "Beige 1"},
+            {"value": "text-beige2", "label": "Beige 2"},
+            {"value": "text-beige3", "label": "Beige 3"}
+          ],
+          "default": "citrus-style2"
+        },
+        {
+          "type": "range",
+          "id": "font_size",
+          "min": 7,
+          "max": 12,
+          "step": 1,
+          "label": "Font size",
+          "default": 10,
+          "info": "Default value is 10"
+        },
+        {
+          "type": "color",
+          "id": "color_title",
+          "label": "Text color",
+          "default": "#282525"
+        },
+        {
+          "type": "paragraph",
+          "content": "Special Characters"
+        },
+        {
+          "type": "paragraph",
+          "content": "Text wrapped with <em></em> or <strong></strong> are styled by the following settings"
+        },
+        {
+          "type": "color",
+          "id": "em_color",
+          "label": "Emphasized text color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "em_bg_color",
+          "label": "Emphasized text background color",
+          "default": "#a8bf00"
+        },
+        {
+          "type": "color",
+          "id": "strong_color",
+          "label": "Strong text color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "strong_bg_color",
+          "label": "Strong text background color",
+          "default": "#2c7800"
+        },
+        {
+          "type": "header",
+          "content": "Button"
+        },
+        {
+          "type": "text",
+          "id": "btn_title",
+          "label": "Button Title",
+          "default": "Discover Now"
+        },
+        {
+          "type": "text",
+          "id": "btn_title_icon",
+          "label": "Icon after text [Browse icons](https://docs.flexkitux.com/pages/icons-list.html)",
+          "default": "icon-dir-double-right"
+        },
+        {
+          "type": "url",
+          "id": "item_link",
+          "label": "Link To"
+        },
+        {
+          "type": "select",
+          "id": "btn_style",
+          "label": "Button Style",
+          "options": [
+            {"value": "btn-default", "label": "Default button"},
+            {"value": "btn-transparent", "label": "Transparent button"},
+            {"value": "btn-secondary", "label": "Secondary button"},
+            {"value": "btn-third", "label": "Third button"},
+            {"value": "btn-text", "label": "Text button"}
+          ],
+          "default": "btn-text"
+        }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "Products masonry carousel",
+    "category": "Collections"
+  }]
+}
+{% endschema %}

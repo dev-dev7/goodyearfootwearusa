@@ -1,0 +1,40 @@
+{% comment %}
+Renders image and text in layout 4 style
+  Accepts:
+    - img: <Image> image
+    - text: <String> text title
+    - link_to: <Url> link of the block
+
+  Usage:
+    {% render 'text_image4' with block %}
+{% endcomment %}
+
+{%- liquid
+assign img = text_image4.settings.img
+assign c_border = text_image4.settings.c_border
+assign w_border = text_image4.settings.w_border
+assign text = text_image4.settings.title
+assign color_title = text_image4.settings.color_title
+assign link_to = text_image4.settings.link_to
+assign content_style = text_image4.settings.content_style
+-%}
+
+<div class="image-layout4" style="border:{{ w_border }}px solid {{ c_border }};background-color:{{ section.settings.c_bg }}">
+  {%- if img != blank -%}
+    <div class="position-absolute image image-loading" style="bottom:-{{ w_border }}px">
+      <img class="lazyload" data-src="{{ img | img_url: 'master' }}" />
+    </div>
+  {%- else -%}
+    <div class="position-absolute image" style="background-color:#efefef;bottom:-{{ w_border }}px">
+      {{ 'image' | placeholder_svg_tag: 'placesvg' }}
+    </div>
+  {%- endif -%}
+
+  <div class="text {{ content_style }} ds-flex justify-center font-10">
+    <h2 style="color:{{ color_title }}">{{ text | newline_to_br }}</h2>
+  </div><!-- .text-content -->
+
+  {%- if link_to != blank -%}
+    <a href="{{ link_to }}" class="link-entire"></a>
+  {%- endif -%}
+</div><!-- .image-layout4 -->

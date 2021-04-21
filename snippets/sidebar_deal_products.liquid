@@ -1,0 +1,42 @@
+{% comment %}
+Renders deal products in the sidebar
+  Accepts:
+    - collection_name: <Collection> Name of collection to show
+    - block_title: <String> Block title
+    - deals_show_count: <Number> Number of products to show totally
+    - auto_speed: <Number> Carousel autoplay speed, default is 6
+
+  Usage:
+    {% include 'sidebar_deal_products', collection_name: section.settings.deal_collection, block_title: section.settings.latest_deals_title,
+      show_deals_swatch: section.settings.show_deals_swatch, deals_show_count: section.settings.deals_show_count,
+      prd_img_ft: section.settings.deals_prd_img_ft %}
+{% endcomment %}
+
+{%- assign c_collection = collections[collection_name] -%}
+
+{%- if block_title != blank -%}
+  <h3 class="block-title">{{ block_title }}</h3>
+{%- endif -%}
+<div class="sidebar-carousel{% unless show_deals_swatch %} disable-swatch{% endunless %}">
+  <div class="items-carousel vertical-default {{ prd_img_ft }}"
+    data-auto="{{ auto_speed | default: 6 }}"
+    data-dots="false"
+    data-nav="true"
+    data-wraparound="true">
+    {%- unless c_collection == blank -%}
+      {%- if c_collection.products_count == 0 -%}
+        <p class="description">{{ 'collections.general.no_matches' | t }}</p>
+      {%- else -%}
+        {%- for product in c_collection.products limit: deals_show_count -%}
+          <div class="slide-item">
+            {% include 'product_card_vertical_default', collection: c_collection, product: product %}
+          </div>
+        {%- endfor -%}
+      {%- endif -%}
+    {%- else -%}
+      <div class="slide-item">
+        {% render 'product_card', pp_index: 1 %}
+      </div>
+    {%- endunless -%}
+  </div><!-- .items-carousel -->
+</div><!-- .sidebar-carousel -->

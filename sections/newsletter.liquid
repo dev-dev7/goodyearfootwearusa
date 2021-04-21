@@ -1,0 +1,191 @@
+{%- if section.settings.show -%}
+{%- assign title = section.settings.title -%}
+{%- assign description = section.settings.description -%}
+{%- assign section_style = section.settings.style -%}
+
+<div class="position-relative" style="padding:{{ section.settings.section_padding }};background-color:{{ section.settings.color_section_bg }};">
+  {%- if section_style == '1' -%}
+    {% render 'newsletter_form_style1', section: section %}
+  {%- else -%}
+    {% render 'newsletter_form_style2', section: section %}
+  {%- endif -%}
+</div>
+<style>
+{%- if section.settings.margin_mobile -%}
+#shopify-section-{{ section.id }}{
+  margin:{{ section.settings.margin_mobile }}
+}
+{%- endif -%}
+{%- if section.settings.margin_laptop -%}
+@media screen and (min-width: 768px){
+  #shopify-section-{{ section.id }}{
+    margin:{{ section.settings.margin_laptop }}
+  }
+}
+{%- endif -%}
+{%- if section.settings.section_margin -%}
+@media screen and (min-width: 1400px){
+  #shopify-section-{{ section.id }}{
+    margin:{{ section.settings.section_margin }}
+  }
+}
+{%- endif -%}
+</style>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Newsletter",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show",
+      "label": "Show this section",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Section Settings"
+    },
+    {
+      "type": "color",
+      "id": "color_section_bg",
+      "label": "Section background color",
+      "default": "#7bae23"
+    },
+    {
+      "type": "select",
+      "id": "style",
+      "label": "Style",
+      "options": [
+        { "value": "1", "label": "Style 1" },
+        { "value": "2", "label": "Style 2" },
+        { "value": "3", "label": "Style 3" }
+      ],
+      "default": "1"
+    },
+    {
+      "type": "text",
+      "id": "section_width",
+      "label": "Section Width",
+      "info": "This setting only works for Style 3",
+      "default": "100%"
+    },
+    {
+      "type": "header",
+      "content": "Content Settings"
+    },
+    {
+      "type": "textarea",
+      "id": "title",
+      "label": "Form Title",
+      "default": "Sign up for our newsletter"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "and enjoy <b>-15% off</b> your first purchase!"
+    },
+    {
+      "type": "header",
+      "content": "Color Settings"
+    },
+    {
+      "type": "color",
+      "id": "color_title",
+      "label": "Title Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "c_title_bg",
+      "label": "Title background color",
+      "info": "This setting only works for Style 3",
+      "default": "#f8f8f8"
+    },
+    {
+      "type": "color",
+      "id": "color_desc",
+      "label": "Description Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "color_input_bg",
+      "label": "Input box background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "color_input",
+      "label": "Input box text color",
+      "default": "#454648"
+    },
+    {
+      "type": "color",
+      "id": "color_btn_bg",
+      "label": "Button background color",
+      "default": "#669c07"
+    },
+    {
+      "type": "color",
+      "id": "color_btn",
+      "label": "Button text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "color_btn_hover",
+      "label": "Button hover background",
+      "default": "#b9d40b"
+    },
+    {
+      "type": "color",
+      "id": "c_form_bg",
+      "label": "Form background color",
+      "default": "#dddddd"
+    },
+    {
+      "type": "header",
+      "content": "Space settings",
+      "info": "sequence: top-right-bottom-left (ex: 0 0 10px 0)"
+    },
+    {
+      "type": "paragraph",
+      "content": "Space between other sections"
+    },
+    {
+      "type": "text",
+      "id": "section_margin",
+      "label": "Margin on desktop"
+    },
+    {
+      "type": "text",
+      "id": "margin_laptop",
+      "label": "Margin on laptop"
+    },
+    {
+      "type": "text",
+      "id": "margin_mobile",
+      "label": "Margin on mobile"
+    },
+    {
+      "type": "paragraph",
+      "content": "Space inside the section"
+    },
+    {
+      "type": "text",
+      "id": "section_padding",
+      "label": "Section Padding",
+      "default": "25px 0 25px 0",
+      "info": "Useful when section background color is set"
+    }
+  ],
+  "presets": [{
+    "name": "Newsletter",
+    "category": "Newsletter"
+  }]
+}
+{% endschema %}

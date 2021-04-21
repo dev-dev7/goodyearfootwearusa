@@ -1,0 +1,151 @@
+<div id="vndPopupsContainer">
+{%- if settings.enable_newsletter_popup and request.page_type == 'index' -%}
+
+{% assign form_action = settings.newsletter_form_action %}
+{%- if settings.newsletter_bg != blank -%}
+  {% capture newsletter_bg %}<img class="image-bg lazyload lazypreload" data-src="{{ settings.newsletter_bg | img_url: 'master' }}"/>{% endcapture %}
+  {%- assign ar = 100 | divided_by: settings.newsletter_bg.aspect_ratio -%}
+{%- else -%}
+  {%- assign ar = 59.21 -%}
+{%- endif -%}
+
+<div style="display: none;">
+  <div id="newsletter-popup" class="vnd-pp-content">
+    {%- if settings.newsletter_type == 'custom' -%}
+      {{ settings.newsletter_content_html }}
+    {%- else -%}
+      <div class="position-relative" style="min-height:360px;padding-top:{{ ar }}%;background-color:{{ settings.newsletter_bg_c }}">
+        {{ newsletter_bg }}
+
+        <div class="text-content v-center ds-flex" style="width: 100%;">
+          <div class="{{ settings.newsletter_type }} {{ settings.newsletter_content_pos }} {{ settings.newsletter_content_align }}">
+              {%- if settings.newsletter_popup_subtitle != blank-%}
+                <p class="newsletter-popup_subtitle">{{ settings.newsletter_popup_subtitle | newline_to_br }}</p>
+              {%- endif -%}
+
+              {%- if settings.newsletter_popup_title != blank-%}
+                <h3>{{ settings.newsletter_popup_title | newline_to_br }}</h3>
+              {%- endif -%}
+
+              {%- if settings.newsletter_popup_desc != blank-%}
+                <p class="newsletter-popup_desc">{{ settings.newsletter_popup_desc | newline_to_br }}</p>
+              {%- endif -%}
+
+              {%- if settings.newsletter_service == 'shopify-default' -%}
+                {% form 'customer', class: 'form-newsletter position-relative', id: form.id %}
+                  {% render 'form_status', form: form, form_id: formId, success_message: 'general.newsletter_form.confirmation' | t %}
+                  {% unless form.posted_successfully? %}
+                    <input type="hidden" name="contact[tags]" value="newsletter">
+                    <input type="email" name="contact[email]" class="input-strict" value="{% if customer %}{{ customer.email }}{% endif %}" placeholder="Enter your email address" autocorrect="off" autocapitalize="off" required>
+                    {%- if settings.newsletter_type == 'newsletter-style' -%}
+                      <button type="submit" name="commit" class="btn-icon">{% render 'icon-arrow-right' %}</button>
+                    {%- elsif settings.newsletter_type == 'textbox' -%}
+                      <button type="submit" class="btn btn-default btn-newsletter">{{ settings.newsletter_popup_btn }}</button>
+                    {%- else -%}
+                      <button type="submit" name="commit" class="link-color btn-newsletter">{{ settings.newsletter_popup_btn }}&#32;&#62;</button>
+                    {%- endif -%}
+                  {% endunless %}
+                {% endform %}
+              {%- else -%}
+
+                <form action="{{ form_action }}" method="post" name="mc-embedded-subscribe-form" class="form-newsletter position-relative">
+                  <input class="input-strict" placeholder="Enter your email address" type="email" value="{% if customer %}{{ customer.email }}{% endif %}" name="EMAIL" required/>
+                  {%- if settings.newsletter_type == 'newsletter-style' -%}
+                    <button type="submit" class="btn-icon">{% render 'icon-arrow-right' %}</button>
+                  {%- elsif settings.newsletter_type == 'textbox' -%}
+                    <button type="submit" class="btn btn-default btn-newsletter">{{ settings.newsletter_popup_btn }}</button>
+                  {%- else -%}
+                    <button type="submit" class="link-color btn-newsletter">{{ settings.newsletter_popup_btn }}&#32;&#62;</button>
+                  {%- endif -%}
+                </form>
+              {%- endif -%}
+
+              {%- if settings.newsletter_type == 'newsletter-style' -%}
+                <div class="subscribe-config">
+                  <input type="checkbox" id="disable-newsletter">
+                  <label style="color:{{ settings.newsletter_desc_c }}" for="disable-newsletter">{{ 'general.newsletter_form.hide_now' | t }}</label>
+                </div>
+              {%- endif -%}
+          </div><!-- content-pos -->
+        </div><!-- slideshow-content -->
+      </div><!-- position-relative -->
+      <style>
+      #newsletter-popup .text-content h3{color:{{ settings.newsletter_title_c }};}
+      #newsletter-popup .text-content .newsletter-popup_desc{color:{{ settings.newsletter_desc_c }};}
+      #newsletter-popup .text-content .newsletter-popup_subtitle{color:{{ settings.newsletter_subtitle_c }};}
+      @media all and (min-width: 768px) {
+        #newsletter-popup .text-content h3{font-size:{{ settings.font_nsl_title_size}}px;}
+        #newsletter-popup .text-content .newsletter-popup_desc{font-size:{{ settings.font_nsl_desc_size}}px;}
+        #newsletter-popup .text-content .newsletter-popup_subtitle{font-size:{{ settings.font_nsl_subtitle_size}}px;}
+      }
+      </style>
+    {%- endif -%}
+  </div><!-- newsletter-popup -->
+</div>
+
+{%- endif -%}
+
+<div id="user-notice" class="user-notice">
+  <div class="container ds-flex align-start msg-notice">
+    <div class="icon icon-success">{% render 'icon-ticksign' %}</div>
+    <div class="icon icon-warn">{% render 'icon-attention' %}</div>
+    <div class="icon icon-error">{% render 'icon-close-thick' %}</div>
+    <div class="icon icon-info">{% render 'icon-information2' %}</div>
+    <div class="heading"></div>
+    <div class="message"></div>
+    <div class="us-nt__c ml-auto">{% render 'icon-close' %}</div>
+  </div>
+</div>
+
+{%- if settings.enable_login_popup -%}
+<div class="vpp-bx-wrapper" id="account-popup">
+<div class="vpp-bx account-box">
+  {%- if shop.customer_accounts_enabled -%}
+    {%- if customer -%}
+      <li class="menu-item">
+        <a href="/account/logout" class="menu-item-link" data-no-instant>{{ 'customer.logout.title' | t }}</a>
+      </li>
+      <li class="menu-item">
+        <a href="/account" class="menu-item-link" data-no-instant>{{ 'customer.account.title' | t }}</a>
+      </li>
+    {%- else -%}
+      {% form 'customer_login' %}
+        <h3 class="popup-title">{{ 'customer.login.title' | t }}</h3>
+
+        {{ form.errors | default_errors }}
+
+        <label class="form-label" for="customer_email">{{ 'customer.login.email' | t }}</label>
+        <div class="position-relative">
+          <input class="form-input" type="email" name="customer[email]" />
+        </div>
+
+        <label class="form-label" for="customer_password">{{ 'customer.login.password' | t }}</label>
+        <div class="position-relative">
+          <input class="form-input" type="password" name="customer[password]" />
+        </div>
+
+        <input type="hidden" name="checkout_url" id="login_redirect" value="" />
+
+        <input class="btn btn-default" type="submit" value="{{ 'customer.login.sign_in' | t }}" />
+      {% endform %}
+
+      <div class="text-center other-links">
+        {{ 'customer.register.title' | t | customer_register_link }}
+        <a href="/account/login#recover" data-no-instant>{{ 'customer.login.forgot_password' | t }}</a>
+      </div>
+    {%- endif -%}
+  {%- endif -%}
+<div class="vpp-close">{% render 'icon-close' %}</div>
+</div><!-- .vpp-bx.account-box -->
+</div><!-- .vpp-bx-wrapper -->
+{%- endif -%}
+
+<div class="vnd-loading-scr" style="display: none">{% render 'render_icon', icon_name: settings.anm_loading_pp %}</div>
+
+<div id="mobile-menu-overlay"></div>
+{%- if settings.enable_scroll_top -%}
+<div id="toPageTop" style="color:{{ settings.c_scroll_top }}">
+  {% render 'icon-arrow-up' %}
+</div>
+{%- endif -%}
+</div>

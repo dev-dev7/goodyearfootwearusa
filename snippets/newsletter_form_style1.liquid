@@ -1,0 +1,44 @@
+{% comment %}
+Renders newsletter form style 1
+  Accepts:
+    - section: {Object} content type - section/block
+      = title: {String} newsletter form title
+      = description: {String} Newsletter form description
+      = style: {Number} newsletter form style (value: 1)
+
+  Usage:
+    {% render 'newsletter_form_style1', section: section %}
+    {% render 'newsletter_form_style1', section: block %}
+{% endcomment %}
+<div class="newsletter newsletter-form container ds-flex flex-wrap align-center style1 newsletter-{{ section.id }}">
+  <div class="ds-flex align-center">
+    {% render 'icon-sendmessage' %}
+    <div class="ds-flex flex-column">
+      <h3 class="title">{{ section.settings.title | newline_to_br }}</h3>
+      <p class="newsletter-subtitle">{{ section.settings.description | newline_to_br }}</p>
+    </div>
+  </div><!-- .ds-flex.align-center -->
+  {%- if settings.newsletter_service == 'shopify-default' -%}
+    {% form 'customer', class: 'form-newsletter ds-flex', id: form.id %}
+      {% render 'form_status', form: form, form_id: formId, success_message: 'general.newsletter_form.confirmation' | t %}
+      {% unless form.posted_successfully? %}
+        <input type="hidden" name="contact[tags]" value="newsletter">
+        <input type="email" name="contact[email]" class="input-round" value="{% if customer %}{{ customer.email }}{% endif %}" placeholder="{{ 'general.newsletter_form.email_placeholder' | t }}" autocorrect="off" autocapitalize="off" required>
+        <button type="submit" name="commit" class="btn btn-round">{{ 'general.newsletter_form.submit' | t }}</button>
+      {% endunless %}
+    {% endform %}
+  {%- else -%}
+    <form action="{{ settings.newsletter_form_action }}" method="post" name="mc-embedded-subscribe-form" class="form-newsletter ds-flex">
+      <input class="input-round" placeholder="{{ 'general.newsletter_form.email_placeholder' | t }}" type="email" value="{% if customer %}{{ customer.email }}{% endif %}" name="EMAIL" required/>
+      <button type="submit" name="subscribe" class="btn btn-round">{{ 'general.newsletter_form.submit' | t }}</button>
+    </form>
+  {%- endif -%}
+</div><!-- .newsletter -->
+<style>
+.newsletter-{{ section.id }} .title{color:{{section.settings.color_title}}}
+.newsletter-{{ section.id }} .newsletter-subtitle{color:{{section.settings.color_desc}}}
+.newsletter-{{ section.id }} input{background-color:{{section.settings.color_input_bg }};color:{{section.settings.color_input}}}
+.newsletter-{{ section.id }} svg{fill:{{section.settings.color_title}}}
+.newsletter-{{ section.id }} .btn-round{background-color:{{section.settings.color_btn_bg}};color:{{section.settings.color_btn}}}
+.newsletter-{{ section.id }} .btn-round:hover{background-color:{{section.settings.color_btn_hover}}}
+</style>

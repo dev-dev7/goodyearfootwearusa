@@ -1,0 +1,1197 @@
+<style>
+#shopify-section-{{ section.id }} .sidebar-block {
+  padding-top: {{ section.settings.blocks_gap }}px;
+  padding-bottom: {{ section.settings.blocks_gap }}px;
+}
+#shopify-section-{{ section.id }} .sidebar-block:first-child {
+  padding-top: 0;
+}
+#shopify-section-{{ section.id }} .block-promo {
+  padding-top: 1.5rem;
+}
+#shopify-section-{{ section.id }} .block-advertise {
+  padding-top: 2rem;
+}
+#shopify-section-{{ section.id }} .block-advertise svg {
+  background-color: #5b6a6a;
+}
+</style>
+<div style="margin: {{ section.settings.margin }}">
+  <div class="container style1">
+    <div class="row">
+      {%- if section.settings.sidebar_pos != 'none' -%}
+        <div class="mobile-sidebar-toggler">
+          {% render 'icon-dir-left' %}
+        </div>
+        <div class="mobile-sidebar home-sidebar large-3 col-padding height-100 {{ section.settings.sidebar_pos }}">
+
+          {%- if section.settings.show_newsletter -%}
+            <div class="sidebar-block">
+              {% render 'sidebar_newsletter', block_title: section.settings.newsletter_title, text: section.settings.newsletter_text, button: section.settings.newsletter_button %}
+            </div>
+          {%- endif -%}
+
+          {%- if section.settings.show_bestseller -%}
+            <div class="sidebar-block">
+              {% render 'sidebar_collection_carousel', block_title: section.settings.bestseller_title,
+                collection_name: section.settings.bestseller_collection, show_count: section.settings.bestseller_show_count,
+                prd_img_ft: section.settings.bestseller_prd_img_ft %}
+            </div>
+          {%- endif -%}
+
+          {%- if section.settings.show_testimonials -%}
+            <div class="sidebar-block">
+              {% render 'sidebar_testimonials', block_title: section.settings.testimonials_title, author1: section.settings.testimonial_author1,
+                content1: section.settings.testimonial_content1, img1: section.settings.testimonial_img1,
+                time1: section.settings.testimonial_time1, author2: section.settings.testimonial_author2,
+                content2: section.settings.testimonial_content2, img2: section.settings.testimonial_img2,
+                time2: section.settings.testimonial_time2 %}
+            </div>
+          {%- endif -%}
+
+          {%- if section.settings.show_blog -%}
+            <div class="sidebar-block">
+              {% render 'sidebar_blog', block_title: section.settings.blogs_title, selected: section.settings.blog,
+                show_count: section.settings.blog_show_count %}
+            </div>
+          {%- endif -%}
+
+          {%- if section.settings.show_deals -%}
+            <div class="sidebar-block">
+              {% include 'sidebar_deal_products', collection_name: section.settings.deal_collection, block_title: section.settings.latest_deals_title,
+                show_deals_swatch: section.settings.show_deals_swatch, deals_show_count: section.settings.deals_show_count,
+                prd_img_ft: section.settings.deals_prd_img_ft %}
+            </div>
+          {%- endif -%}
+
+          {%- if section.settings.show_promo -%}
+            <div class="sidebar-block block-promo">
+              {%- for index in (1..3) -%}
+                {% capture icon_index %}promo_icon{{ index }}{% endcapture %}
+                {% capture title_index %}promo_title{{ index }}{% endcapture %}
+                {% capture text_index %}promo_text{{ index }}{% endcapture %}
+                {% assign promo_icon = section.settings[icon_index] %}
+                {% assign promo_title = section.settings[title_index] %}
+                {% assign promo_text = section.settings[text_index] %}
+                {% include 'promotion', promo_icon: promo_icon, promo_title: promo_title, promo_text: promo_text %}
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+
+          {%- if section.settings.show_advertise -%}
+            <div class="sidebar-block block-advertise">
+              {%- assign advertise_img = section.settings.advertise_img -%}
+              {%- assign advertise_subtitle = section.settings.advertise_subtitle -%}
+              {%- assign advertise_title    = section.settings.advertise_title -%}
+              {%- assign advertise_text_style = section.settings.advertise_text_style -%}
+              {%- assign advertise_thp   = section.settings.advertise_thp -%}
+              {%- assign advertise_tvp   = section.settings.advertise_tvp -%}
+              {%- assign advertise_color = section.settings.advertise_color -%}
+              {%- assign advertise_ta    = section.settings.advertise_ta -%}
+              {% render 'sidebar_advertise', img: advertise_img, subtitle: advertise_subtitle, block_title: advertise_title,
+                style: advertise_text_style, color: advertise_color, thp: advertise_thp, tvp: advertise_tvp, ta: advertise_ta %}
+            </div>
+          {%- endif -%}
+
+        </div><!-- .mobile-sidebar.home-sidebar.large-3 -->
+
+        <div class="large-9 col-padding height-100">
+      {%- else -%}
+        <div class="large-12 col-padding">
+      {%- endif -%}
+          {%- for block in section.blocks -%}
+            <div class="content-block" {{block.shopify_attributes}}>
+              {%- case block.type -%}
+                {%- when 'collections_tab' -%}
+                  {% include 'collections_tab' with block, c_type: 'block' %}
+                {%- when 'products_masonry' -%}
+                  {% include 'products_masonry' with block %}
+                {%- when 'latest_news' -%}
+                  {% render 'latest_news' with block %}
+                {%- when 'text_image2' -%}
+                  {% render 'text_image2' with block %}
+                {%- when 'manufacturer_slider' -%}
+                  {% render 'manufacturer_slider' with block %}
+                {%- else -%}
+                  {% render 'simple_slideshow' with block %}
+              {%- endcase -%}
+            </div>
+          {%- endfor -%}
+        </div><!-- .large-9 / .large-12 -->
+    </div><!-- .row -->
+  </div><!-- .container.style1 -->
+</div>
+
+{% schema %}
+{
+  "name": "Section with sidebar 1",
+  "tag": "section",
+  "class": "vs-group-content",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Settings"
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "Section Margin",
+      "info": "Set margin for section top-right-bottom-left (e.g. 20px 15px 10px 0)",
+      "default": "0 0 120px 0"
+    },
+    {
+      "type": "header",
+      "content": "Sidebar Settings",
+      "info": "Configure Sidebar"
+    },
+    {
+      "type": "range",
+      "id": "blocks_gap",
+      "min": 0,
+      "max": 60,
+      "step": 1,
+      "unit": "px",
+      "label": "Sidebar Block top/bottom padding",
+      "default": 40
+    },
+    {
+      "type": "select",
+      "id": "sidebar_pos",
+      "label": "Show Sidebar",
+      "options": [
+        { "value": "right", "label": "Right" },
+        { "value": "left", "label": "Left" },
+        { "value": "none", "label": "Hide" }
+      ],
+      "default": "right"
+    },
+    {
+      "type": "paragraph",
+      "content": "=== Newsletter Form ==="
+    },
+    {
+      "type": "checkbox",
+      "id": "show_newsletter",
+      "label": "Show Newsletter Form",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "newsletter_title",
+      "label": "Form Title",
+      "default": "NEWSLETTER"
+    },
+    {
+      "type": "textarea",
+      "id": "newsletter_text",
+      "label": "Description",
+      "default": "Subscribe for the latest styles and sales, plus get 25% off your first order."
+    },
+    {
+      "type": "text",
+      "id": "newsletter_button",
+      "label": "Button text",
+      "default": "Submit"
+    },
+    {
+      "type": "paragraph",
+      "content": "=== Bestseller Slideshow ==="
+    },
+    {
+      "type": "checkbox",
+      "id": "show_bestseller",
+      "label": "Show Bestseller",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "bestseller_title",
+      "label": "Block Title",
+      "default": "bestsellers"
+    },
+    {
+      "type": "collection",
+      "id": "bestseller_collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "bestseller_show_count",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "label": "Number of Products to show at once",
+      "default": 3
+    },
+    {
+      "type": "radio",
+      "id": "bestseller_prd_img_ft",
+      "label": "Add darkness to product images",
+      "options": [
+        { "value": "img-br-100", "label": "No" },
+        { "value": "img-br-97", "label": "Yes" }
+      ],
+      "default": "img-br-97",
+      "info": "Recommended for white background product images"
+    },
+    {
+      "type": "paragraph",
+      "content": "=== Testimonial Slideshow ==="
+    },
+    {
+      "type": "checkbox",
+      "id": "show_testimonials",
+      "label": "Show Testimonials",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "testimonials_title",
+      "label": "Block Title",
+      "default": "testimonials"
+    },
+    {
+      "type": "text",
+      "id": "testimonial_author1",
+      "label": "Author Name",
+      "default": "MARK LEWIS,"
+    },
+    {
+      "type": "image_picker",
+      "id": "testimonial_img1",
+      "label": "Author Image"
+    },
+    {
+      "type": "textarea",
+      "id": "testimonial_content1",
+      "label": "Content",
+      "default": "Vestibulum ante ipsum primis faucibus orci luctus et ultrices posu ere cubilia curae. Quisque sceler isque mollis..."
+    },
+    {
+      "type": "text",
+      "id": "testimonial_time1",
+      "label": "Published Time",
+      "default": "May 14, 2019"
+    },
+    {
+      "type": "text",
+      "id": "testimonial_author2",
+      "label": "Author Name",
+      "default": "William,"
+    },
+    {
+      "type": "image_picker",
+      "id": "testimonial_img2",
+      "label": "Author Image"
+    },
+    {
+      "type": "textarea",
+      "id": "testimonial_content2",
+      "label": "Content",
+      "default": "Faucibus orci ante ipsum primis posu luctus et ultrices vestibulum ere cubilia curae. Quisque sceler isque mollis..."
+    },
+    {
+      "type": "text",
+      "id": "testimonial_time2",
+      "label": "Published Time",
+      "default": "Apr 21, 2019"
+    },
+    {
+      "type": "paragraph",
+      "content": "=== Popular Post Slideshow ==="
+    },
+    {
+      "type": "checkbox",
+      "id": "show_blog",
+      "label": "Show Popular Post",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "blogs_title",
+      "label": "Block Title",
+      "default": "popular post"
+    },
+    {
+      "type": "blog",
+      "id": "blog",
+      "label": "Select Blog"
+    },
+    {
+      "type": "range",
+      "id": "blog_show_count",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "label": "Number of articles to show at once",
+      "default": 3
+    },
+    {
+      "type": "paragraph",
+      "content": "=== Latest Deals Slideshow ==="
+    },
+    {
+      "type": "checkbox",
+      "id": "show_deals",
+      "label": "Show Latest Deals",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "latest_deals_title",
+      "label": "Block Title",
+      "default": "latest deals"
+    },
+    {
+      "type": "collection",
+      "id": "deal_collection",
+      "label": "Collection"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_deals_swatch",
+      "label": "Show Color Swatch",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "deals_show_count",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "label": "Maximun Number of Products to show",
+      "default": 3
+    },
+    {
+      "type": "radio",
+      "id": "deals_prd_img_ft",
+      "label": "Add darkness to product images",
+      "options": [
+        { "value": "img-br-100", "label": "No" },
+        { "value": "img-br-97", "label": "Yes" }
+      ],
+      "default": "img-br-97",
+      "info": "Recommended for white background product images"
+    },
+    {
+      "type": "paragraph",
+      "content": "=== Promotion Text ==="
+    },
+    {
+      "type": "checkbox",
+      "id": "show_promo",
+      "label": "Show Promotion Text",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "promo_icon1",
+      "label": "Icon 1",
+      "default": "icon-truck"
+    },
+    {
+      "type": "text",
+      "id": "promo_title1",
+      "label": "Title 1",
+      "default": "Free Delivery"
+    },
+    {
+      "type": "textarea",
+      "id": "promo_text1",
+      "label": "Text 1",
+      "default": "Cras pellentesque, nisi ac tempus pellentesqna"
+    },
+    {
+      "type": "text",
+      "id": "promo_icon2",
+      "label": "Icon 2",
+      "default": "icon-headset2"
+    },
+    {
+      "type": "text",
+      "id": "promo_title2",
+      "label": "Title 2",
+      "default": "24/h support"
+    },
+    {
+      "type": "textarea",
+      "id": "promo_text2",
+      "label": "Text 2",
+      "default": "Pellenteque habitant morbi senectus et netus et male"
+    },
+    {
+      "type": "text",
+      "id": "promo_icon3",
+      "label": "Icon 3",
+      "default": "icon-lock-wide"
+    },
+    {
+      "type": "text",
+      "id": "promo_title3",
+      "label": "Title 3",
+      "default": "payment secured"
+    },
+    {
+      "type": "textarea",
+      "id": "promo_text3",
+      "label": "Text 3",
+      "default": "Mauris interdum nulla ante dignissim, vel malesuada"
+    },
+    {
+      "type": "paragraph",
+      "content": "=== Advertisement Block ==="
+    },
+    {
+      "type": "checkbox",
+      "id": "show_advertise",
+      "label": "Show Advertisement",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "advertise_img",
+      "label": "Background Image"
+    },
+    {
+      "type": "text",
+      "id": "advertise_subtitle",
+      "label": "Sub Title",
+      "default": "A 13\" notebook"
+    },
+    {
+      "type": "textarea",
+      "id": "advertise_title",
+      "label": "Text",
+      "default": "The power to\nmove you."
+    },
+    {
+      "type": "select",
+      "id": "advertise_text_style",
+      "label": "Content style",
+      "options": [
+        { "value": "default", "label": "Green Style" },
+        { "value": "top-left", "label": "Blue Style" }
+      ],
+      "default": "default"
+    },
+    {
+      "type": "select",
+      "id": "advertise_thp",
+      "label": "Horizontal position of content",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "advertise_tvp",
+      "label": "Vertical position of content",
+      "options": [
+        { "value": "v-top", "label": "Top" },
+        { "value": "v-center", "label": "Center" },
+        { "value": "v-bottom", "label": "Bottom" }
+      ],
+      "default": "v-center"
+    },
+    {
+      "type": "select",
+      "id": "advertise_ta",
+      "label": "Text alignment of content",
+      "options": [
+        { "value": "text-left", "label": "Left" },
+        { "value": "text-center", "label": "Center" },
+        { "value": "text-right", "label": "Right" }
+      ],
+      "default": "text-center"
+    },
+    {
+      "type": "color",
+      "id": "advertise_color",
+      "label": "Advertisement Text Color",
+      "default": "#fff"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "products_masonry",
+      "name": "Deal of the day",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "deal of the day"
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "range",
+          "id": "rows",
+          "label": "Number of rows",
+          "min": 1,
+          "max": 6,
+          "step": 1,
+          "default": 2
+        },
+        {
+          "type": "range",
+          "id": "cols",
+          "label": "Number of cols",
+          "min": 1,
+          "max": 3,
+          "step": 1,
+          "default": 2
+        },
+        {
+          "type": "select",
+          "id": "card_style",
+          "label": "Product Card Style",
+          "options": [
+            { "value": "vertical-default", "label": "Vertical default" },
+            { "value": "vertical-classic", "label": "Vertical classic" },
+            { "value": "vertical-progressive", "label": "Vertical progressive" },
+            { "value": "vertical-modern", "label": "Vertical modern" },
+            { "value": "horizontal-advanced", "label": "Horizontal advanced" },
+            { "value": "horizontal-classic", "label": "Horizontal classic" },
+            { "value": "horizontal-default", "label": "Horizontal default" },
+            { "value": "horizontal-modern", "label": "Horizontal modern" },
+            { "value": "horizontal-progressive", "label": "Horizontal progressive" }
+          ],
+          "default": "vertical-default"
+        },
+        {
+          "type": "select",
+          "id": "main_style",
+          "label": "Main Product Card Style",
+          "options": [
+            { "value": "vertical-advanced", "label": "Vertical advanced" },
+            { "value": "vertical-classic", "label": "Vertical classic" },
+            { "value": "vertical-default", "label": "Vertical default" },
+            { "value": "vertical-modern", "label": "Vertical modern" },
+            { "value": "vertical-progressive", "label": "Vertical progressive" }
+          ],
+          "default": "vertical-default"
+        },
+        {
+          "type": "radio",
+          "id": "prd_img_ft",
+          "label": "Add darkness to product images",
+          "options": [
+            { "value": "img-br-100", "label": "No" },
+            { "value": "img-br-97", "label": "Yes" }
+          ],
+          "default": "img-br-97",
+          "info": "Recommended for white background product images"
+        },
+        {
+          "type": "checkbox",
+          "id": "card_shadow",
+          "label": "Show boxshadow around product cards",
+          "default": false
+        }
+      ]
+    },
+    {
+      "type": "text_image2",
+      "name": "Text with Image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image1",
+          "label": "Banner Image 1",
+          "info": "420px*235px recommended"
+        },
+        {
+          "type": "text",
+          "id": "subtitle1",
+          "label": "Sub Title",
+          "default": "SEE THE GREAT"
+        },
+        {
+          "type": "text",
+          "id": "title1",
+          "label": "Title",
+          "default": "NEXT IS NOW"
+        },
+        {
+          "type": "textarea",
+          "id": "description1",
+          "label": "Description",
+          "default": "Starting at <span>$720.00</span>"
+        },
+        {
+          "type": "text",
+          "id": "link_text1",
+          "label": "Button Text"
+        },
+        {
+          "type": "url",
+          "id": "link1",
+          "label": "Banner 1 link"
+        },
+        {
+          "type": "image_picker",
+          "id": "image2",
+          "label": "Banner Image 2",
+          "info": "420px*235px recommended"
+        },
+        {
+          "type": "text",
+          "id": "subtitle2",
+          "label": "Sub Title",
+          "default": "$100 DICCOUNT OFF THE"
+        },
+        {
+          "type": "text",
+          "id": "title2",
+          "label": "Title",
+          "default": "HEADPHONES"
+        },
+        {
+          "type": "textarea",
+          "id": "description2",
+          "label": "Description"
+        },
+        {
+          "type": "text",
+          "id": "link_text2",
+          "label": "Button Text",
+          "default": "ORDER NOW"
+        },
+        {
+          "type": "url",
+          "id": "link2",
+          "label": "Banner 2 link"
+        },
+        {
+          "type": "image_picker",
+          "id": "image3",
+          "label": "Banner Image 3",
+          "info": "420px*500px recommended"
+        },
+        {
+          "type": "text",
+          "id": "subtitle3",
+          "label": "Sub Title 3",
+          "default": "EXCLUSIVE"
+        },
+        {
+          "type": "textarea",
+          "id": "title3",
+          "label": "Title",
+          "default": "DISCOUNTS\n& OFFERS"
+        },
+        {
+          "type": "textarea",
+          "id": "description3",
+          "label": "Description",
+          "default": "Lorem ipsum dolor sit amet, consectetur adipiscing elit mauris finibus"
+        },
+        {
+          "type": "text",
+          "id": "link_text3",
+          "label": "Button Text",
+          "default": "READ MORE"
+        },
+        {
+          "type": "url",
+          "id": "link3",
+          "label": "Banner 3 link"
+        }
+      ]
+    },
+    {
+      "type": "collections_tab",
+      "name": "Collections tab",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Section Title",
+          "default": "latest products"
+        },
+        {
+          "type": "select",
+          "id": "tab_title_style",
+          "label": "Tab Item Font Style",
+          "options": [
+            { "value": "default", "label": "Default" },
+            { "value": "italic", "label": "Italic" }
+          ],
+          "default": "italic"
+        },
+        {
+          "type": "header",
+          "content": "Card style configuration"
+        },
+        {
+          "type": "select",
+          "id": "card_style",
+          "label": "Product Card Style",
+          "options": [
+            { "value": "vertical-advanced", "label": "Vertical advanced" },
+            { "value": "vertical-classic", "label": "Vertical classic" },
+            { "value": "vertical-default", "label": "Vertical default" },
+            { "value": "vertical-modern", "label": "Vertical modern" },
+            { "value": "vertical-progressive", "label": "Vertical progressive" },
+            { "value": "horizontal-advanced", "label": "Horizontal advanced" },
+            { "value": "horizontal-classic", "label": "Horizontal classic" },
+            { "value": "horizontal-default", "label": "Horizontal default" },
+            { "value": "horizontal-progressive", "label": "Horizontal progressive" },
+            { "value": "horizontal-modern", "label": "Horizontal modern" }
+          ],
+          "default": "vertical-default"
+        },
+        {
+          "type": "checkbox",
+          "id": "card_border",
+          "label": "Show border around product cards",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "card_shadow",
+          "label": "Show boxshadow around product cards",
+          "default": false
+        },
+        {
+          "type": "radio",
+          "id": "prd_img_ft",
+          "label": "Add darkness to product images",
+          "options": [
+            { "value": "img-br-100", "label": "No" },
+            { "value": "img-br-97", "label": "Yes" }
+          ],
+          "default": "img-br-97",
+          "info": "Recommended for white background product images"
+        },
+        {
+          "type": "header",
+          "content": "Layout configuration"
+        },
+        {
+          "type": "range",
+          "id": "cols",
+          "label": "Number of columns",
+          "min": 1,
+          "max": 6,
+          "step": 1,
+          "default": 4
+        },
+        {
+          "type": "range",
+          "id": "limit",
+          "label": "Number of products to show",
+          "min": 1,
+          "max": 10,
+          "step": 1,
+          "default": 8
+        },
+        {
+          "type": "collection",
+          "id": "collection_1",
+          "label": "Collection"
+        },
+        {
+          "type": "collection",
+          "id": "collection_2",
+          "label": "Collection"
+        },
+        {
+          "type": "collection",
+          "id": "collection_3",
+          "label": "Collection"
+        },
+        {
+          "type": "collection",
+          "id": "collection_4",
+          "label": "Collection"
+        },
+        {
+          "type": "collection",
+          "id": "collection_5",
+          "label": "Collection"
+        }
+      ]
+    },
+    {
+      "type": "latest_news",
+      "name": "Latest News",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Block Settings"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Section Title",
+          "default": "latest news"
+        },
+        {
+          "type": "blog",
+          "id": "latest_blog",
+          "label": "Select Blog"
+        },
+        {
+          "type": "header",
+          "content": "Carousel Settings"
+        },
+        {
+          "type": "range",
+          "id": "cols",
+          "label": "Number of articles to show at once",
+          "min": 1,
+          "max": 4,
+          "step": 1,
+          "default": 2
+        },
+        {
+          "type": "checkbox",
+          "id": "show_dots",
+          "label": "Show Pagination Dots",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "show_nav",
+          "label": "Show Navigation",
+          "default": true
+        },
+        {
+          "type": "select",
+          "id": "nav_style",
+          "label": "Navigator position",
+          "options": [
+            { "value": "nav-top__right", "label": "Top right" },
+            { "value": "nav-top__center", "label": "Top center" },
+            { "value": "nav-middle", "label": "Middle center" }
+          ],
+          "default": "nav-top__right"
+        },
+        {
+          "type": "header",
+          "content": "Style settings"
+        },
+        {
+          "type": "select",
+          "id": "image_style",
+          "label": "Image size",
+          "options": [
+            { "value": "default", "label": "Set height relative to image" },
+            { "value": "fixed-height", "label": "Fixed height" }
+          ],
+          "default": "fixed-height"
+        },
+        {
+          "type": "select",
+          "id": "ln_style",
+          "label": "Style",
+          "options": [
+            { "value": "default", "label": "Position text under image" },
+            { "value": "text-on-right", "label": "Position text on the right" },
+            { "value": "text-override", "label": "Position text override image" }
+          ],
+          "default": "default"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_excerpt",
+          "label": "Show blog excerpt",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "show_date",
+          "label": "Show post date",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "show_comment",
+          "label": "Show comment numbers",
+          "default": false
+        },
+        {
+          "type": "select",
+          "id": "pos_date_comment",
+          "label": "Date and comment position",
+          "options": [
+            { "value": "relative", "label": "Before image" },
+            { "value": "absolute", "label": "Overwrite image" }
+          ],
+          "default": "relative"
+        },
+        {
+          "type": "header",
+          "content": "Typography Settings"
+        },
+        {
+          "type": "range",
+          "id": "size_title",
+          "label": "Title font size",
+          "min": 10,
+          "max": 30,
+          "step": 1,
+          "default": 20,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "size_excerpt",
+          "label": "Excerpt font size",
+          "min": 10,
+          "max": 20,
+          "step": 1,
+          "default": 15,
+          "unit": "px"
+        },
+        {
+          "type": "color",
+          "id": "color_title",
+          "label": "Article title color",
+          "default": "#3d3d3d"
+        },
+        {
+          "type": "color",
+          "id": "color_excerpt",
+          "label": "Article excerpt color",
+          "default": "#797979"
+        },
+        {
+          "type": "color",
+          "id": "c_time",
+          "label": "Article time color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "bg_time",
+          "label": "Article time background",
+          "default": "#90a900"
+        },
+        {
+          "type": "color",
+          "id": "bd_time",
+          "label": "Article time border",
+          "default": "#90a900"
+        },
+        {
+          "type": "color",
+          "id": "c_cmt",
+          "label": "Comment color",
+          "default": "#3f3f3f"
+        },
+        {
+          "type": "color",
+          "id": "bg_cmt",
+          "label": "Comment background",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "bd_cmt",
+          "label": "Comment border color",
+          "default": "#ebebeb"
+        }
+      ]
+    },
+    {
+      "type": "manufacturer_slider",
+      "name": "Manufacturers",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Block Title",
+          "default": "Manufacturers"
+        },
+        {
+          "type": "range",
+          "id": "cols",
+          "label": "Number of manufacturers to show at once",
+          "min": 1,
+          "max": 7,
+          "step": 1,
+          "default": 4
+        },
+        {
+          "type": "range",
+          "id": "gap",
+          "min": 0,
+          "max": 50,
+          "step": 1,
+          "label": "Space between items",
+          "default": 30
+        },
+        {
+          "type": "select",
+          "id": "nav_style",
+          "label": "Navigator position",
+          "options": [
+            { "value": "nav-top__right", "label": "Top right" },
+            { "value": "nav-top__center", "label": "Top center" },
+            { "value": "nav-middle", "label": "Middle center" }
+          ],
+          "default": "nav-top__right"
+        },
+        {
+          "type": "image_picker",
+          "id": "logo_img1",
+          "label": "Manufacturer Image 1",
+          "info": "390*260px recommended"
+        },
+        {
+          "type": "image_picker",
+          "id": "logo_img2",
+          "label": "Manufacturer Image 2",
+          "info": "390*260px recommended"
+        },
+        {
+          "type": "image_picker",
+          "id": "logo_img3",
+          "label": "Manufacturer Image 3",
+          "info": "390*260px recommended"
+        },
+        {
+          "type": "image_picker",
+          "id": "logo_img4",
+          "label": "Manufacturer Image 4",
+          "info": "390*260px recommended"
+        },
+        {
+          "type": "image_picker",
+          "id": "logo_img5",
+          "label": "Manufacturer Image 5",
+          "info": "390*260px recommended"
+        },
+        {
+          "type": "image_picker",
+          "id": "logo_img6",
+          "label": "Manufacturer Image 6",
+          "info": "390*260px recommended"
+        },
+        {
+          "type": "image_picker",
+          "id": "logo_img7",
+          "label": "Manufacturer Image 7",
+          "info": "390*260px recommended"
+        },
+        {
+          "type": "image_picker",
+          "id": "logo_img8",
+          "label": "Manufacturer Image 8",
+          "info": "390*260px recommended"
+        }
+      ]
+    },
+    {
+      "type": "simple_slideshow",
+      "name": "Image Slideshow",
+      "settings": [
+        {
+          "type": "select",
+          "id": "slide_transition",
+          "label": "Transition Effect",
+          "options": [
+            { "value": "slide", "label": "Slide" },
+            { "value": "fade", "label": "Fade" }
+          ],
+          "default": "slide"
+        },
+        {
+          "type": "text",
+          "id": "auto_speed",
+          "label": "Autoplay",
+          "info": "'5' for the slideshow to auto rotate every 5 seconds. '0' to disable auto rotate.",
+          "default": "5"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_dots",
+          "label": "Show Pagination Dots",
+          "default": true
+        },
+        {
+          "type": "color",
+          "id": "dots_color",
+          "label": "Dots Color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "color_dots_h",
+          "label": "Dots hover color"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_nav",
+          "label": "Show Navigation",
+          "default": true
+        },
+        {
+          "type": "select",
+          "id": "nav_style",
+          "label": "Navigator style",
+          "options": [
+            { "value": "slideshow-nav__big", "label": "Big" },
+            { "value": "slideshow-nav__small", "label": "Small" }
+          ],
+          "default": "slideshow-nav__small"
+        },
+        {
+          "type": "color",
+          "id": "nav_color",
+          "label": "Navigation Color",
+          "default": "#444444"
+        },
+        {
+          "type": "checkbox",
+          "id": "wrap_around",
+          "label": "Loop images",
+          "default": true
+        },
+        {
+          "type": "image_picker",
+          "id": "img1",
+          "label": "Image 1",
+          "info": "870px*570px recommended"
+        },
+        {
+          "type": "url",
+          "id": "link1",
+          "label": "Link To"
+        },
+        {
+          "type": "image_picker",
+          "id": "img2",
+          "label": "Image 2",
+          "info": "870px*570px recommended"
+        },
+        {
+          "type": "url",
+          "id": "link2",
+          "label": "Link To"
+        }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "Section with sidebar 1",
+    "category": "Main Section",
+    "blocks": [
+      { "type": "products_masonry" },
+      { "type": "text_image2" },
+      { "type": "collections_tab" },
+      { "type": "latest_news" },
+      { "type": "manufacturer_slider"}
+    ]
+  }]
+}
+{% endschema %}

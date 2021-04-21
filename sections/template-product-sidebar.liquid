@@ -1,0 +1,320 @@
+{%- liquid
+assign css = ''
+-%}
+
+{%- for block in section.blocks -%}
+  <div class="sidebar-block sidebar-block-{{ block.id }}" {{block.shopify_attributes}}>
+    {%- case block.type -%}
+      {%- when 'promotion' -%}
+        {%- for index in (1..3) -%}
+          {% capture icon_index %}promo_icon{{ index }}{% endcapture %}
+          {% capture title_index %}promo_title{{ index }}{% endcapture %}
+          {% capture text_index %}promo_text{{ index }}{% endcapture %}
+          {% assign promo_icon = block.settings[icon_index] %}
+          {% assign promo_title = block.settings[title_index] %}
+          {% assign promo_text = block.settings[text_index] %}
+          {% include 'promotion', promo_icon: promo_icon, promo_title: promo_title, promo_text: promo_text %}
+        {%- endfor -%}
+        {%- capture css -%}
+          {{ css }}
+          .sidebar-block-{{ block.id }} .promo-container {
+            border-color: {{ block.settings.color_border }};
+            border-width: {{ block.settings.border_width }}px;
+          }
+          .sidebar-block-{{ block.id }} .promo-icon {
+            color: {{ block.settings.color_icon }}
+          }
+          .sidebar-block-{{ block.id }} .promo-title {
+            color: {{ block.settings.color_title }}
+          }
+          .sidebar-block-{{ block.id }} .promo-text {
+            color: {{ block.settings.color_desc }}
+          }
+        {%- endcapture -%}
+      {%- when 'collection_carousel' -%}
+        {% render 'sidebar_collection_carousel', block_title: block.settings.bestseller_title,
+          collection_name: block.settings.bestseller_collection, show_count: block.settings.bestseller_show_count,
+          prd_img_ft: block.settings.prd_img_ft %}
+      {%- when 'sidebar_blogs' -%}
+        {% render 'sidebar_blog', block_title: block.settings.blogs_title, selected: block.settings.blog,
+            show_count: block.settings.blog_show_count %}
+      {%- else -%}
+        {%- assign advertise_img = block.settings.img -%}
+        {%- assign advertise_subtitle = block.settings.subtitle -%}
+        {%- assign advertise_title = block.settings.title -%}
+        {%- assign advertise_text_style = block.settings.advertise_text_style -%}
+        {%- assign advertise_thp = block.settings.advertise_thp -%}
+        {%- assign advertise_tvp = block.settings.advertise_tvp -%}
+        {%- assign advertise_ta = block.settings.advertise_ta -%}
+        {%- assign advertise_color = block.settings.color -%}
+        {% render 'sidebar_advertise', img: advertise_img, subtitle: advertise_subtitle, block_title: advertise_title,
+          style: advertise_text_style, color: advertise_color, thp: advertise_thp, tvp: advertise_tvp, ta: advertise_ta %}
+    {%- endcase -%}
+  </div><!-- .sidebar-block -->
+{%- endfor -%}
+
+{%- capture styles -%}
+#shopify-section-{{ section.id }} .sidebar-block { margin-top:{{ section.settings.gap_blocks }}px; }
+{{ css }}
+{%- endcapture -%}
+<style>{{ styles | strip_newlines | remove: '  ' }}</style>
+{% schema %}
+{
+  "name": "Product Page Sidebar",
+  "class": "vs-initialize-slider",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Space"
+    },
+    {
+      "type": "range",
+      "id": "gap_blocks",
+      "min": 30,
+      "max": 100,
+      "step": 1,
+      "label": "Space between blocks",
+      "default": 60
+    }
+  ],
+  "blocks": [
+    {
+      "type": "promotion",
+      "name": "Promotion blocks",
+      "settings": [
+        {
+          "type": "range",
+          "id": "border_width",
+          "min": 0,
+          "max": 5,
+          "step": 1,
+          "label": "Border width",
+          "default": 2
+        },
+        {
+          "type": "color",
+          "id": "color_border",
+          "label": "Border Color",
+          "default": "#e5e5e5"
+        },
+        {
+          "type": "color",
+          "id": "color_icon",
+          "label": "Icon Color",
+          "default": "#478107"
+        },
+        {
+          "type": "color",
+          "id": "color_title",
+          "label": "Title Color",
+          "default": "#333333"
+        },
+        {
+          "type": "color",
+          "id": "color_desc",
+          "label": "Description Color",
+          "default": "#555555"
+        },
+        {
+          "type": "text",
+          "id": "promo_icon1",
+          "label": "Icon 1 - [Browse svg icons](https://docs.flexkitux.com/pages/icons-list.html)",
+          "default": "icon-truck"
+        },
+        {
+          "type": "textarea",
+          "id": "promo_title1",
+          "label": "Title 1",
+          "default": "WE SHIPPING\nWORLDWIDE"
+        },
+        {
+          "type": "textarea",
+          "id": "promo_text1",
+          "label": "Text 1",
+          "default": "Cras pellentesque, nisi ac tempus pellentesqna"
+        },
+        {
+          "type": "text",
+          "id": "promo_icon2",
+          "label": "Icon 2 - [Browse svg icons](https://docs.flexkitux.com/pages/icons-list.html)",
+          "default": "icon-money-back-1"
+        },
+        {
+          "type": "textarea",
+          "id": "promo_title2",
+          "label": "Title 2",
+          "default": "100% MONEY BACK\nGUARANTEE"
+        },
+        {
+          "type": "textarea",
+          "id": "promo_text2",
+          "label": "Text 2",
+          "default": "Pellenteque habitant morbi senectus et netus et male"
+        },
+        {
+          "type": "text",
+          "id": "promo_icon3",
+          "label": "Icon 3 - [Browse svg icons](https://docs.flexkitux.com/pages/icons-list.html)",
+          "default": "icon-lock-wide"
+        },
+        {
+          "type": "textarea",
+          "id": "promo_title3",
+          "label": "Title 3",
+          "default": "100% SECURED\nPAYMENT"
+        },
+        {
+          "type": "textarea",
+          "id": "promo_text3",
+          "label": "Text 3",
+          "default": "Mauris interdum nulla ante dignissim, vel malesuada"
+        }
+      ]
+    },
+    {
+      "type": "collection_carousel",
+      "name": "Products Carousel",
+      "settings": [
+        {
+          "type": "text",
+          "id": "bestseller_title",
+          "label": "Block Title",
+          "default": "bestsellers"
+        },
+        {
+          "type": "collection",
+          "id": "bestseller_collection",
+          "label": "Collection"
+        },
+        {
+          "type": "range",
+          "id": "bestseller_show_count",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "label": "Number of Products to show at once",
+          "default": 3
+        },
+        {
+          "type": "radio",
+          "id": "prd_img_ft",
+          "label": "Add darkness to product images",
+          "options": [
+            { "value": "img-br-100", "label": "No" },
+            { "value": "img-br-97", "label": "Yes" }
+          ],
+          "default": "img-br-97",
+          "info": "Recommended for white background product images"
+        }
+      ]
+    },
+    {
+      "type": "sidebar_advertise",
+      "name": "Image with Text",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "img",
+          "label": "Background Image"
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "label": "Sub Title",
+          "default": "HUAWEI WATCH"
+        },
+        {
+          "type": "textarea",
+          "id": "title",
+          "label": "Text",
+          "default": "TIMELESS DESIGN"
+        },
+        {
+          "type": "select",
+          "id": "advertise_text_style",
+          "label": "Content style",
+          "options": [
+            { "value": "default", "label": "Green Style" },
+            { "value": "top-left", "label": "Blue Style" }
+          ],
+          "default": "top-left"
+        },
+        {
+          "type": "select",
+          "id": "advertise_thp",
+          "label": "Horizontal position of content",
+          "options": [
+            { "value": "left", "label": "Left" },
+            { "value": "center", "label": "Center" },
+            { "value": "right", "label": "Right" }
+          ],
+          "default": "center"
+        },
+        {
+          "type": "select",
+          "id": "advertise_tvp",
+          "label": "Vertical position of content",
+          "options": [
+            { "value": "v-top", "label": "Top" },
+            { "value": "v-center", "label": "Center" },
+            { "value": "v-bottom", "label": "Bottom" }
+          ],
+          "default": "v-center"
+        },
+        {
+          "type": "select",
+          "id": "advertise_ta",
+          "label": "Text alignment of content",
+          "options": [
+            { "value": "text-left", "label": "Left" },
+            { "value": "text-center", "label": "Center" },
+            { "value": "text-right", "label": "Right" }
+          ],
+          "default": "text-center"
+        },
+        {
+          "type": "color",
+          "id": "color",
+          "label": "Advertisement Text Color",
+          "default": "#fff"
+        }
+      ]
+    },
+    {
+      "type": "sidebar_blogs",
+      "name": "Blogs carousel",
+      "settings": [
+        {
+          "type": "text",
+          "id": "blogs_title",
+          "label": "Block Title",
+          "default": "popular post"
+        },
+        {
+          "type": "blog",
+          "id": "blog",
+          "label": "Select Blog"
+        },
+        {
+          "type": "range",
+          "id": "blog_show_count",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "label": "Number of articles to show at once",
+          "default": 3
+        }
+      ]
+    }
+  ],
+  "default": {
+    "blocks": [
+      { "type": "promotion" },
+      { "type": "collection_carousel" },
+      { "type": "sidebar_advertise" },
+      { "type": "sidebar_blogs"}
+    ]
+  }
+}
+{% endschema %}

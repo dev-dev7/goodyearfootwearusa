@@ -1,0 +1,281 @@
+{% comment %}
+This section is rendered in following product templates
+  - product.liquid
+  - product.grid-images.liquid
+  - product.media-center.liquid
+{% endcomment %}
+{%- liquid
+assign show_section = section.settings.show_section
+assign width = section.settings.width
+assign color_back = section.settings.color_back
+assign color_title = section.settings.color_title
+assign has_minheight = section.settings.has_minheight
+
+assign p_m = blank
+assign section_title = blank
+for media in product.media
+  unless media.alt contains '[vnd_special]'
+    continue
+  else
+    assign p_m = media
+    assign section_title = media.alt | remove: '[vnd_special]'
+    break
+  endunless
+endfor
+-%}
+{%- if show_section and p_m != blank -%}
+<div class="{{ width }}">
+  <div class="position-relative" style="background-color:{{ color_back }}">
+    <div class="product-showcase__wrapper">
+      {%- if section_title != blank -%}
+        <h2 class="text-center">{{ section_title }}</h2>
+      {%- endif -%}
+
+      <div class="position-relative">
+        <div class="position-relative image-container fade-appear{% if has_minheight %} has-minheight{% endif %}">
+          <div class="position-relative" style="padding-top:{{ 100 | divided_by: p_m.aspect_ratio }}%;">
+            {% render 'image', m_img: p_m %}
+          </div>
+        </div>
+
+        <div class="info-container ds-flex flex-column space-around transform-appear">
+          {%- for block in section.blocks -%}
+            {%- if block.settings.target_product != product.handle -%}
+              {%- continue -%}
+            {%- endif -%}
+            {% capture thecycle %}{% cycle 'even', 'odd' %}{% endcapture %}
+            {%- if thecycle == 'even' -%}
+              <div class="ds-flex space-between">
+                <div class="ds-flex align-center text-right" {{ block.shopify_attributes }}>
+                  <div class="text-wrapper">
+                    {%- if block.settings.title != blank -%}
+                      <h3>{{ block.settings.title }}</h3>
+                    {%- endif -%}
+                    {%- if block.settings.desc != blank -%}
+                      <p>{{ block.settings.desc | newline_to_br }}</p>
+                    {%- endif -%}
+                  </div>
+
+                  <div class="icon-wrapper ds-flex align-center justify-center">
+                    {% include 'include_icon', icon_name: block.settings.icon %}
+                  </div>
+                </div>
+            {%- else -%}
+                <div class="ds-flex align-center text-left" {{ block.shopify_attributes }}>
+                  <div class="icon-wrapper ds-flex align-center justify-center">
+                    {% include 'include_icon', icon_name: block.settings.icon %}
+                  </div>
+
+                  <div class="text-wrapper">
+                    {%- if block.settings.title != blank -%}
+                      <h3>{{ block.settings.title }}</h3>
+                    {%- endif -%}
+                    {%- if block.settings.desc != blank -%}
+                      <p>{{ block.settings.desc | newline_to_br }}</p>
+                    {%- endif -%}
+                  </div><!-- text-wrapper -->
+
+                </div><!-- .ds-flex.align-center.text-left -->
+              </div><!-- .ds-flex.space-between -->
+            {%- endif -%}
+          {%- endfor -%}
+        </div><!-- .info-container -->
+      </div><!-- .position-relative -->
+    </div><!-- product-showcase__wrapper -->
+  </div><!-- layout -->
+</div>
+
+{%- capture css -%}
+#shopify-section-{{ section.id }} { margin:{{ section.settings.margin_mobile }}; }
+@media all and (min-width: 768px) {
+  #shopify-section-{{ section.id }} { margin:{{ section.settings.margin_laptop }}; }
+}
+@media all and (min-width: 1400px) {
+  #shopify-section-{{ section.id }} { margin:{{ section.settings.margin }}; }
+}
+#shopify-section-{{ section.id }} h2 { color:{{ color_title }}; }
+#shopify-section-{{ section.id }} h3 { color: {{ section.settings.color_t }} }
+#shopify-section-{{ section.id }} p { color: {{ section.settings.color_desc }} }
+#shopify-section-{{ section.id }} .icon-wrapper {
+  background-color:{{ section.settings.color_ibg }};
+  color:{{ section.settings.color_icon }}
+}
+{%- endcapture -%}
+<style>{{ css | strip_newlines | remove: '  ' }}</style>
+{%- endif -%}
+{% schema %}
+{
+  "name": "Product Features",
+  "tag": "section",
+  "class": "vs-product-showcase",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_section",
+      "label": "Show Section",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Section Space"
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "Section Margin on Desktop",
+      "info": "Set margin for section top-right-bottom-left (e.g. 20px 15px 10px 0).",
+      "default": "130px 0 130px 0"
+    },
+    {
+      "type": "text",
+      "id": "margin_laptop",
+      "label": "Section Margin on Laptop",
+      "default": "90px 0 70px 0"
+    },
+    {
+      "type": "text",
+      "id": "margin_mobile",
+      "label": "Section Margin on Mobile",
+      "default": "60px 0 45px 0"
+    },
+    {
+      "type": "header",
+      "content": "Section Settings"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Section Width",
+      "options": [
+        { "value": "container", "label": "Fixed Width" },
+        { "value": "full-width-container", "label": "Full Width" }
+      ],
+      "default": "full-width-container"
+    },
+    {
+      "type": "checkbox",
+      "id": "has_minheight",
+      "label": "Set minimum height 320px on mobiles",
+      "info": "Background images and videos can be cropped when this option is enabled",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "color_title",
+      "label": "Title color",
+      "default": "#2d2c2c"
+    },
+    {
+      "type": "color",
+      "id": "color_back",
+      "label": "Background Color",
+      "default": "#ededed"
+    },
+    {
+      "type": "header",
+      "content": "Product Information Texts"
+    },
+    {
+      "type": "color",
+      "id": "color_t",
+      "label": "Information title color",
+      "default": "#3c3c3c"
+    },
+    {
+      "type": "color",
+      "id": "color_desc",
+      "label": "Description color",
+      "default": "#6a6a6a"
+    },
+    {
+      "type": "color",
+      "id": "color_ibg",
+      "label": "Icon background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "color_icon",
+      "label": "Icon color",
+      "default": "#3c3c3c"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "information",
+      "name": "Product information",
+      "settings": [
+        {
+          "type": "product",
+          "id": "target_product",
+          "label": "Select product to show this block",
+          "info": "By choosing a product in this setting, you will show this block in that product details page. If you don't set, this block is showed across all products that have a product media with [vnd_special] alt text."
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "All-Day Play"
+        },
+        {
+          "type": "textarea",
+          "id": "desc",
+          "label": "Description",
+          "default": "Donec semper, ante eget rutrum varius, orci\nmetus. Sed sed sapien id diam dictum ..."
+        },
+        {
+          "type": "text",
+          "id": "icon",
+          "label": "Icon Name",
+          "default": "icon-play-1"
+        }
+      ]
+    }
+  ],
+  "default": {
+    "blocks": [
+      { "type": "information" },
+      {
+        "type": "information",
+        "settings": {
+          "title": "Pure Adaptive Noise",
+          "desc": "Quisque ac quam id quam ullam. lorem corper\ndignissim ullamcorper utnisi...",
+          "icon": "icon-microphone-2"
+        }
+      },
+      {
+        "type": "information",
+        "settings": {
+          "title": "Charge and Go",
+          "desc": "Suspendisse nec nulla vitae justo lacinia ferment.\nCurabitur vitae erat fermentum viverra...",
+          "icon": "icon-microphone-1"
+        }
+      },
+      {
+        "type": "information",
+        "settings": {
+          "title": "Stereo Bluetooth",
+          "desc": "Mauris id magna ut dui pulvinar mattis in quis\nlorem.Vivamus eleifend, dui fringilla...",
+          "icon": "icon-speaker"
+        }
+      },
+      {
+        "type": "information",
+        "settings": {
+          "title": "Seemless Switching",
+          "desc": "Consectetur tincidunt, augue lacus sollicitudin\nsapien, interdum. Augue eros sed nulla...",
+          "icon": "icon-music"
+        }
+      },
+      {
+        "type": "information",
+        "settings": {
+          "title": "Noise Isolation",
+          "desc": "Praesent gravida malesuada faucibus. Etiam\nvehicula massa eget nisl ante, posuere...",
+          "icon": "icon-pause"
+        }
+      }
+    ]
+  }
+}
+{% endschema %}

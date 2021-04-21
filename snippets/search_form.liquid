@@ -1,0 +1,58 @@
+{% comment %}
+Renders search box form
+  Accepts:
+    - search_style: <String> Search form style (values: "search-box-fixed", search-box-popup", "search-line-popup")
+    - a_class: <String> Additional class name
+    - border: <String> Border width of input box and button
+    - categories: <String> Search categories
+    - cat_type: <String> Category type (values: 'product_type', 'tag')
+
+  Usage:
+    {% render 'search_form', search_style: item.settings.search_style, search_icon: item.settings.search_icon, border: item.settings.search_btn_border, categories: item.settings.categories, cat_type: item.settings.cat_type %}
+{% endcomment %}
+{%- liquid
+assign terms = search.terms | split: 'product_type:' | first
+assign terms = terms | split: 'tag:' | first
+assign terms = terms | split: 'vendor:' | first
+assign terms = terms | remove: '*' | strip
+if cat_type != blank and search.terms contains cat_type
+  assign cat_type = cat_type | append: ':'
+  assign cat_res = search.terms | split: cat_type | last
+else
+  assign cat_res = 'general.search.all_categories' | t
+endif
+-%}
+{%- if search_style contains 'search-box-category' -%}
+<a href="#" class="search-button header-search__button header-search__mobile-button">
+  {% render 'render_icon', icon_name: search_icon %}
+  <span>{{ 'general.search.submit' | t }}</span>
+</a>
+{%- endif -%}
+<form action="/search" method="get" role="search" class="header-search search-form {{ search_style }} {{ a_class }}" autocomplete="off">
+  {%- if search_style contains 'search-box-category' and categories != blank -%}
+    {%- assign cat_arr = categories | strip_newlines | strip | replace: ', ', ',' | replace: ' ,', ',' | split: ',' -%}
+    <div class="search-categories-container dd-pp__wrp position-relative">
+      <a href="#" class="search-category-name dd-pp__atv ds-flex align-center" data-cat-type="{{ cat_type }}"><span>{{ cat_res }}</span>{% render 'icon-dir-down' %}</a>
+      <ul class="list-style-none dd-pp__list">
+        <li class="search-by-cat">{{ 'general.search.all_categories' | t }}</li>
+        {%- for cat in cat_arr -%}
+          <li class="search-by-cat" data-category="{{ cat }}">{{ cat }}</li>
+        {%- endfor -%}
+      </ul>
+    </div>
+  {%- endif -%}
+  <div class="search-input-container">
+    <input type="text" name="q" class="header-search__input{% if border == '0' %} header-search__no-border{% endif %}" value="{{ terms }}"
+      placeholder="{{ 'general.search.placeholder' | t }}">
+    {%- if settings.search_predictive -%}
+      <div class="result-container"></div>
+    {%- endif -%}
+  </div>
+
+  <button type="submit" class="search-button header-search__button">
+    {% render 'render_icon', icon_name: search_icon %}
+    {%- if btn_title != blank -%}
+      <span class="search-button__title">{{ btn_title }}</span>
+    {%- endif -%}
+  </button>
+</form>

@@ -1,0 +1,23 @@
+{% comment %}
+Renders manufacturer slider as a block in sections with sidebar
+Logo settings can be found from Theme Settings
+
+  Usage:
+    {% render 'logo' %}
+{% endcomment %}
+
+<a href="{{ shop.url }}" class="logo-image">
+  {%- if settings.logo_type == 'svg' and settings.logo_svg != blank -%}
+    {% render 'render_icon', icon_name: settings.logo_svg %}
+  {%- elsif settings.logo_type == 'image' and settings.logo != blank -%}
+    <img class="logo-image__desc" src="{{ settings.logo | img_url: 'master' }}" alt="{{ shop.name }}">
+
+    {%- if settings.logo_mobile != blank -%}
+      <img class="logo-image__mobile" src="{{ settings.logo_mobile | img_url: 'master' }}" alt="{{ shop.name }}">
+    {%- else -%}
+      <img class="logo-image__mobile" src="{{ settings.logo | img_url: 'master' }}" alt="{{ shop.name }}">
+    {%- endif -%}
+  {%- else -%}
+    {{ shop.name }}
+  {%- endif -%}
+</a>

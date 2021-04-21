@@ -1,0 +1,339 @@
+{%- assign sidebar_pos = section.settings.sidebar_pos -%}
+{%- assign article_date = section.settings.article_date -%}
+{%- assign show_comment = section.settings.show_comment -%}
+{%- assign show_tags = section.settings.show_tags -%}
+{% assign number_of_comments = article.comments_count %}
+
+<div class="container" style="padding-top: {{ section.settings.p_top }};padding-bottom: {{ section.settings.p_bottom }}">
+  <div class="row">
+
+    {%- if sidebar_pos != 'none'-%}
+      <div class="mobile-sidebar-toggler">
+        {% render 'icon-dir-left' %}
+      </div>
+
+      <div class="home-sidebar mobile-sidebar height-100 large-3 col-padding {{ section.settings.sidebar_pos }}">
+        {%- for block in section.blocks -%}
+          <div class="sidebar-block" {{ block.shopify_attributes }}>
+            {%- case block.type -%}
+
+              {%- when "collection_menu" -%}
+                {% render 'collection_sidebar_navigation' %}
+
+              {%- when "sidebar_newsletter" -%}
+                {% render 'sidebar_newsletter', block_title: block.settings.title, text: block.settings.text, button: block.settings.button %}
+
+              {%- when "recent_posts" -%}
+                {% render 'sidebar_blog', block_title: block.settings.title, selected: block.settings.blog,
+                  show_count: block.settings.show_count %}
+
+              {%- else -%}
+                {% render 'post_tags', block_title: block.settings.title %}
+
+            {%- endcase -%}
+          </div><!-- .sidebar-block -->
+        {%- endfor -%}
+      </div><!-- .home-sidebar.mobile-sidebar.large-3 -->
+    {%- endif -%}
+
+    <div class="{% if sidebar_pos != 'none' %}large-9 height-100{% else %}large-12{% endif %} col-padding">
+
+      {% if article.image %}
+        <div style="max-width: {{ article.image.width }}px;">
+        <div class="position-relative" style="padding-top:{{ 100 | divided_by: article.image.aspect_ratio }}%">
+          {% render 'image', m_img: article.image, image_alt: article.image.alt, link_to: article.url %}
+        </div>
+        </div>
+      {% endif %}
+
+      {%- if article_date -%}
+        <div class="article-date">
+          <span class="article-date__day">{{ article.published_at | date: "%d" }}</span>
+          <span class="article-date__month">{{ article.published_at | date: "%b %Y" }}</span>
+
+          {%- if show_comment and number_of_comments > 0 -%}
+            <span class="article-comment__separator">/</span>
+            <span class="article-date__comment">{{ 'blogs.comments.with_count_html' | t: count: number_of_comments }}</span>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      <h1 class="article-title">{{ article.title }}</h1>
+      <div class="article-content" style="color: {{ section.settings.content_color }};">
+        {{ article.content }}
+      </div>
+
+      {% if section.settings.article_author %}
+        <div class="article-author ds-flex">
+          <div class="author-bio ds-flex align-center">
+            {% capture date %}<time datetime='{{ article.published_at | date: '%Y-%m-%d' }}'>{{ article.published_at | date: format: 'month_day_year' }}</time>{% endcapture %}
+            <h5>{{ 'blogs.article.author_on_date_html' | t: date: date, author: article.author }}</h5>
+            {%- if article.user.bio -%}
+              <p>{{ article.user.bio }}</p>
+            {%- endif -%}
+          </div>
+
+        </div><!-- .article-author -->
+      {% endif %}
+
+      <div class="tags-container ds-flex align-center flex-wrap">
+        {%- if show_tags and article.tags.size > 0 -%}
+          <div class="article-tags">
+            <span>{{ 'blogs.article.tags' | t }}: </span>
+            {% for tag in article.tags %}
+              <span><a href="/blogs/{{ blog.handle }}/tagged/{{ tag | handleize }}" title="{{ blog.title }} {{ tag | escape }}">{{ tag }}</a> {% unless forloop.last %}/{% endunless %} </span>
+            {% endfor %}
+          </div>
+        {%- endif -%}
+
+        {% if section.settings.enable_share %}
+          <div class="article-share">
+            {% render 'addthis' %}
+          </div>
+        {% endif %}
+      </div><!-- .tags-container -->
+
+      <div class="article-comment">
+        {%- if number_of_comments > 0 -%}
+          <h3 class="comment-title">{{'blogs.comments.with_count_html' | t: count: number_of_comments}}</h3>
+
+          {% paginate article.comments by 5 %}
+
+            <div>
+              <ul class="list-style-none">
+                {%- comment -%} Showing the rest of the comments. {%- endcomment -%}
+                {%- for comment in article.comments -%}
+                  <li class="comment-block" id="{{ comment.id }}">
+                    <div class="comment ds-flex align-center">
+                      {% render 'icon-avatar' %}
+                      <div>
+                        <div class="comment-content">
+                          {{ comment.content }}
+                        </div>
+                        <div>
+                          <span class="commenter-name">{{ 'blogs.article.by_author' | t: date: date, author: comment.author }}</span>
+                          <time datetime="{{ comment.created_at | date: '%Y-%m-%d' }}">{{ comment.created_at | date: format: 'month_day_year' }}</time>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                {%- endfor -%}
+              </ul>
+
+              {% if paginate.pages > 1 %}
+                <div class="pagination">
+                  {{ paginate | default_pagination | replace: '&laquo; Previous', '&larr;' | replace: 'Next &raquo;', '&rarr;' }}
+                </div>
+              {% endif %}
+            </div>
+
+          {% endpaginate %}
+        {% endif %}
+
+        {%- comment -%} Comment submission form {%- endcomment -%}
+        {% if blog.comments_enabled? %}
+          <div class="comment-form-container">
+            {% form 'new_comment', article %}
+
+              <h3 class="comment-title">{{ 'blogs.comments.title' | t }}</h3>
+              {%- if form.errors -%}
+                <p class="msg-notice msg-notice__error">{% render 'icon-close-thick' %}{{ form.errors | default_errors }}</p>
+              {%- endif -%}
+
+              {%- if form.posted_successfully? -%}
+                <p class="note msg-notice msg-notice__success">
+                  {% render 'icon-ticksign' %}
+                  {%- if blog.moderated? -%}
+                    {{ 'blogs.comments.success_moderated' | t }}
+                  {%- else -%}
+                    {{ 'blogs.comments.success' | t }}
+                  {%- endif -%}
+                </p>
+              {%- else -%}
+                <div class="ds-flex align-center">
+                  <label for="CommentAuthor">{{ 'blogs.comments.name' | t }}</label>
+                  <input type="text" name="comment[author]" id="CommentAuthor" {% if form.errors contains 'author' %}class="error"{% endif %} value="{{ form.author }}" placeholder="{{ 'blogs.comments.name' | t }}*" autocapitalize="words">
+                </div>
+                <div class="ds-flex align-center">
+                  <label for="CommentEmail">{{ 'blogs.comments.email' | t }}</label>
+                  <input type="email" name="comment[email]" id="CommentEmail" {% if form.errors contains 'email' %}class="error"{% endif %} value="{{ form.email }}" placeholder="{{ 'blogs.comments.email' | t }}*" autocorrect="off" autocapitalize="off">
+                </div>
+                <div class="ds-flex">
+                  <label class="label-textarea" for="CommentBody">{{ 'blogs.comments.message' | t }}</label>
+                  <textarea name="comment[body]" id="CommentBody" {% if form.errors contains 'body' %}class="error"{% endif %} placeholder="{{ 'blogs.comments.message' | t }}*">{{ form.body }}</textarea>
+                </div>
+
+                <input type="submit" class="btn btn-default" {% if settings.language_enable %}data-translate="blogs.comments.post"{% endif %} value="{{ 'blogs.comments.post' | t }}">
+              {%- endif -%}
+
+            {% endform %}
+          </div><!-- .comment-form-container -->
+        {% endif %}
+
+      </div><!-- .article-comment -->
+    </div><!-- .large-3 / .large-12 -->
+  </div><!-- .row -->
+</div><!-- .container -->
+
+{% schema %}
+{
+  "name": "Article",
+  "tag": "section",
+  "class": "blog-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "p_top",
+      "label": "Padding Top",
+      "info": "Set top space of this section",
+      "default": "48px"
+    },
+    {
+      "type": "text",
+      "id": "p_bottom",
+      "label": "Padding Bottom",
+      "info": "Set bottom space of this section",
+      "default": "170px"
+    },
+    {
+      "type": "checkbox",
+      "id": "article_date",
+      "label": "Show date",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_tags",
+      "label": "Show tags",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_comment",
+      "label": "Show count of comments",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "content_color",
+      "label": "Content Text Color",
+      "default": "#4a4a4a"
+    },
+    {
+      "type": "checkbox",
+      "id": "article_author",
+      "label": "Show article author",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_share",
+      "label": "Show share links",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Sidebar"
+    },
+    {
+      "type": "paragraph",
+      "content": "Create a sidebar by adding content blocks."
+    },
+    {
+      "type": "select",
+      "id": "sidebar_pos",
+      "label": "Show/Hide Sidebar",
+      "options": [
+        { "value": "right", "label": "Right" },
+        { "value": "left", "label": "Left" },
+        { "value": "none", "label": "Hide" }
+      ],
+      "default": "right"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection_menu",
+      "name": "Collection Menu",
+      "limit": 1
+    },
+    {
+      "type": "sidebar_newsletter",
+      "name": "Newsletter sign up form",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading",
+          "default": "Newsletter"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Subheading",
+          "default": "<p>Sign up to get the latest on sales, new releases and more …</p>"
+        },
+        {
+          "type": "text",
+          "id": "button",
+          "label": "Button text",
+          "default": "Submit"
+        }
+      ]
+    },
+    {
+      "type": "recent_posts",
+      "name": "Recent blog posts",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Block title",
+          "default": "recent posts"
+        },
+        {
+          "type": "blog",
+          "id": "blog",
+          "label": "Select blog"
+        },
+        {
+          "type": "select",
+          "id": "show_count",
+          "label": "Display blog posts",
+          "options": [
+            { "value": "1", "label": "1" },
+            { "value": "2", "label": "2" },
+            { "value": "3", "label": "3" },
+            { "value": "4", "label": "4" },
+            { "value": "5", "label": "5" }
+          ],
+          "default": "3"
+        }
+      ]
+    },
+    {
+      "type": "post_tags",
+      "name": "Blog post tags",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "tag cloud"
+        }
+      ]
+    }
+  ],
+  "default": {
+    "blocks": [
+      { "type": "collection_menu" },
+      { "type": "sidebar_newsletter" },
+      { "type": "recent_posts" },
+      { "type": "post_tags" }
+    ]
+  }
+}
+{% endschema %}

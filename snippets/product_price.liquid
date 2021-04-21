@@ -1,0 +1,28 @@
+{% comment %}
+Renders product price
+  Accepts:
+    - price: <Number> Product price
+    - compare_at_price: <Number> Product compared price
+
+  Usage:
+    {% render 'product_price', price: product.price, compare_at_price: product.compare_at_price %}
+{% endcomment %}
+
+{%- liquid
+if settings.price_format == 'without_zero'
+  assign c_p = compare_at_price | money_without_trailing_zeros
+  assign r_p = price | money_without_trailing_zeros
+else
+  assign c_p = compare_at_price | money
+  assign r_p = price | money
+endif
+-%}
+
+<div itemprop="price" content="{{ price | money_without_currency | remove: ',' }}" class="product-price">
+  {%- if compare_at_price > price -%}
+    <span class="old-price money">{{ c_p }}</span>
+    <span class="sale-price current-price money">{{ r_p }}</span>
+  {%- else -%}
+    <span class="current-price money">{{ r_p }}</span>
+  {%- endif -%}
+</div>

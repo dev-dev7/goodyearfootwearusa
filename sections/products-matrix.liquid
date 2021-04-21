@@ -1,0 +1,78 @@
+<div style="margin: {{ section.settings.margin }};">
+  <div class="container">
+    {% render 'products_matrix' with section %}
+  </div>
+</div>
+{% schema %}
+{
+  "name": "Products Matrix",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Settings"
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "Section margin",
+      "info": "Set margin for section top-right-bottom-left (e.g. 20px 15px 10px 0)",
+      "default": "0 0 180px 0"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section name",
+      "default": "latest products"
+    },
+    {
+      "type": "collection",
+      "id": "collection_name",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "number_per_row",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "label": "Products to show per row",
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "number_of_rows",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "label": "Number of rows",
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "item_space",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "label": "Space between items",
+      "default": 15
+    },
+    {
+      "type": "radio",
+      "id": "prd_img_ft",
+      "label": "Add darkness to product images",
+      "options": [
+        { "value": "img-br-100", "label": "No" },
+        { "value": "img-br-97", "label": "Yes" }
+      ],
+      "default": "img-br-100",
+      "info": "Recommended for white background product images"
+    }
+  ],
+  "presets": [{
+    "name": "Products Matrix",
+    "category": "Collections"
+  }]
+}
+{% endschema %}

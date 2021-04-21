@@ -1,0 +1,36 @@
+{% comment %}
+Renders collection sorting options in collections page
+  - design: <String> classic / advanced design of filter elements
+  - blocks: <Blocks Array> section blocks
+  - max_p: <Number> maximum price
+  - min_p: <Number> minimum price
+  - range_max: <Number> maximum price of the collection
+  - range_min: <Number> minimum price of the collection
+  - tags_list: <Array> list of current tags
+
+  Usage:
+    {% render 'template_collection_filter_dd', design: filter_design, blocks: section.blocks, max_p: max_p, min_p: min_p, range_max: range_max, range_min: range_min, tags_list: tags_list, cp: cp %}
+{% endcomment %}
+<div class="filter-wrapper dd-pp__wrp">
+<a id="filter-by" class="ds-flex align-center collection-filter__by dd-pp__atv" title="{{ d_name }}" href="#"><span>{{ 'collections.general.filter' | t }}</span>{% render 'icon-filter' %}</a>
+<div class="dd-pp__list">
+  <a href="#" class="dd-pp__close ds-block">{% render 'icon-close' %}</a>
+  <div class="ds-flex flex-wrap width-100">
+  {%- for block in blocks -%}
+    {%- if block.type == 'filter_by_tags' -%}
+    <div class="sidebar-block medium-3 small-6">
+      {% render 'collection_sidebar_filter' with block, c_tags: tags_list, max_p: max_p, min_p: min_p, cp: cp %}
+    </div>
+
+    {%- elsif block.type == 'filter_by_price' -%}
+    <div class="sidebar-block medium-3 small-6">
+      {%- if block.settings.title != blank -%}
+        <h3 class="block-title">{{ block.settings.title }}</h3>
+      {%- endif -%}
+      <input type="hidden" id="vnd-price-range" class="slider-input" data-min="{{ range_min }}" data-max="{{ range_max }}" data-range-start="{{ min_p }}" data-range-end ="{{ max_p }}" />
+    </div>
+    {%- endif -%}
+  {%- endfor -%}
+  </div>
+</div>
+</div>

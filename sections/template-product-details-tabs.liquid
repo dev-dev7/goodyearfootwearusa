@@ -1,0 +1,257 @@
+{%- if section.blocks.size > 0 -%}
+<div class="container product-details-tabs__{{ section.settings.style }}">
+  <div class="tabs">
+    <ul class="tabs-nav list-style-none">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'unique' and product.metafields.tab_unique.size < 1 -%}
+          {%- continue -%}
+        {%- endif -%}
+
+        <li class="tabs-nav__item{% if forloop.first %} active{% endif %} {{ block.type }}">
+          {%- case block.type -%}
+            {%- when 'description' -%}
+              <a href="#tabs-content-{{ block.id }}"><h4>{{ 'products.product.description' | t }}</h4></a>
+
+            {%- when 'reviews' -%}
+              <a href="#tabs-content-{{ block.id }}"><h4>{{ 'products.product.reviews' | t }}</h4></a>
+
+            {%- when 'unique' -%}
+              {%- assign outer_first = forloop.first -%}
+              {%- for tab in product.metafields.tab_unique -%}
+                {%- if forloop.index > 1 -%}
+                  </li><li class="tabs-nav__item{% if outer_first %} active{% endif %} {{ block.type }}">
+                {%- endif -%}
+                {%- if tab != blank -%}
+                  <h4><a href="#tabs-content-{{ block.id }}{% unless forloop.index == 1 %}-{{ forloop.index }}{% endunless %}">{{ tab | first }}</a></h4>
+                {%- endif -%}
+                {%- assign outer_first = false -%}
+              {%- endfor -%}
+
+            {%- when 'product_video' -%}
+              <a href="#tabs-content-{{ block.id }}"><h4>{{ 'products.product.product_video' | t }}</h4></a>
+
+            {%- when 'custom' -%}
+              <a href="#tabs-content-{{ block.id }}"><h4>{{ block.settings.name }}</h4></a>
+          {%- endcase -%}
+        </li>
+      {%- endfor -%}
+      <li class="tabs-nav__item"></li>
+    </ul>
+    <div class="tabs-content">
+      {%- for block in section.blocks -%}
+        <div class="tabs-content__item{% if forloop.first %} active{% endif %}" id="tabs-content-{{ block.id }}" {{ block.shopify_attributes}}>
+          {%- case block.type -%}
+            {%- when 'description' -%}
+              {% render 'product_description', description: product.description, truncate: false %}
+
+            {%- when 'reviews' -%}
+              {%- case settings.review_app -%}
+                {%- when 'shopify-app' -%}
+                  <div id="shopify-product-reviews" data-id="{{product.id}}" style="margin:0;">{{ product.metafields.spr.reviews }}</div>
+                {%- when 'ali-reviews' -%}
+                  <div id="shopify-ali-review" product-id="{{ product.id }}"> {{ shop.metafields.review_collector.review_code }} </div>
+                {%- when 'loox' -%}
+                  <div id="looxReviews" data-product-id="{{product.id}}" class="loox-reviews-default"></div>
+                {%- when 'judgeme' -%}
+                  {% render 'judgeme_widgets', widget_type: 'judgeme_review_widget', concierge_install: false, product: product %}
+                {%- when 'stampedio' -%}
+                  <div id="stamped-main-widget"
+                    data-widget-style="standard" data-product-id="{{ product.id }}" data-name="{{ product.title | escape }}"
+                    data-url="{{ shop.url }}{{ product.url }}" data-image-url="{{ product.featured_image | product_img_url: "large" | replace: '?', '%3F' | replace: '&','%26'}}"
+                    data-description="{{ product.description | escape }}" data-product-sku="{{product.handle}}"
+                    data-product-type="{{product.type}}">
+                    {{ product.metafields.stamped.reviews }}
+                  </div>
+              {%- endcase -%}
+
+            {%- when 'unique' -%}
+              {%- assign outer_first = forloop.first -%}
+              {%- for tab in product.metafields.tab_unique -%}
+                {%- if forloop.index > 1 -%}
+                  </div><div class="tabs-content__item{% if outer_first %} active{% endif %}" id="tabs-content-{{ block.id }}-{{ forloop.index }}" {{ block.shopify_attributes}}>
+                {%- endif -%}
+                {%- if tab != blank -%}
+                  <div class="content-unique">{{ tab | last }}</div>
+                {%- endif -%}
+                {%- assign outer_first = false -%}
+              {%- endfor -%}
+
+            {%- when 'product_video' -%}
+              {% render 'product_video', media: product.media, extra: false, cols: block.settings.cols,
+                  controls: block.settings.controls, mute: block.settings.mute,
+                  autoplay: block.settings.autoplay, loop: block.settings.loop %}
+
+            {%- when 'custom' -%}
+              {{ block.settings.content | newline_to_br }}
+          {%- endcase -%}
+        </div><!-- .tabs-content__item -->
+      {%- endfor -%}
+    </div><!-- .tabs-content -->
+  </div><!-- .tabs.ds-flex -->
+</div><!-- .container -->
+{%- capture css -%}
+#shopify-section-{{ section.id }}{margin:{{ section.settings.margin_mobile }}}
+@media all and (min-width: 768px){
+  #shopify-section-{{ section.id }}{margin:{{ section.settings.margin_laptop }}}
+}
+@media all and (min-width: 1400px){
+  #shopify-section-{{ section.id }}{margin:{{ section.settings.margins }}}
+}
+#shopify-section-{{ section.id }} .tabs-nav__item h4{color:{{ section.settings.c_tab }}}
+#shopify-section-{{ section.id }} .tabs-nav__item.active h4{color:{{ section.settings.c_active_tab }}}
+{%- endcapture -%}
+<style>{{ css | strip_newlines | remove: '  ' }}</style>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Details Tabs",
+  "class": "product-details-tabs",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Product Details Tab"
+    },
+    {
+      "type": "text",
+      "id": "margins",
+      "label": "Section Margin",
+      "default": "0 0 120px 0",
+      "info": "Set margin for section top-right-bottom-left (e.g. 20px 15px 10px 0)."
+    },
+    {
+      "type": "text",
+      "id": "margin_laptop",
+      "label": "Section Margin on Laptop",
+      "default": "0 0 90px 0"
+    },
+    {
+      "type": "text",
+      "id": "margin_mobile",
+      "label": "Section Margin on Mobile",
+      "default": "0 0 75px 0"
+    },
+    {
+      "type": "color",
+      "id": "c_tab",
+      "label": "Tab title color",
+      "default": "#b5b5b5"
+    },
+    {
+      "type": "color",
+      "id": "c_active_tab",
+      "label": "Selected Tab title color",
+      "default": "#666666"
+    },
+    {
+      "type": "select",
+      "id": "style",
+      "label": "Section Style",
+      "options": [
+        { "value": "classic", "label": "Classic - Vertical" },
+        { "value": "modern", "label": "Modern - Horizontal" }
+      ],
+      "default": "modern",
+      "info": "Select layout of tabs"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "description",
+      "name": "Description",
+      "limit": 1
+    },
+    {
+      "type": "reviews",
+      "name": "Reviews",
+      "limit": 1
+    },
+    {
+      "type": "product_video",
+      "name": "Product Video",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Product videos you uploaded from Shopfiy Product Edit page will be showed here."
+        },
+        {
+          "type": "range",
+          "id": "cols",
+          "label": "Number of columns",
+          "min": 1,
+          "max": 4,
+          "step": 1,
+          "default": 2,
+          "info": "Set the number of videos to show in a row."
+        },
+        {
+          "type": "range",
+          "id": "gap_videos",
+          "min": 0,
+          "max": 50,
+          "step": 1,
+          "unit": "px",
+          "label": "Gap between videos",
+          "default": 18
+        },
+        {
+          "type": "checkbox",
+          "id": "controls",
+          "label": "Show video controls",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "autoplay",
+          "label": "Enable autoplay of video",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "loop",
+          "label": "Loop video after finish",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "mute",
+          "label": "Mute video by default",
+          "default": true
+        }
+      ]
+    },
+    {
+      "type": "unique",
+      "name": "Unique Tab",
+      "limit": 1
+    },
+    {
+      "type": "custom",
+      "name": "Custom Tab",
+      "settings": [
+        {
+          "type": "text",
+          "label": "Tab name",
+          "id": "name",
+          "default": "Custom tab"
+        },
+        {
+          "type": "richtext",
+          "label": "Tab content",
+          "id": "content",
+          "default": "<p>Write down your custom text here...</p>"
+        }
+      ]
+    }
+  ],
+  "default": {
+    "blocks": [
+      { "type": "description" },
+      { "type": "reviews" },
+      { "type": "product_video" },
+      { "type": "custom" }
+    ]
+  }
+}
+{% endschema %}

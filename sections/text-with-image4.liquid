@@ -1,0 +1,98 @@
+{%- if section.settings.show -%}
+<div style="margin: {{ section.settings.margin }};">
+  {% render 'text_image4' with section %}
+</div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Text with image 4",
+  "class": "container",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show",
+      "label": "Show this section",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "Section margin",
+      "info": "Set margin for section top-right-bottom-left (e.g. 20px 15px 10px 0)",
+      "default": "0 0 114px 0"
+    },
+    {
+      "type": "image_picker",
+      "id": "img",
+      "label": "Background image",
+      "info": "477px*184px recommended"
+    },
+    {
+      "type": "color",
+      "id": "c_bg",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "c_border",
+      "label": "Border color",
+      "default": "#2d79fd"
+    },
+    {
+      "type": "range",
+      "id": "w_border",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "unit": "px",
+      "label": "Border width",
+      "default": 7
+    },
+    {
+      "type": "select",
+      "id": "content_style",
+      "label": "Content Style",
+      "options": [
+        {"value": "text-green1", "label": "Green 1"},
+        {"value": "text-green2", "label": "Green 2"},
+        {"value": "text-green3", "label": "Green 3"},
+        {"value": "text-orange", "label": "Orange"},
+        {"value": "text-citrus1", "label": "Citrus 1"},
+        {"value": "text-citrus2", "label": "Citrus 2"},
+        {"value": "text-yellow1", "label": "Yellow 1"},
+        {"value": "text-yellow2", "label": "Yellow 2"},
+        {"value": "text-blue1", "label": "Blue 1"},
+        {"value": "text-blue2", "label": "Blue 2"},
+        {"value": "text-beige1", "label": "Beige 1"},
+        {"value": "text-beige2", "label": "Beige 2"},
+        {"value": "text-beige3", "label": "Beige 3"}
+      ],
+      "default": "text-blue2"
+    },
+    {
+      "type": "textarea",
+      "id": "title",
+      "label": "Title",
+      "default": "Ready for today.\nBuilt for tomorrow."
+    },
+    {
+      "type": "color",
+      "id": "color_title",
+      "label": "Title Color",
+      "default": "#3c3c43"
+    },
+    {
+      "type": "url",
+      "id": "link_to",
+      "label": "Link To"
+    }
+  ],
+  "presets": [{
+    "name": "Text with image 4",
+    "category": "Text Section"
+  }]
+}
+{% endschema %}

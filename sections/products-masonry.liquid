@@ -1,0 +1,128 @@
+<div style="margin: {{ section.settings.margin }};">
+  <div class="container">
+    {% include 'products_masonry' with section %}
+  </div>
+</div>
+{% schema %}
+{
+  "name": "Products Masonry Grid",
+  "tag": "section",
+  "class": "vs-products-masonry",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Settings"
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "Section margin",
+      "info": "Set margin for section top-right-bottom-left (e.g. 20px 15px 10px 0)",
+      "default": "0 0 180px 0"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section title",
+      "default": "Latest Deals"
+    },
+    {
+      "type": "text",
+      "id": "description",
+      "label": "Section description",
+      "default": "Unique items from vanguard designers."
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "rows",
+      "label": "Number of rows",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "cols",
+      "label": "Number of cols",
+      "min": 1,
+      "max": 3,
+      "step": 1,
+      "default": 1
+    },
+    {
+      "type": "select",
+      "id": "card_style",
+      "label": "Product Card Style",
+      "options": [
+        { "value": "vertical-advanced", "label": "Vertical advanced" },
+        { "value": "vertical-classic", "label": "Vertical classic" },
+        { "value": "vertical-default", "label": "Vertical default" },
+        { "value": "vertical-modern", "label": "Vertical modern" },
+        { "value": "vertical-progressive", "label": "Vertical progressive" },
+        { "value": "horizontal-advanced", "label": "Horizontal advanced" },
+        { "value": "horizontal-classic", "label": "Horizontal classic" },
+        { "value": "horizontal-default", "label": "Horizontal default" },
+        { "value": "horizontal-progressive", "label": "Horizontal progressive" },
+        { "value": "horizontal-modern", "label": "Horizontal modern" }
+      ],
+      "default": "horizontal-advanced"
+    },
+    {
+      "type": "radio",
+      "id": "prd_img_ft",
+      "label": "Add darkness to product images",
+      "options": [
+        { "value": "img-br-100", "label": "No" },
+        { "value": "img-br-97", "label": "Yes" }
+      ],
+      "default": "img-br-100",
+      "info": "Recommended for white background product images"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_border",
+      "label": "Show border around product cards",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "card_shadow",
+      "label": "Show boxshadow around product cards",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "main_pos",
+      "label": "Main Product Position",
+      "options": [
+        { "value": "default", "label": "Left" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "right"
+    },
+    {
+      "type": "select",
+      "id": "main_style",
+      "label": "Main Product Card Style",
+      "options": [
+        { "value": "vertical-classic", "label": "Vertical classic" },
+        { "value": "vertical-advanced", "label": "Vertical advanced" },
+        { "value": "vertical-default", "label": "Vertical default" },
+        { "value": "vertical-progressive", "label": "Vertical progressive" },
+        { "value": "vertical-modern", "label": "Vertical modern" }
+      ],
+      "default": "vertical-default"
+    }
+  ],
+  "presets": [{
+    "name": "Products Masonry Grid",
+    "category": "Collections"
+  }]
+}
+{% endschema %}

@@ -1,0 +1,66 @@
+{% comment %}
+Renders manufacturer slider as a block in sections with sidebar
+  Accepts:
+    - manufacturer_slider: content to show(block)
+      = title: <String> Block title
+      = show_dots: <Boolean> show/hide pagination dots
+      = show_nav: <Boolean> show/hide carousel navigation
+      = nav_style: <String> position of the navigation (values: "nav-top__right", "nav-top__center", "nav-middle")
+      = auto_speed: <Number> auto rotation speed of the carousel. default value is 5 when no value is set
+      = wrap_around: <Boolean> loop carousel
+      = cell_align: <String> Align selected item to left, center or right
+      = gap: <Number> space between items
+      = cols: <Number> number of items to show at once
+
+  Usage:
+    {% render 'manufacturer_slider' with block %}
+{% endcomment %}
+{%- liquid
+assign block_title = manufacturer_slider.settings.title
+assign auto_speed = manufacturer_slider.settings.auto_speed
+assign cols = manufacturer_slider.settings.cols
+assign show_dots = manufacturer_slider.settings.show_dots
+assign show_nav = manufacturer_slider.settings.show_nav
+assign nav_style = manufacturer_slider.settings.nav_style
+assign cell_align = manufacturer_slider.settings.cell_align
+assign wrap_around = manufacturer_slider.settings.wrap_around
+assign gap = manufacturer_slider.settings.gap | divided_by: 2
+-%}
+
+{%- if block_title -%}
+  <h3 class="block-title">{{ block_title }}</h3>
+{%- endif -%}
+
+<div class="content-slideshow {{ nav_style }}">
+  <div class="items-carousel content-align-center"
+    data-auto="{{ auto_speed | default: 5 }}"
+    data-dots="{{ show_dots }}"
+    data-nav="{{ show_nav | default: 'true' }}"
+    data-wraparound="{{ wrap_around | default: 'true' }}"
+    data-cellalign="{{ cell_align | default: 'left' }}"
+    style="margin-left:-{{ gap }}px;margin-right:-{{ gap }}px">
+    {%- for index in (1..8) -%}
+      {% capture img_idx %}logo_img{{ index }}{% endcapture %}
+      {%- if manufacturer_slider.settings[img_idx] != blank -%}
+        {%- assign at_least_one = true -%}
+        {%- assign img = manufacturer_slider.settings[img_idx] -%}
+
+        <div class="slide-item grid-items__{{ cols }}" style="padding: 0 {{ gap }}px;">
+          <div class="position-relative image-loading" style="padding-top: {{ 100 | divided_by: img.aspect_ratio }}%;">
+            <img class="lazyload image-bg" data-src="{{ img | img_url: 'master' }}" width="{{ img.width }} width="{{ img.height }}/>
+          </div>
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+
+    {%- unless at_least_one -%}
+      {%- for i in (1..7) -%}
+        <div class="slide-item grid-items__{{ cols }}" style="padding: 0 {{ gap }}px;">
+          <div class="position-relative" style="padding-top: 100%">
+            {{ 'image' | placeholder_svg_tag: 'placeholder' }}
+          </div>
+        </div>
+      {%- endfor -%}
+    {%- endunless -%}
+  </div><!-- .items-carousel -->
+</div><!-- .content-slideshow -->
