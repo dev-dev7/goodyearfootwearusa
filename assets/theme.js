@@ -3670,6 +3670,15 @@ $(document).ready(() => {
   vndHlp.initSct(null, 'section.vs-masonry-grid', vndMsrGrd.onLoad);
   vndHlp.initSct(null, 'section.vs-products-masonry', productsMasonry.onLoad);
   vndHlp.initSct(null, 'section.vs-page-tabs', vndPageTabs.onLoad);
-
+  announcementFlickity();
   PageRender.init();
 });
+
+function announcementFlickity() {
+  $('.announcement-bar').addClass('announcement-bar__show').flickity({
+    wrapAround: true,
+    autoPlay: 3000,
+    draggable: true,
+    pageDots: false
+  });
+}

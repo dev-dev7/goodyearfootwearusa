@@ -235,13 +235,17 @@
     "c_tooltip_new": "#90a900",
     "enable_review": true,
     "sections": {
+      "announcement-bar": {
+        "type": "announcement-bar",
+        "settings": {
+          "show_announcement": true,
+          "announcement_bg": "#ffd300",
+          "announcement_color": "#000000"
+        }
+      },
       "top-bar": {
         "type": "top-bar",
         "settings": {
-          "show_announcement": true,
-          "announcement_text": "Sign up & get 10% Off Your First Order + Free Shipping for all orders over $75!",
-          "announcement_bg": "#ffd300",
-          "announcement_color": "#000000",
           "show_topbar": true,
           "hide_mobile": false,
           "topbar_style": "general",

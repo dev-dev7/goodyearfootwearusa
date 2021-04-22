@@ -1,0 +1,60 @@
+<div class="vs-topbar {{ section.settings.topbar_style }}">
+	{%- if section.settings.show_announcement -%}
+		<div class="announcement-bar position-relative" style="background-color: {{ section.settings.announcement_bg | default: settings.c_theme }}">
+			{%- for block in section.blocks -%}
+				<h2 class="text-center" style="width: 100%; color: {{ section.settings.announcement_color | default: '#fff' }}">{{ block.settings.text | newline_to_br }}
+					{%- if block.settings.link != blank -%}
+						<a href="{{ block.settings.link }}" class="link-entire"></a>
+					{%- endif -%}
+				</h2>
+			{%- endfor -%}
+		</div><!-- .announcement-bar -->
+	{%- endif -%}
+</div><!-- .vs-topbar -->
+{%- assign styles = styles | strip_newlines | remove: '  ' -%}
+<style>{{ styles }}{% render 'style_topbar_items', blocks: section.blocks %}</style>
+{% schema %}
+{
+	"name": "Announcement Bar",
+	"settings": [
+		{
+			"type": "header",
+			"content": "Announcement Configuration"
+		},
+		{
+			"type": "checkbox",
+			"id": "show_announcement",
+			"label": "Show Announcement",
+			"default": false
+		},
+		{
+			"type": "color",
+			"id": "announcement_bg",
+			"label": "Background color"
+		},
+		{
+			"type": "color",
+			"id": "announcement_color",
+			"label": "Text color"
+		}
+	],
+	"blocks": [
+		{
+			"type": "Announcement",
+			"name": "Announcement Text",
+			"settings": [
+				{
+					"type": "textarea",
+					"id": "text",
+					"label": "Announcement Text"
+				},
+				{
+					"type": "url",
+					"id": "link",
+					"label": "Link"
+				}
+			]
+		}
+	]
+}
+{% endschema %}

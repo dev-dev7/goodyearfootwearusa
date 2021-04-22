@@ -5,14 +5,6 @@ assign right_items = ""
 assign styles = ''
 -%}
 <div class="vs-topbar {{ section.settings.topbar_style }}" style="background-color:{{section.settings.topbar_bg}};color: {{section.settings.topbar_text_color}}">
-  {%- if section.settings.show_announcement -%}
-    <div class="announcement-bar position-relative" style="background-color: {{ section.settings.announcement_bg | default: settings.c_theme }}">
-      <h2 class="text-center" style="color: {{ section.settings.announcement_color | default: '#fff' }}">{{ section.settings.announcement_text | newline_to_br }}</h2>
-      {%- if section.settings.announcement_link != blank -%}
-        <a href="{{ section.settings.announcement_link }}" class="link-entire"></a>
-      {%- endif -%}
-    </div><!-- .announcement-bar -->
-  {%- endif -%}
 
   {%- if section.settings.show_topbar -%}
     {%- for block in section.blocks -%}
@@ -77,36 +69,6 @@ assign styles = ''
 {
   "name": "Top Bar",
   "settings": [
-    {
-      "type": "header",
-      "content": "Announcement Configuration"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_announcement",
-      "label": "Show Announcement",
-      "default": false
-    },
-    {
-      "type": "textarea",
-      "id": "announcement_text",
-      "label": "Text"
-    },
-    {
-      "type": "color",
-      "id": "announcement_bg",
-      "label": "Background color"
-    },
-    {
-      "type": "color",
-      "id": "announcement_color",
-      "label": "Text color"
-    },
-    {
-      "type": "url",
-      "id": "announcement_link",
-      "label": "Link"
-    },
     {
       "type": "header",
       "content": "Top Bar Configuration"

@@ -48,6 +48,7 @@
 </head>
 <body id="{{ page_title | handle }}" class="template-{{ template.name | handle }} {{ settings.bt_style }} {{ settings.product_action_pos }} {{ settings.product_action_style }} {{ settings.dot_style }} {{ settings.product_cd_align }} {{ settings.anm_img_loader }}{% if settings.vertical_card_wishlist %} product-card__btn-wishlist{% endif %} product-card__label-{{ settings.product_label_style }}">
   {%- if settings.enable_top_promotion -%}{% section 'text-with-icon' %}{%- endif -%}
+  {% section 'announcement-bar' %}
   {% section 'top-bar' %}
   {% section 'header' %}
   {% if settings.enable_mb_hd %}
