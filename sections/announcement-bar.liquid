@@ -1,8 +1,9 @@
-<div class="vs-topbar {{ section.settings.topbar_style }}">
+<div class="vs-topbar" style="background-color: {{ section.settings.announcement_bg | default: settings.c_theme }}">
 	{%- if section.settings.show_announcement -%}
-		<div class="announcement-bar position-relative" style="background-color: {{ section.settings.announcement_bg | default: settings.c_theme }}">
+		<div class="announcement-bar position-relative">
 			{%- for block in section.blocks -%}
-				<h2 class="text-center" style="width: 100%; color: {{ section.settings.announcement_color | default: '#fff' }}">{{ block.settings.text | newline_to_br }}
+				
+				<h2 {{ block.shopify_attributes }} class="text-center announcement-text" style="width: 100%; color: {{ section.settings.announcement_color | default: '#fff' }}">{{ block.settings.text | newline_to_br }}
 					{%- if block.settings.link != blank -%}
 						<a href="{{ block.settings.link }}" class="link-entire"></a>
 					{%- endif -%}
@@ -11,8 +12,7 @@
 		</div><!-- .announcement-bar -->
 	{%- endif -%}
 </div><!-- .vs-topbar -->
-{%- assign styles = styles | strip_newlines | remove: '  ' -%}
-<style>{{ styles }}{% render 'style_topbar_items', blocks: section.blocks %}</style>
+
 {% schema %}
 {
 	"name": "Announcement Bar",

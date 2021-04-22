@@ -9844,11 +9844,21 @@ html {
     padding-left: 32px;
     padding-right: 32px;
   }
-  max-height: 0px;
-  transition: max-height 1s ease;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+  .announcement-show {
+    display: block!important;
+  }
 }
 
-.announcement-bar__show {
+.announcement-bar > .announcement-text {
+  display: none;
+}
 
-  max-height: 100px;
+.announcement-bar > .text-center:first-child {
+  display: block;
+}
+.d-none {
+  display: none!important;
 }

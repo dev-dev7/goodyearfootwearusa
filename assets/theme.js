@@ -24,7 +24,6 @@ var vndTopbar = {
     setTimeout(() => {
       vndHeader.initLanguageSwitcher(container);
     }, 350);
-
     const popups = new vndTheme.Popups(container),
           dropdowns = new vndTheme.Dropdowns(container);
   },
@@ -3670,15 +3669,31 @@ $(document).ready(() => {
   vndHlp.initSct(null, 'section.vs-masonry-grid', vndMsrGrd.onLoad);
   vndHlp.initSct(null, 'section.vs-products-masonry', productsMasonry.onLoad);
   vndHlp.initSct(null, 'section.vs-page-tabs', vndPageTabs.onLoad);
-  announcementFlickity();
+
   PageRender.init();
 });
 
 function announcementFlickity() {
-  $('.announcement-bar').addClass('announcement-bar__show').flickity({
+  $('.announcement-bar').flickity({
     wrapAround: true,
     autoPlay: 3000,
     draggable: true,
     pageDots: false
   });
+}
+if (Shopify.designMode) {
+  document.addEventListener(
+    'shopify:block:select', function(event) {
+      $(".announcement-text").each(function() {
+        var announceId = $(this).data('shopifyEditorBlock').id
+        if(event.detail.blockId === announceId) {
+          $(this).removeClass("d-none").addClass("announcement-show")
+        } else {
+          $(this).addClass("d-none").removeClass("announcement-show")
+        }
+      })
+    }
+  );
+} else {
+  announcementFlickity();
 }
